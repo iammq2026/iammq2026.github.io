@@ -2323,8 +2323,11 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     return clone;
   }
 
+  function isProtectedEditorContainer(el){
+    return !!(el && el.id === "animal-grid" && el.hasAttribute && el.hasAttribute("data-ez-animal-display"));
+  }
   function duplicateFrame(){
-    if(!selectedFrame) return;
+    if(!selectedFrame || isProtectedEditorContainer(selectedFrame)) return;
     var clone = ezMakeCloneUnique(selectedFrame.cloneNode(true));
     clone.classList.remove("ez-selected");
     selectedFrame.parentNode.insertBefore(clone, selectedFrame.nextSibling);
@@ -2332,7 +2335,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     markUnsaved();
   }
   function deleteFrame(){
-    if(!selectedFrame) return;
+    if(!selectedFrame || isProtectedEditorContainer(selectedFrame)) return;
     if(!confirm("Delete this element?")) return;
     var el = selectedFrame;
     hideAllFloating();
@@ -3636,6 +3639,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       ownerEmail: $("#cpOwnerEmail").value
     };
   }
+  window.ezGetCollectedSettings=function(){return collectSettings();};
   function applySettings(s){
     if(!s) return;
     // Phase 1 config foundation: older saves remain compatible.
@@ -4053,7 +4057,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   function savePhase2(draft){try{
     var key=draft?LS_DRAFT:LS_SETTINGS,existing={};
     try{existing=JSON.parse(localStorage.getItem(key)||"null")||{};}catch(e){}
-    var obj=(typeof collectSettings==="function")?collectSettings():existing;
+    var obj=(typeof window.ezGetCollectedSettings==="function")?window.ezGetCollectedSettings():existing;
     obj=obj||existing||{};
     obj.schemaVersion=Math.max(4,Number(obj.schemaVersion||1));
     obj.configModel="vana-embed-site";obj.phase2=clone(phase2);
@@ -6944,15 +6948,18 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     phase2.categories.forEach(function(c){var selected=active===c.id;html+='<button onclick="filterCategory(\''+esc(c.id)+'\')" class="cat-btn '+(selected?"active ":"")+"px-4 py-2 rounded-full text-xs font-semibold transition-all "+(selected?"bg-forest text-cream":"bg-sandlight text-forest hover:bg-sand")+'" data-cat="'+esc(c.id)+'">'+esc(c.name)+'</button>';});
     wrap.innerHTML=html;
   }
-  function productCta(a,classes,iconClass){
+  function productCta(a,classes,iconClass,prefix){
+    prefix=prefix||"animal";
     var label=String(a.buttonText||"View Product");
     var link=normalizeButtonLink(a.buttonLink);
     iconClass=iconClass||"w-3.5 h-3.5";
+    var buttonId=prefix+"-button-"+String(a.id||"");
+    var textMarker=prefix==="animal"?" data-ez-animal-text="true"":"";
     if(link){
       var target=a.buttonOpenNewTab===true?' target="_blank" rel="noopener noreferrer"':"";
-      return '<a href="'+esc(link)+'"'+target+' class="'+classes+' flex items-center justify-center space-x-1.5"><i data-lucide="external-link" class="'+iconClass+'"></i><span>'+esc(label)+'</span></a>';
+      return '<a id="'+esc(buttonId)+'" href="'+esc(link)+'"'+target+' class="'+classes+' flex items-center justify-center space-x-1.5"><i data-lucide="external-link" class="'+iconClass+'"></i><span'+textMarker+'>'+esc(label)+'</span></a>';
     }
-    return '<button data-target-id="'+esc(a.targetId||"")+'" data-product-id="'+esc(a.targetId||"")+'" data-commerce-action="view-product" data-payment-type="'+esc(a.paymentType||"")+'" class="'+classes+' flex items-center justify-center space-x-1.5"><i data-lucide="eye" class="'+iconClass+'"></i><span>'+esc(label)+'</span></button>';
+    return '<button id="'+esc(buttonId)+'" data-target-id="'+esc(a.targetId||"")+'" data-product-id="'+esc(a.targetId||"")+'" data-commerce-action="view-product" data-payment-type="'+esc(a.paymentType||"")+'" class="'+classes+' flex items-center justify-center space-x-1.5"><i data-lucide="eye" class="'+iconClass+'"></i><span'+textMarker+'>'+esc(label)+'</span></button>';
   }
   function renderAnimals(){
     var grid=$("animal-grid"),main=document.getElementById("main");if(!grid||!main||!main.contains(grid))return;
@@ -6960,10 +6967,10 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     phase2.animals.forEach(function(a){
       var c=getCat(a.categoryId),label=c?c.name:(a.badge||"Wildlife"),unit=a.paymentType==="onetime"?"/ one-time":"/ mo";
       var safeName=String(a.name).replace(/'/g,"\\'");var safeSpecies=String(a.species).replace(/'/g,"\\'");var safeImage=String(a.image).replace(/'/g,"\\'");
-      html+='<div class="animal-card bg-white rounded-2xl overflow-hidden border border-sand/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col" id="animal-card-'+esc(a.id)+'" data-category="'+esc(a.categoryId)+'" data-animal-id="'+esc(a.id)+'">';
-      html+='<div class="relative h-60 overflow-hidden"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Wildlife\'"><span class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs font-semibold px-3 py-1 rounded-full">'+esc(label)+'</span></div>';
-      html+='<div class="p-6 flex-grow flex flex-col justify-between space-y-4"><div><div class="flex justify-between items-start mb-2"><h3 class="font-serif text-2xl font-bold text-forest">'+esc(a.name)+'</h3><span class="text-xs bg-terracotta/10 text-terracotta font-bold px-2.5 py-1 rounded-md">'+esc(a.condition)+'</span></div><p class="text-xs text-slategreen uppercase tracking-wider font-semibold mb-3">'+esc(a.species)+'</p><p class="text-sm text-forest/80 line-clamp-3 mb-4">'+esc(a.description)+'</p><div class="text-xs text-slategreen space-y-1 bg-sandlight p-3 rounded-lg border border-sand/50"><p><strong>Care Plan:</strong> '+esc(a.carePlan)+'</p><p><strong>Sanctuary Location:</strong> '+esc(a.location)+'</p><p><strong>Total Donations:</strong> '+money(a.totalDonations||0)+'</p></div></div>';
-      html+='<div class="pt-4 border-t border-sand flex items-center justify-between"><div><span class="text-xs text-slategreen block">'+(a.paymentType==='onetime'?'One-time Gift':'Monthly Care')+'</span><span class="text-lg font-bold text-forest">'+money(a.price)+' <span class="text-xs font-normal text-slategreen">'+unit+'</span></span></div>'+productCta(a,'px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors','w-3.5 h-3.5')+'</div></div></div>';
+      html+='<div class="animal-card ez-frame bg-white rounded-2xl overflow-hidden border border-sand/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col" id="animal-card-'+esc(a.id)+'" data-ez-animal-card="true" data-category="'+esc(a.categoryId)+'" data-animal-id="'+esc(a.id)+'">';
+      html+='<div id="animal-media-'+esc(a.id)+'" class="relative h-60 overflow-hidden"><img id="animal-image-'+esc(a.id)+'" data-ez-animal-media="true" src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Wildlife\'"><span id="animal-badge-'+esc(a.id)+'" data-ez-animal-text="true" class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs font-semibold px-3 py-1 rounded-full">'+esc(label)+'</span></div>';
+      html+='<div id="animal-content-'+esc(a.id)+'" class="p-6 flex-grow flex flex-col justify-between space-y-4"><div id="animal-copy-'+esc(a.id)+'"><div id="animal-title-row-'+esc(a.id)+'" class="flex justify-between items-start mb-2"><h3 id="animal-name-'+esc(a.id)+'" data-ez-animal-text="true" class="font-serif text-2xl font-bold text-forest">'+esc(a.name)+'</h3><span id="animal-condition-'+esc(a.id)+'" data-ez-animal-text="true" class="text-xs bg-terracotta/10 text-terracotta font-bold px-2.5 py-1 rounded-md">'+esc(a.condition)+'</span></div><p id="animal-species-'+esc(a.id)+'" data-ez-animal-text="true" class="text-xs text-slategreen uppercase tracking-wider font-semibold mb-3">'+esc(a.species)+'</p><p id="animal-description-'+esc(a.id)+'" data-ez-animal-text="true" class="text-sm text-forest/80 line-clamp-3 mb-4">'+esc(a.description)+'</p><div id="animal-care-box-'+esc(a.id)+'" class="text-xs text-slategreen space-y-1 bg-sandlight p-3 rounded-lg border border-sand/50"><p id="animal-care-'+esc(a.id)+'" data-ez-animal-text="true"><strong>Care Plan:</strong> '+esc(a.carePlan)+'</p><p id="animal-location-'+esc(a.id)+'" data-ez-animal-text="true"><strong>Sanctuary Location:</strong> '+esc(a.location)+'</p><p id="animal-donations-'+esc(a.id)+'" data-ez-animal-text="true"><strong>Total Donations:</strong> '+money(a.totalDonations||0)+'</p></div></div>';
+      html+='<div id="animal-footer-'+esc(a.id)+'" class="pt-4 border-t border-sand flex items-center justify-between"><div id="animal-payment-'+esc(a.id)+'"><span id="animal-payment-label-'+esc(a.id)+'" data-ez-animal-text="true" class="text-xs text-slategreen block">'+(a.paymentType==='onetime'?'One-time Gift':'Monthly Care')+'</span><span id="animal-price-'+esc(a.id)+'" data-ez-animal-text="true" class="text-lg font-bold text-forest">'+money(a.price)+' <span class="text-xs font-normal text-slategreen">'+unit+'</span></span></div><div id="animal-button-wrap-'+esc(a.id)+'">'+productCta(a,'px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors','w-3.5 h-3.5','animal')+'</div></div></div></div>';
     });
     grid.innerHTML=html;
     if(typeof window.filterCategory==='function')window.filterCategory(activeCat||"all");
@@ -6973,7 +6980,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     var root=$("featured-animal-card");if(!root)return;var a=getAnimal(phase2.featuredAnimalId)||phase2.animals[0];if(!a)return;
     var total=num(a.totalDonations),goal=num(a.donationGoal,1200),pct=goal>0?Math.min(100,(total/goal)*100):0,unit=a.paymentType==="onetime"?"/ one-time":"/ mo";
     var safeName=String(a.name).replace(/'/g,"\\'");var safeSpecies=String(a.species).replace(/'/g,"\\'");var safeImage=String(a.image).replace(/'/g,"\\'");
-    root.innerHTML='<div class="bg-forestlight/90 border border-sand/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md"><div class="absolute top-4 right-4 bg-terracotta text-cream text-xs px-3 py-1.5 rounded-full font-semibold shadow-md flex items-center space-x-1.5"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Featured</span></div><div class="relative h-64 sm:h-72 rounded-xl overflow-hidden mb-5"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Rescued+Wildlife\'"><div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-forest to-transparent p-4 flex justify-between items-end"><div><span class="text-xs uppercase tracking-wider text-terracotta font-bold">Featured Sanctuary Resident</span><h3 class="font-serif text-2xl text-cream font-bold">'+esc(a.name)+' — '+esc(a.species)+'</h3></div><span class="text-xs px-2.5 py-1 bg-moss text-sand rounded-md font-medium">'+esc(a.condition)+'</span></div></div><p class="text-sand/80 text-sm mb-5 leading-relaxed">'+esc(a.description)+'</p><div class="bg-forest/80 rounded-xl p-3.5 mb-5 border border-sand/10 flex justify-between items-center text-xs"><div><p class="text-sand/60">Total Donations</p><p class="text-cream font-bold text-sm">'+money(total)+(goal>0?" / "+money(goal):"")+'</p></div><div class="w-24 bg-sand/20 h-2 rounded-full overflow-hidden"><div class="bg-terracotta h-full" style="width:'+pct.toFixed(1)+'%"></div></div></div>'+productCta(a,'w-full py-3.5 rounded-xl bg-sand text-forest font-bold text-sm hover:bg-cream transition-colors','w-4 h-4')+'</div>';
+    root.innerHTML='<div class="bg-forestlight/90 border border-sand/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md"><div class="absolute top-4 right-4 bg-terracotta text-cream text-xs px-3 py-1.5 rounded-full font-semibold shadow-md flex items-center space-x-1.5"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Featured</span></div><div class="relative h-64 sm:h-72 rounded-xl overflow-hidden mb-5"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Rescued+Wildlife\'"><div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-forest to-transparent p-4 flex justify-between items-end"><div><span class="text-xs uppercase tracking-wider text-terracotta font-bold">Featured Sanctuary Resident</span><h3 class="font-serif text-2xl text-cream font-bold">'+esc(a.name)+' — '+esc(a.species)+'</h3></div><span class="text-xs px-2.5 py-1 bg-moss text-sand rounded-md font-medium">'+esc(a.condition)+'</span></div></div><p class="text-sand/80 text-sm mb-5 leading-relaxed">'+esc(a.description)+'</p><div class="bg-forest/80 rounded-xl p-3.5 mb-5 border border-sand/10 flex justify-between items-center text-xs"><div><p class="text-sand/60">Total Donations</p><p class="text-cream font-bold text-sm">'+money(total)+(goal>0?" / "+money(goal):"")+'</p></div><div class="w-24 bg-sand/20 h-2 rounded-full overflow-hidden"><div class="bg-terracotta h-full" style="width:'+pct.toFixed(1)+'%"></div></div></div>'+productCta(a,'w-full py-3.5 rounded-xl bg-sand text-forest font-bold text-sm hover:bg-cream transition-colors','w-4 h-4','featured')+'</div>';
     if(window.lucide)lucide.createIcons();
   }
   function updateFeaturedEditor(){
