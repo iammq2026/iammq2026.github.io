@@ -3967,7 +3967,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   function uniqueAnimalId(name){var base="animal-"+slug(name),id=base,n=2;while(getAnimal(id))id=base+"-"+(n++);return id;}
   function uniqueCatId(name){var base="cat-"+slug(name),id=base,n=2;while(getCat(id))id=base+"-"+(n++);return id;}
   function uniqueTargetId(amount,ignoreId){var nAmount=priceNumber(amount,0),base="price-"+String(nAmount).replace(/\.0+$/g,"").replace(/\./g,"-"),id=base,n=2;while(phase2.animals.some(function(a){return a.id!==ignoreId&&a.targetId===id;}))id=base+"-"+(n++);return id;}
-    function syncAnnouncementTarget(){  function syncAnnouncementTarget(){var base="price-"+String(priceNumber(phase2.announcement.amount,0)).replace(/\.0+$/g,"").replace(/\./g,"-"),clash=phase2.animals.some(function(a){return a.targetId===base;});phase2.announcement.targetId=clash?base+"-announcement":base;}
+  function syncAnnouncementTarget(){var base="price-"+String(priceNumber(phase2.announcement.amount,0)).replace(/\.0+$/g,"").replace(/\./g,"-"),clash=phase2.animals.some(function(a){return a.targetId===base;});phase2.announcement.targetId=clash?base+"-announcement":base;}
 
   function savePhase2(draft){try{var key=draft?LS_DRAFT:LS_SETTINGS,obj=JSON.parse(localStorage.getItem(key)||"null")||{};obj.schemaVersion=Math.max(4,Number(obj.schemaVersion||1));obj.configModel="vana-embed-site";obj.phase2=clone(phase2);localStorage.setItem(key,JSON.stringify(obj));if(!draft)localStorage.removeItem(LS_DRAFT);}catch(e){}}
   function readPhase2Source(){
