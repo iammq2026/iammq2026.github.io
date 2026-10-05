@@ -1758,36 +1758,6 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 <div class="cp-phase2-list" id="p2AnimalList"></div>
 </div>
 
-<div class="cp-phase2-block">
-<div class="cp-phase2-block-title">Group Products Sync</div>
-<label>Group Products Name</label>
-<input id="p2GroupProductsName" placeholder="Wildlife Sponsorship Products" type="text"/>
-<div class="cp-phase2-title-row" style="margin-top:10px;"><span class="cp-phase2-item-name">Products in Group</span><button class="cp-action-btn cp-action-primary cp-small-btn" id="p2AddGroupProduct" type="button">+ Add Product</button></div>
-<div class="cp-phase2-add-row" style="margin-top:7px;">
-<select id="p2GroupProductPicker"><option value="">Select a website product</option></select>
-<button class="cp-action-btn" id="p2GroupProductAddSelected" type="button">Add</button>
-</div>
-<div class="cp-phase2-title-row" style="margin-top:10px;"><span class="cp-phase2-item-meta" id="p2GroupProductCount">0 products</span><span class="cp-phase2-item-meta">Synced from website</span></div>
-<div class="cp-phase2-list" id="p2GroupProductList" style="margin-top:7px;"></div>
-<div class="cp-phase2-block" style="margin-top:10px;margin-bottom:0;padding:9px;background:rgba(201,161,90,.05);">
-<div class="cp-phase2-block-title" style="margin-bottom:7px;">Product Mapping Preview</div>
-<div class="cp-phase2-item-meta">Product Target IDs</div>
-<div class="cp-id-preview" style="margin-top:5px;"><code id="p2GroupProductTargets">—</code></div>
-</div>
-<p class="cp-note">Group Products stay synchronized with the products displayed on the website. Target IDs are system-managed and exposed for the centralized Product System.</p>
-</div>
-<div class="cp-phase2-block">
-<div class="cp-phase2-block-title">Guardian Welcome Kit</div>
-<label class="cp-check-row"><input checked="" id="p2WelcomeKitEnabled" type="checkbox"/><span>Enable Welcome Kit progress</span></label>
-<div class="cp-phase2-grid two">
-<div><label>Unlock Amount</label><input id="p2WelcomeKitThreshold" min="0" placeholder="30" step="0.01" type="number"/></div>
-<div><label>Progress Title</label><input id="p2WelcomeKitTitle" placeholder="Guardian Welcome Kit Progress" type="text"/></div>
-</div>
-<div class="cp-phase2-grid two">
-<div><label>Unlocked Message</label><input id="p2WelcomeKitUnlocked" placeholder="✓ Welcome Kit Unlocked!" type="text"/></div>
-<div><label>Not Yet Unlocked Message</label><input id="p2WelcomeKitPending" placeholder="Pledge $30+ for Free Kit" type="text"/></div>
-</div>
-</div>
 <div class="cp-phase2-footnote">Phase 2 prepares synchronized product presentation data and product target mappings for the centralized Product System. Commerce processing is intentionally external to the website template.</div>
 </section>
 </div>
@@ -1846,6 +1816,11 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 <label>Button Name</label>
 <input id="p3Button" placeholder="View Product" type="text"/>
 </div>
+</div>
+<div>
+<label>Button Link</label>
+<input id="p3ButtonLink" placeholder="youtube.com" type="text"/>
+<label class="p3-check-row" style="margin-top:8px;"><input id="p3ButtonNewTab" type="checkbox"/><span>✅ Open new tab</span></label>
 </div>
 <div>
 <label>Description</label>
@@ -3963,15 +3938,13 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       {id:"cat-marine",name:"Marine Life"},{id:"cat-birds",name:"Endangered Birds"}
     ],
     animals:[
-      {id:"animal-aria",name:"Aria",species:"Sumatran Tiger (Panthera tigris sumatrae)",image:"https://images.unsplash.com/photo-1561731216-c3a4d99437d5?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Critical",description:"Recovering after wire snare extraction. Requires daily physical therapy and enriched rainforest habitat enclosure.",carePlan:"Raw carnivore protein + bone supplements",location:"Sumatra Deep Reserve",price:"$25",paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-25"},
-      {id:"animal-kibo",name:"Kibo",species:"Mountain Gorilla (Gorilla beringei beringei)",image:"https://images.unsplash.com/photo-1540573133985-7523134d2185?q=80&w=800&auto=format&fit=crop",categoryId:"cat-primates",badge:"Elephants & Primates",condition:"Stable",description:"Orphaned infant rescued from illegal pet trade traffickers. Now integrated into Virunga sanctuary troop.",carePlan:"Bamboo shoot forage & infant gorilla milk formula",location:"Virunga Highlands",price:"$35",paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-35"},
-      {id:"animal-nala",name:"Nala",species:"African Savannah Elephant",image:"https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=800&auto=format&fit=crop",categoryId:"cat-primates",badge:"Elephants & Primates",condition:"Priority",description:"Rescued after surviving poacher ambush in Tsavo East. Receiving leg wound treatment and herd re-socialization.",carePlan:"180kg Acacia foliage & vet wound dressings",location:"Tsavo East Haven",price:"$50",paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-50"},
-      {id:"animal-kai",name:"Kai",species:"Green Sea Turtle (Chelonia mydas)",image:"https://images.unsplash.com/photo-1518467166778-b88f373ffec7?q=80&w=800&auto=format&fit=crop",categoryId:"cat-marine",badge:"Marine Life",condition:"Rehabbed",description:"Saved after ingestion of ocean plastics and flipper entanglement. Prepped for ocean re-release next month.",carePlan:"Sea grass diet + GPS ocean satellite tag",location:"Coral Reef Marine Lab",price:"$15",paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-15"},
-      {id:"animal-zephyr",name:"Zephyr",species:"Snow Leopard (Panthera uncia)",image:"https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Vulnerable",description:"Rescued from a high-altitude snare corridor and now receiving rehabilitation and protected habitat care.",carePlan:"High-protein carnivore diet + mobility conditioning",location:"Himalayan Sanctuary",price:"$40",paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-40"},
-      {id:"animal-soleil",name:"Soleil",species:"Hyacinth Macaw (Anodorhynchus hyacinthinus)",image:"https://images.unsplash.com/photo-1552728089-57bdde30beb3?q=80&w=800&auto=format&fit=crop",categoryId:"cat-birds",badge:"Endangered Birds",condition:"Stable",description:"Confiscated from illegal wildlife traffickers. Now learning natural flight dynamics in our aviary canopy sanctuary.",carePlan:"Palm nuts & flight rehabilitation enclosure",location:"Pantanal Aviary Haven",price:"$20",paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-20"}
+      {id:"animal-aria",name:"Aria",species:"Sumatran Tiger (Panthera tigris sumatrae)",image:"https://images.unsplash.com/photo-1561731216-c3a4d99437d5?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Critical",description:"Recovering after wire snare extraction. Requires daily physical therapy and enriched rainforest habitat enclosure.",carePlan:"Raw carnivore protein + bone supplements",location:"Sumatra Deep Reserve",price:"$25",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-25"},
+      {id:"animal-kibo",name:"Kibo",species:"Mountain Gorilla (Gorilla beringei beringei)",image:"https://images.unsplash.com/photo-1540573133985-7523134d2185?q=80&w=800&auto=format&fit=crop",categoryId:"cat-primates",badge:"Elephants & Primates",condition:"Stable",description:"Orphaned infant rescued from illegal pet trade traffickers. Now integrated into Virunga sanctuary troop.",carePlan:"Bamboo shoot forage & infant gorilla milk formula",location:"Virunga Highlands",price:"$35",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-35"},
+      {id:"animal-nala",name:"Nala",species:"African Savannah Elephant",image:"https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=800&auto=format&fit=crop",categoryId:"cat-primates",badge:"Elephants & Primates",condition:"Priority",description:"Rescued after surviving poacher ambush in Tsavo East. Receiving leg wound treatment and herd re-socialization.",carePlan:"180kg Acacia foliage & vet wound dressings",location:"Tsavo East Haven",price:"$50",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-50"},
+      {id:"animal-kai",name:"Kai",species:"Green Sea Turtle (Chelonia mydas)",image:"https://images.unsplash.com/photo-1518467166778-b88f373ffec7?q=80&w=800&auto=format&fit=crop",categoryId:"cat-marine",badge:"Marine Life",condition:"Rehabbed",description:"Saved after ingestion of ocean plastics and flipper entanglement. Prepped for ocean re-release next month.",carePlan:"Sea grass diet + GPS ocean satellite tag",location:"Coral Reef Marine Lab",price:"$15",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-15"},
+      {id:"animal-zephyr",name:"Zephyr",species:"Snow Leopard (Panthera uncia)",image:"https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Vulnerable",description:"Rescued from a high-altitude snare corridor and now receiving rehabilitation and protected habitat care.",carePlan:"High-protein carnivore diet + mobility conditioning",location:"Himalayan Sanctuary",price:"$40",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-40"},
+      {id:"animal-soleil",name:"Soleil",species:"Hyacinth Macaw (Anodorhynchus hyacinthinus)",image:"https://images.unsplash.com/photo-1552728089-57bdde30beb3?q=80&w=800&auto=format&fit=crop",categoryId:"cat-birds",badge:"Endangered Birds",condition:"Stable",description:"Confiscated from illegal wildlife traffickers. Now learning natural flight dynamics in our aviary canopy sanctuary.",carePlan:"Palm nuts & flight rehabilitation enclosure",location:"Pantanal Aviary Haven",price:"$20",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-20"}
     ],
-    groupProducts:{name:"Wildlife Sponsorship Products",productIds:["animal-aria","animal-kibo","animal-nala","animal-kai","animal-zephyr","animal-soleil"]},
-    welcomeKit:{enabled:true,threshold:30,title:"Guardian Welcome Kit Progress",unlockedMessage:"✓ Welcome Kit Unlocked!",pendingMessage:"Pledge $30+ for Free Kit"},
   };
 
   function $(id){return document.getElementById(id);}
@@ -3982,16 +3955,19 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   function priceText(v){var s=String(v==null?"":v).trim();if(!s)return "";if(/^[-+]?\d+(?:\.\d+)?$/.test(s)){var n=parseFloat(s);return "$"+n.toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2});}return s;}
   function slug(s){return String(s||"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"-").replace(/-+$/g,"").slice(0,28)||"category";}
   function money(v){return priceText(v);}
+  function normalizeButtonLink(v){
+    var s=String(v==null?"":v).trim();
+    if(!s)return "";
+    if(/^https?:\/\//i.test(s))return s;
+    if(/^\/\//.test(s))return "https:"+s;
+    return "https://"+s;
+  }
   function getCat(id){return phase2.categories.find(function(c){return c.id===id;})||null;}
   function getAnimal(id){return phase2.animals.find(function(a){return a.id===id;})||null;}
   function uniqueAnimalId(name){var base="animal-"+slug(name),id=base,n=2;while(getAnimal(id))id=base+"-"+(n++);return id;}
   function uniqueCatId(name){var base="cat-"+slug(name),id=base,n=2;while(getCat(id))id=base+"-"+(n++);return id;}
   function uniqueTargetId(amount,ignoreId){var nAmount=priceNumber(amount,0),base="price-"+String(nAmount).replace(/\.0+$/g,"").replace(/\./g,"-"),id=base,n=2;while(phase2.animals.some(function(a){return a.id!==ignoreId&&a.targetId===id;}))id=base+"-"+(n++);return id;}
-  function selectedGroupProducts(){
-    var ids=Array.isArray(phase2.groupProducts.productIds)?phase2.groupProducts.productIds:[];
-    return ids.map(function(id){return getAnimal(id);}).filter(Boolean);
-  }
-  function syncAnnouncementTarget(){var base="price-"+String(priceNumber(phase2.announcement.amount,0)).replace(/\.0+$/g,"").replace(/\./g,"-"),clash=phase2.animals.some(function(a){return a.targetId===base;});phase2.announcement.targetId=clash?base+"-announcement":base;}
+    function syncAnnouncementTarget(){  function syncAnnouncementTarget(){var base="price-"+String(priceNumber(phase2.announcement.amount,0)).replace(/\.0+$/g,"").replace(/\./g,"-"),clash=phase2.animals.some(function(a){return a.targetId===base;});phase2.announcement.targetId=clash?base+"-announcement":base;}
 
   function savePhase2(draft){try{var key=draft?LS_DRAFT:LS_SETTINGS,obj=JSON.parse(localStorage.getItem(key)||"null")||{};obj.schemaVersion=Math.max(4,Number(obj.schemaVersion||1));obj.configModel="vana-embed-site";obj.phase2=clone(phase2);localStorage.setItem(key,JSON.stringify(obj));if(!draft)localStorage.removeItem(LS_DRAFT);}catch(e){}}
   function readPhase2Source(){
@@ -4009,12 +3985,8 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     phase2.announcement=Object.assign({},phase2.announcement,src.announcement||{});
     phase2.announcement.amount=priceText(phase2.announcement.amount||"$25");
     if(Array.isArray(src.categories)&&src.categories.length)phase2.categories=src.categories.map(function(c){return {id:String(c.id||uniqueCatId(c.name)),name:String(c.name||"Category")};});
-    if(Array.isArray(src.animals)&&src.animals.length)phase2.animals=src.animals.map(function(a){return Object.assign({},a,{id:String(a.id||uniqueAnimalId(a.name)),price:priceText(a.price||"$0"),totalDonations:num(a.totalDonations),targetId:String(a.targetId||"")});});
+    if(Array.isArray(src.animals)&&src.animals.length)phase2.animals=src.animals.map(function(a){return Object.assign({},a,{id:String(a.id||uniqueAnimalId(a.name)),price:priceText(a.price||"$0"),totalDonations:num(a.totalDonations),targetId:String(a.targetId||""),buttonLink:String(a.buttonLink||""),buttonOpenNewTab:a.buttonOpenNewTab===true});});
     phase2.featuredAnimalId=getAnimal(src.featuredAnimalId)?src.featuredAnimalId:(getAnimal(phase2.featuredAnimalId)?phase2.featuredAnimalId:(phase2.animals[0]&&phase2.animals[0].id));
-    phase2.groupProducts=Object.assign({},phase2.groupProducts,src.groupProducts||{});if(!Array.isArray(phase2.groupProducts.productIds))phase2.groupProducts.productIds=[];
-    phase2.groupProducts.productIds=phase2.groupProducts.productIds.filter(function(id){return !!getAnimal(id);});
-    if(!phase2.groupProducts.productIds.length)phase2.groupProducts.productIds=phase2.animals.map(function(a){return a.id;});
-    phase2.welcomeKit=Object.assign({},phase2.welcomeKit,src.welcomeKit||{});
     syncAllTargetIds();
   }
   function syncAllTargetIds(){
@@ -4040,6 +4012,16 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     phase2.categories.forEach(function(c){var selected=active===c.id;html+='<button onclick="filterCategory(\''+esc(c.id)+'\')" class="cat-btn '+(selected?"active ":"")+"px-4 py-2 rounded-full text-xs font-semibold transition-all "+(selected?"bg-forest text-cream":"bg-sandlight text-forest hover:bg-sand")+'" data-cat="'+esc(c.id)+'">'+esc(c.name)+'</button>';});
     wrap.innerHTML=html;
   }
+  function productCta(a,classes,iconClass){
+    var label=String(a.buttonText||"View Product");
+    var link=normalizeButtonLink(a.buttonLink);
+    iconClass=iconClass||"w-3.5 h-3.5";
+    if(link){
+      var target=a.buttonOpenNewTab===true?' target="_blank" rel="noopener noreferrer"':"";
+      return '<a href="'+esc(link)+'"'+target+' class="'+classes+' flex items-center justify-center space-x-1.5"><i data-lucide="external-link" class="'+iconClass+'"></i><span>'+esc(label)+'</span></a>';
+    }
+    return '<button data-target-id="'+esc(a.targetId||"")+'" data-product-id="'+esc(a.targetId||"")+'" data-commerce-action="view-product" data-payment-type="'+esc(a.paymentType||"")+'" class="'+classes+' flex items-center justify-center space-x-1.5"><i data-lucide="eye" class="'+iconClass+'"></i><span>'+esc(label)+'</span></button>';
+  }
   function renderAnimals(){
     var grid=$("animal-grid");if(!grid)return;
     var activeBtn=document.querySelector("#category-filters .cat-btn.active"),activeCat=activeBtn?activeBtn.getAttribute("data-cat"):"all",html="";
@@ -4049,7 +4031,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       html+='<div class="animal-card bg-white rounded-2xl overflow-hidden border border-sand/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col" id="animal-card-'+esc(a.id)+'" data-category="'+esc(a.categoryId)+'" data-animal-id="'+esc(a.id)+'">';
       html+='<div class="relative h-60 overflow-hidden"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Wildlife\'"><span class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs font-semibold px-3 py-1 rounded-full">'+esc(label)+'</span></div>';
       html+='<div class="p-6 flex-grow flex flex-col justify-between space-y-4"><div><div class="flex justify-between items-start mb-2"><h3 class="font-serif text-2xl font-bold text-forest">'+esc(a.name)+'</h3><span class="text-xs bg-terracotta/10 text-terracotta font-bold px-2.5 py-1 rounded-md">'+esc(a.condition)+'</span></div><p class="text-xs text-slategreen uppercase tracking-wider font-semibold mb-3">'+esc(a.species)+'</p><p class="text-sm text-forest/80 line-clamp-3 mb-4">'+esc(a.description)+'</p><div class="text-xs text-slategreen space-y-1 bg-sandlight p-3 rounded-lg border border-sand/50"><p><strong>Care Plan:</strong> '+esc(a.carePlan)+'</p><p><strong>Sanctuary Location:</strong> '+esc(a.location)+'</p><p><strong>Total Donations:</strong> '+money(a.totalDonations||0)+'</p></div></div>';
-      html+='<div class="pt-4 border-t border-sand flex items-center justify-between"><div><span class="text-xs text-slategreen block">'+(a.paymentType==='onetime'?'One-time Gift':'Monthly Care')+'</span><span class="text-lg font-bold text-forest">'+money(a.price)+' <span class="text-xs font-normal text-slategreen">'+unit+'</span></span></div><button id="'+esc(a.targetId)+'" data-target-id="'+esc(a.targetId)+'" data-product-id="'+esc(a.targetId)+'" data-commerce-action="view-product" data-payment-type="'+esc(a.paymentType)+'" class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5"><i data-lucide="eye" class="w-3.5 h-3.5"></i><span>View Product</span></button></div></div></div>';
+      html+='<div class="pt-4 border-t border-sand flex items-center justify-between"><div><span class="text-xs text-slategreen block">'+(a.paymentType==='onetime'?'One-time Gift':'Monthly Care')+'</span><span class="text-lg font-bold text-forest">'+money(a.price)+' <span class="text-xs font-normal text-slategreen">'+unit+'</span></span></div>'+productCta(a,'px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors','w-3.5 h-3.5')+'</div></div></div>';
     });
     grid.innerHTML=html;
     if(typeof window.filterCategory==='function')window.filterCategory(activeCat||"all");
@@ -4059,7 +4041,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     var root=$("featured-animal-card");if(!root)return;var a=getAnimal(phase2.featuredAnimalId)||phase2.animals[0];if(!a)return;
     var total=num(a.totalDonations),goal=num(a.donationGoal,1200),pct=goal>0?Math.min(100,(total/goal)*100):0,unit=a.paymentType==="onetime"?"/ one-time":"/ mo";
     var safeName=String(a.name).replace(/'/g,"\\'");var safeSpecies=String(a.species).replace(/'/g,"\\'");var safeImage=String(a.image).replace(/'/g,"\\'");
-    root.innerHTML='<div class="bg-forestlight/90 border border-sand/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md"><div class="absolute top-4 right-4 bg-terracotta text-cream text-xs px-3 py-1.5 rounded-full font-semibold shadow-md flex items-center space-x-1.5"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Featured</span></div><div class="relative h-64 sm:h-72 rounded-xl overflow-hidden mb-5"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Rescued+Wildlife\'"><div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-forest to-transparent p-4 flex justify-between items-end"><div><span class="text-xs uppercase tracking-wider text-terracotta font-bold">Featured Sanctuary Resident</span><h3 class="font-serif text-2xl text-cream font-bold">'+esc(a.name)+' — '+esc(a.species)+'</h3></div><span class="text-xs px-2.5 py-1 bg-moss text-sand rounded-md font-medium">'+esc(a.condition)+'</span></div></div><p class="text-sand/80 text-sm mb-5 leading-relaxed">'+esc(a.description)+'</p><div class="bg-forest/80 rounded-xl p-3.5 mb-5 border border-sand/10 flex justify-between items-center text-xs"><div><p class="text-sand/60">Total Donations</p><p class="text-cream font-bold text-sm">'+money(total)+(goal>0?" / "+money(goal):"")+'</p></div><div class="w-24 bg-sand/20 h-2 rounded-full overflow-hidden"><div class="bg-terracotta h-full" style="width:'+pct.toFixed(1)+'%"></div></div></div><button data-target-id="'+esc(a.targetId||'')+'" data-product-id="'+esc(a.targetId||'')+'" data-commerce-action="view-product" class="w-full py-3.5 rounded-xl bg-sand text-forest font-bold text-sm hover:bg-cream transition-colors flex items-center justify-center space-x-2"><i data-lucide="eye" class="w-4 h-4 text-terracotta"></i><span>View Product</span></button></div>';
+    root.innerHTML='<div class="bg-forestlight/90 border border-sand/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md"><div class="absolute top-4 right-4 bg-terracotta text-cream text-xs px-3 py-1.5 rounded-full font-semibold shadow-md flex items-center space-x-1.5"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Featured</span></div><div class="relative h-64 sm:h-72 rounded-xl overflow-hidden mb-5"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Rescued+Wildlife\'"><div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-forest to-transparent p-4 flex justify-between items-end"><div><span class="text-xs uppercase tracking-wider text-terracotta font-bold">Featured Sanctuary Resident</span><h3 class="font-serif text-2xl text-cream font-bold">'+esc(a.name)+' — '+esc(a.species)+'</h3></div><span class="text-xs px-2.5 py-1 bg-moss text-sand rounded-md font-medium">'+esc(a.condition)+'</span></div></div><p class="text-sand/80 text-sm mb-5 leading-relaxed">'+esc(a.description)+'</p><div class="bg-forest/80 rounded-xl p-3.5 mb-5 border border-sand/10 flex justify-between items-center text-xs"><div><p class="text-sand/60">Total Donations</p><p class="text-cream font-bold text-sm">'+money(total)+(goal>0?" / "+money(goal):"")+'</p></div><div class="w-24 bg-sand/20 h-2 rounded-full overflow-hidden"><div class="bg-terracotta h-full" style="width:'+pct.toFixed(1)+'%"></div></div></div>'+productCta(a,'w-full py-3.5 rounded-xl bg-sand text-forest font-bold text-sm hover:bg-cream transition-colors','w-4 h-4')+'</div>';
     if(window.lucide)lucide.createIcons();
   }
   function updateFeaturedEditor(){
@@ -4081,18 +4063,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       return '<div class="cp-phase2-item"><div class="cp-phase2-item-main"><div class="cp-phase2-item-name">'+esc(a.name)+' <span style="color:#C9A15A">#'+esc(a.id.replace(/^animal-/,""))+'</span></div><div class="cp-phase2-item-meta">'+esc(c?c.name:(a.badge||"Uncategorized"))+' · '+money(a.price)+' '+(a.paymentType==="onetime"?'one-time':'monthly')+' · '+esc(a.targetId||"")+'</div></div><div class="p3-list-actions"><button type="button" data-animal-edit="'+esc(a.id)+'">Edit</button><button type="button" data-animal-duplicate="'+esc(a.id)+'">Duplicate</button><button type="button" class="danger" data-animal-delete="'+esc(a.id)+'">Delete</button></div></div>';
     }).join("");
   }
-  function renderGroupProducts(){
-    var box=$("p2GroupProductList");if(!box)return;
-    var selected=phase2.groupProducts.productIds||[];
-    var picker=$("p2GroupProductPicker");
-    if(picker){picker.innerHTML='<option value="">Select a website product</option>'+phase2.animals.filter(function(a){return selected.indexOf(a.id)<0;}).map(function(a){return '<option value="'+esc(a.id)+'">'+esc(a.name)+' — '+money(a.price)+' · '+esc(a.targetId||"")+'</option>';}).join("");}
-    box.innerHTML=selected.map(function(id){var a=getAnimal(id);if(!a)return "";return '<div class="cp-phase2-item"><div class="cp-phase2-item-main"><div class="cp-phase2-item-name">'+esc(a.name)+'</div><div class="cp-phase2-item-meta">'+money(a.price)+' · '+esc(a.paymentType==="onetime"?'one-time':'monthly')+' · '+esc(a.targetId||"")+'</div></div><button type="button" class="danger" data-group-product-remove="'+esc(a.id)+'">Remove</button></div>';}).join("");
-    var items=selectedGroupProducts();
-    $("p2GroupProductCount").textContent=items.length+' product'+(items.length===1?'':'s')+' selected';
-    var targets=items.map(function(a){return a.targetId;});
-    $("p2GroupProductTargets").textContent=targets.length?targets.join(' + '):'—';
-  }
-  var phase3Modal = $("ezPhase3Modal");
+    var phase3Modal =  var phase3Modal = $("ezPhase3Modal");
   var phase2Manager = $("ezPhase2Modal");
   var phase3ReturnToPhase2 = false;
   var phase3OriginalId = "";
@@ -4118,10 +4089,10 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       $("p3EditingId").value=duplicateMode?"":a.id;
       $("p3Name").value=duplicateMode?(String(a.name||"Product")+" Copy"):String(a.name||"");
       $("p3Species").value=String(a.species||"");$("p3Category").innerHTML=phase2.categories.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>';}).join("");$("p3Category").value=a.categoryId||((phase2.categories[0]||{}).id||"");
-      $("p3Badge").value=String(a.badge||"");$("p3Image").value=String(a.image||"");$("p3Condition").value=String(a.condition||"");$("p3Button").value=String(a.buttonText||"");$("p3Description").value=String(a.description||"");$("p3CarePlan").value=String(a.carePlan||"");$("p3Location").value=String(a.location||"");$("p3PaymentType").value=a.paymentType||"monthly";$("p3Price").value=priceText(a.price||"$25");$("p3TotalDonations").value=num(a.totalDonations);
+      $("p3Badge").value=String(a.badge||"");$("p3Image").value=String(a.image||"");$("p3Condition").value=String(a.condition||"");$("p3Button").value=String(a.buttonText||"");$("p3ButtonLink").value=String(a.buttonLink||"");$("p3ButtonNewTab").checked=a.buttonOpenNewTab===true;$("p3Description").value=String(a.description||"");$("p3CarePlan").value=String(a.carePlan||"");$("p3Location").value=String(a.location||"");$("p3PaymentType").value=a.paymentType||"monthly";$("p3Price").value=priceText(a.price||"$25");$("p3TotalDonations").value=num(a.totalDonations);
       $("p3ProductId").textContent=duplicateMode?"New ID on Save":a.id;
     }else{
-      $("p3EditingId").value="";$("p3Name").value="";$("p3Species").value="Wildlife Species";$("p3Category").innerHTML=phase2.categories.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>';}).join("");$("p3Category").value=((phase2.categories[0]||{}).id||"");$("p3Badge").value=((getCat($("p3Category").value)||{}).name||"Wildlife");$("p3Image").value="";$("p3Condition").value="Stable";$("p3Button").value="View Product";$("p3Description").value="";$("p3CarePlan").value="";$("p3Location").value="";$("p3PaymentType").value="monthly";$("p3Price").value="$25";$("p3TotalDonations").value=0;$("p3ProductId").textContent="New ID on Save";
+      $("p3EditingId").value="";$("p3Name").value="";$("p3ButtonLink").value="";$("p3ButtonNewTab").checked=false;$("p3Species").value="Wildlife Species";$("p3Category").innerHTML=phase2.categories.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>';}).join("");$("p3Category").value=((phase2.categories[0]||{}).id||"");$("p3Badge").value=((getCat($("p3Category").value)||{}).name||"Wildlife");$("p3Image").value="";$("p3Condition").value="Stable";$("p3Button").value="View Product";$("p3Description").value="";$("p3CarePlan").value="";$("p3Location").value="";$("p3PaymentType").value="monthly";$("p3Price").value="$25";$("p3TotalDonations").value=0;$("p3ProductId").textContent="New ID on Save";
     }
     $("p3ModalTitle").textContent=duplicateMode?"Duplicate Product / Animal":(a?"Edit Product / Animal":"Create Product / Animal");
     phase3SetImagePreview($("p3Image").value.trim());phase3UpdateMeta();
@@ -4145,7 +4116,9 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       categoryId:$("p3Category").value,
       badge:$("p3Badge").value.trim()||((getCat($("p3Category").value)||{}).name||"Wildlife"),
       condition:$("p3Condition").value.trim()||"Stable",
-      buttonText:$("p3Button").value.trim()||("Sponsor "+name),
+      buttonText:$("p3Button").value.trim()||"View Product",
+      buttonLink:normalizeButtonLink($("p3ButtonLink").value),
+      buttonOpenNewTab:$("p3ButtonNewTab").checked,
       description:$("p3Description").value.trim(),
       carePlan:$("p3CarePlan").value.trim(),
       location:$("p3Location").value.trim(),
@@ -4159,17 +4132,13 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     if(index>=0 && !phase3DuplicateMode){phase2.animals[index]=data;}
     else{phase2.animals.push(data);index=phase2.animals.length-1;}
     if(!phase2.featuredAnimalId)phase2.featuredAnimalId=data.id;
-    var gp=phase2.groupProducts.productIds||[];
-    if(gp.indexOf(data.id)<0)gp.push(data.id);
-    phase2.groupProducts.productIds=gp.filter(function(pid){return !!getAnimal(pid);});
     syncAllTargetIds();renderAll();markChanged();phase3Close();
   }
 
-  function renderAll(){renderAnnouncement();renderCategoryFilters();renderAnimals();renderFeatured();renderCategoryList();renderAnimalList();renderGroupProducts();updateFeaturedEditor();}
+  function renderAll(){renderAnnouncement();renderCategoryFilters();renderAnimals();renderFeatured();renderCategoryList();renderAnimalList();updateFeaturedEditor();}
   function markChanged(){savePhase2(true);var pill=$("ezUnsavedPill");if(pill)pill.style.display="block";}
 
-  window.vanaPhase2GetMoney=function(v){return money(v);}
-  window.vanaPhase2GetWelcomeKit=function(){return clone(phase2.welcomeKit);};
+  window.vanaPhase2GetMoney=function(v){return money(v);};
   function bind(){
     $("p2AnnouncementEnabled").addEventListener("change",function(){phase2.announcement.enabled=this.checked;renderAnnouncement();markChanged();});
     $("p2AnnouncementText").addEventListener("input",function(){phase2.announcement.text=this.value;renderAnnouncement();markChanged();});
@@ -4193,7 +4162,6 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
         var id=del.getAttribute("data-animal-delete");
         if(phase2.animals.length<=1){alert("At least one product must remain.");return;}
         if(phase2.featuredAnimalId===id){var replacement=phase2.animals.find(function(a){return a.id!==id;});phase2.featuredAnimalId=replacement?replacement.id:"";updateFeaturedEditor();}
-        phase2.groupProducts.productIds=phase2.groupProducts.productIds.filter(function(x){return x!==id;});
         phase2.animals=phase2.animals.filter(function(a){return a.id!==id;});
         renderAll();markChanged();
       }
@@ -4207,16 +4175,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       var id=$("p3EditingId").value.trim(),a=getAnimal(id);
       if(a){phase3Open(a,true);}
     });
-    $("p2GroupProductsName").value=phase2.groupProducts.name||"Wildlife Sponsorship Products";
-    $("p2GroupProductsName").addEventListener("input",function(){phase2.groupProducts.name=this.value;markChanged();});
-    $("p2AddGroupProduct").addEventListener("click",function(){$("p2GroupProductPicker").focus();});
-    $("p2GroupProductAddSelected").addEventListener("click",function(){var id=$("p2GroupProductPicker").value;if(!id)return;var arr=phase2.groupProducts.productIds||[];if(arr.indexOf(id)<0)arr.push(id);phase2.groupProducts.productIds=arr;renderGroupProducts();markChanged();});
-    $("p2GroupProductList").addEventListener("click",function(e){var btn=e.target.closest&&e.target.closest("[data-group-product-remove]");if(!btn)return;var id=btn.getAttribute("data-group-product-remove");phase2.groupProducts.productIds=(phase2.groupProducts.productIds||[]).filter(function(x){return x!==id;});renderGroupProducts();markChanged();});
-    $("p2WelcomeKitEnabled").addEventListener("change",function(){phase2.welcomeKit.enabled=this.checked;markChanged();;});
-    $("p2WelcomeKitThreshold").addEventListener("input",function(){phase2.welcomeKit.threshold=num(this.value);markChanged();;});
-    $("p2WelcomeKitTitle").addEventListener("input",function(){phase2.welcomeKit.title=this.value;markChanged();;});
-    $("p2WelcomeKitUnlocked").addEventListener("input",function(){phase2.welcomeKit.unlockedMessage=this.value;markChanged();;});
-    $("p2WelcomeKitPending").addEventListener("input",function(){phase2.welcomeKit.pendingMessage=this.value;markChanged();;});
+
 
     $("cpSave").addEventListener("click",function(){setTimeout(function(){syncAllTargetIds();savePhase2(false);renderAll();var pill=$("ezUnsavedPill");if(pill)pill.style.display="none";},30);});
     $("cpCopy").addEventListener("click",function(){setTimeout(function(){try{syncAllTargetIds();var domain=$("cpDomain").value.trim()||"yourname.example.com",proto=domain.indexOf("http")===0?"":"https://",baseUrl=proto+domain.replace(/\/$/,"");var base=JSON.parse(localStorage.getItem(LS_SETTINGS)||"null")||{};base.schemaVersion=Math.max(4,Number(base.schemaVersion||1));base.configModel="vana-embed-site";base.phase2=clone(phase2);var payload=btoa(unescape(encodeURIComponent(JSON.stringify(base))));var snippet='<script src="'+baseUrl+'/embed-loader-5.js#p='+encodeURIComponent(payload)+'" data-page="sv-website-5.html" data-ez-embed data-ez-schema="4" defer><\\/script>';var out=$("cpEmbedOut");if(out){out.value=snippet;out.style.display="block";out.select();if(navigator.clipboard)navigator.clipboard.writeText(snippet);}}catch(e){}},50);});
@@ -4224,7 +4183,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 
   function init(){
     var saved=readPhase2Source();if(saved)normalizePhase2(saved);else syncAllTargetIds();
-    $("p2AnnouncementText").value=phase2.announcement.text;$("p2AnnouncementButtonText").value=phase2.announcement.buttonText;$("p2AnnouncementAmount").value=priceText(phase2.announcement.amount||"$25");$("p2AnnouncementEnabled").checked=phase2.announcement.enabled!==false;$("p2GroupProductsName").value=phase2.groupProducts.name||"Wildlife Sponsorship Products";$("p2WelcomeKitEnabled").checked=phase2.welcomeKit.enabled!==false;$("p2WelcomeKitThreshold").value=phase2.welcomeKit.threshold;$("p2WelcomeKitTitle").value=phase2.welcomeKit.title;$("p2WelcomeKitUnlocked").value=phase2.welcomeKit.unlockedMessage;$("p2WelcomeKitPending").value=phase2.welcomeKit.pendingMessage;
+    $("p2AnnouncementText").value=phase2.announcement.text;$("p2AnnouncementButtonText").value=phase2.announcement.buttonText;$("p2AnnouncementAmount").value=priceText(phase2.announcement.amount||"$25");$("p2AnnouncementEnabled").checked=phase2.announcement.enabled!==false;
     bind();renderAll();document.body.dataset.vanaPhase2="2";
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
