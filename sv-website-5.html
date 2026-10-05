@@ -6954,7 +6954,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     var link=normalizeButtonLink(a.buttonLink);
     iconClass=iconClass||"w-3.5 h-3.5";
     var buttonId=prefix+"-button-"+String(a.id||"");
-    var textMarker=prefix==="animal"?" data-ez-animal-text="true"":"";
+    var textMarker=prefix==="animal"?' data-ez-animal-text="true"':"";
     if(link){
       var target=a.buttonOpenNewTab===true?' target="_blank" rel="noopener noreferrer"':"";
       return '<a id="'+esc(buttonId)+'" href="'+esc(link)+'"'+target+' class="'+classes+' flex items-center justify-center space-x-1.5"><i data-lucide="external-link" class="'+iconClass+'"></i><span'+textMarker+'>'+esc(label)+'</span></a>';
