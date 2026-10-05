@@ -4063,7 +4063,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       return '<div class="cp-phase2-item"><div class="cp-phase2-item-main"><div class="cp-phase2-item-name">'+esc(a.name)+' <span style="color:#C9A15A">#'+esc(a.id.replace(/^animal-/,""))+'</span></div><div class="cp-phase2-item-meta">'+esc(c?c.name:(a.badge||"Uncategorized"))+' · '+money(a.price)+' '+(a.paymentType==="onetime"?'one-time':'monthly')+' · '+esc(a.targetId||"")+'</div></div><div class="p3-list-actions"><button type="button" data-animal-edit="'+esc(a.id)+'">Edit</button><button type="button" data-animal-duplicate="'+esc(a.id)+'">Duplicate</button><button type="button" class="danger" data-animal-delete="'+esc(a.id)+'">Delete</button></div></div>';
     }).join("");
   }
-    var phase3Modal =  var phase3Modal = $("ezPhase3Modal");
+  var phase3Modal = $("ezPhase3Modal");
   var phase2Manager = $("ezPhase2Modal");
   var phase3ReturnToPhase2 = false;
   var phase3OriginalId = "";
