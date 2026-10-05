@@ -1806,7 +1806,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 <div class="box-head">
 <div>
 <div class="box-head-title" id="p3ModalTitle">Product / Animal Builder</div>
-<div class="box-head-note">Create, edit, or duplicate a single shared product. This record powers the website card, Group Products, cart eligibility, and future checkout integration.</div>
+<div class="box-head-note">Create, edit, or duplicate a single shared product. This record powers the website card, Group Products, purchase eligibility, and future checkout integration.</div>
 </div>
 <button aria-label="Close Product Builder" class="box-close" id="ezPhase3Close" type="button">×</button>
 </div>
@@ -1909,7 +1909,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 </div>
 </div>
 <div class="p3-builder-note">
-          One Product record is shared by the website card, Group Products, Centralized Cart eligibility, Single Product checkout eligibility, and the future Payment Integration. No duplicate product records are created.
+          One Product record is shared by the website card, Group Products, centralized purchase eligibility, Single Product checkout eligibility, and the future Payment Integration. No duplicate product records are created.
         </div>
 </div>
 </div>
@@ -2181,7 +2181,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     if(insidePanelUi) return;
 
     // In Edit Page mode the page is an editor, not a live website. Stop
-    // navigation, buttons, tabs, cart actions, etc. from firing while selecting.
+    // navigation, buttons, tabs, legacy commerce actions, etc. from firing while selecting.
     var target = e.target && e.target.closest ? e.target.closest("[data-ez-editor-ignore]") : null;
     if(target) return;
 
