@@ -1443,7 +1443,37 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
             const acres = Math.floor(currentCalcAmt * 0.35) + 1;
             const daysRations = Math.floor(currentCalcAmt * 0.4);
             const ctx = {
-                amount: '
+                amount: '$' + currentCalcAmt,
+                daysRations: daysRations,
+                acres: acres,
+                acres3: acres * 3,
+                vetImpact: currentCalcAmt > 50 ? 'Full Vet Trauma Kit' : 'Antibiotic & Wound Supplies'
+            };
+
+            if (mode) {
+                const fmt = (template) => String(template || '')
+                    .replace(/\{amount\}/g, ctx.amount)
+                    .replace(/\{daysRations\}/g, String(ctx.daysRations))
+                    .replace(/\{acres\}/g, String(ctx.acres))
+                    .replace(/\{acres3\}/g, String(ctx.acres3))
+                    .replace(/\{vetImpact\}/g, ctx.vetImpact);
+                headline.innerText = fmt(mode.headline);
+                ctaText.innerText = fmt(mode.cta);
+                m1.innerText = fmt(mode.metrics && mode.metrics[0]);
+                m2.innerText = fmt(mode.metrics && mode.metrics[1]);
+                m3.innerText = fmt(mode.metrics && mode.metrics[2]);
+            } else {
+                headline.innerText = currentCalcFreq === 'monthly'
+                    ? `Provides ${daysRations} days of anti-poaching ranger field rations & protects ${acres} acres of endangered wildlife habitat.`
+                    : `One-time contribution funds emergency veterinary medical kits & secures ${acres * 3} acres of forest reserve.`;
+                ctaText.innerText = currentCalcFreq === 'monthly'
+                    ? `Pledge $${currentCalcAmt} / Month Sponsorship`
+                    : `Make a $${currentCalcAmt} One-Time Gift`;
+                m1.innerText = `${currentCalcAmt > 50 ? 'Full Vet Trauma Kit' : 'Antibiotic & Wound Supplies'}`;
+                m2.innerText = `${acres} Acres Secured`;
+                m3.innerText = 'Direct Field Dispatch Logs';
+            }
+        }
 
         function switchHabitatTab(regionKey) {
             const data = habitatData[regionKey];
