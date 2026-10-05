@@ -1379,6 +1379,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
         }
 
         function setCalcFrequency(freq) {
+            const cfg = window.vanaPhase2GetImpactSimulator ? window.vanaPhase2GetImpactSimulator() : null;
             currentCalcFreq = freq;
             const monthlyBtn = document.getElementById('calc-freq-monthly');
             const onetimeBtn = document.getElementById('calc-freq-onetime');
@@ -1394,6 +1395,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
         }
 
         function selectCalcAmount(amt) {
+            const cfg = window.vanaPhase2GetImpactSimulator ? window.vanaPhase2GetImpactSimulator() : null;
             currentCalcAmt = amt;
             document.getElementById('calc-custom-input').value = amt;
 
@@ -1412,7 +1414,9 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
         }
 
         function onCustomCalcInput(val) {
-            const parsed = parseInt(val) || 0;
+            const cfg = window.vanaPhase2GetImpactSimulator ? window.vanaPhase2GetImpactSimulator() : null;
+            const minAmount = cfg ? (parseFloat(String(cfg.minAmount).replace(/[^0-9.-]/g,'')) || 5) : 5;
+            const parsed = Math.max(minAmount, parseInt(val) || 0);
             currentCalcAmt = parsed;
 
             // Reset preset buttons highlight
@@ -1434,21 +1438,2850 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
             const m1 = document.getElementById('calc-metric-1');
             const m2 = document.getElementById('calc-metric-2');
             const m3 = document.getElementById('calc-metric-3');
-
+            const cfg = window.vanaPhase2GetImpactSimulator ? window.vanaPhase2GetImpactSimulator() : null;
+            const mode = cfg && cfg[currentCalcFreq] ? cfg[currentCalcFreq] : null;
             const acres = Math.floor(currentCalcAmt * 0.35) + 1;
             const daysRations = Math.floor(currentCalcAmt * 0.4);
+            const ctx = {
+                amount: '
 
-            if (currentCalcFreq === 'monthly') {
-                headline.innerText = `Provides ${daysRations} days of anti-poaching ranger field rations & protects ${acres} acres of endangered wildlife habitat.`;
-                ctaText.innerText = `Pledge $${currentCalcAmt} / Month Sponsorship`;
-            } else {
-                headline.innerText = `One-time contribution funds emergency veterinary medical kits & secures ${acres * 3} acres of forest reserve.`;
-                ctaText.innerText = `Make a $${currentCalcAmt} One-Time Gift`;
+        function switchHabitatTab(regionKey) {
+            const data = habitatData[regionKey];
+            if (!data) return;
+
+            const tabs = document.querySelectorAll('.hab-tab');
+            tabs.forEach(tab => {
+                if (tab.dataset.tab === regionKey) {
+                    tab.className = 'hab-tab tab-active px-5 py-2.5 rounded-full text-xs font-semibold border border-sand transition-all';
+                } else {
+                    tab.className = 'hab-tab px-5 py-2.5 rounded-full text-xs font-semibold border border-sand transition-all text-slategreen hover:bg-cream';
+                }
+            });
+
+            const display = document.getElementById('habitat-display-card');
+            display.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-6 relative h-64 sm:h-80 rounded-2xl overflow-hidden">
+                        <img src="${data.image}" alt="${data.title}" class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs px-3 py-1 rounded-full font-medium">
+                            ${data.location}
+                        </div>
+                    </div>
+                    <div class="lg:col-span-6 space-y-4">
+                        <span class="text-xs font-bold text-terracotta uppercase tracking-wider">${data.statusText}</span>
+                        <h3 class="font-serif text-3xl font-bold text-forest">${data.title}</h3>
+                        <p class="text-sm text-slategreen leading-relaxed">${data.overview}</p>
+                        
+                        <div class="space-y-2 pt-2">
+                            <h4 class="text-xs uppercase font-bold text-forest">Primary Environmental Threats:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                ${data.threats.map(t => `<span class="bg-sandlight text-forest text-xs px-2.5 py-1 rounded-md border border-sand">${t}</span>`).join('')}
+                            </div>
+                        </div>
+
+                        <div class="pt-4 flex items-center justify-between border-t border-sand">
+                            <div>
+                                <span class="text-xs text-slategreen block">Active Field Rangers</span>
+                                <span class="text-lg font-bold text-forest">${data.rangers} Personnel</span>
+                            </div>
+                            <button data-commerce-action="view-product" data-product-context="habitat" data-product-name="${data.title}" data-product-price="50" data-product-image="${data.image}" class="px-5 py-2.5 bg-terracotta hover:bg-terracottadark text-cream text-xs font-bold rounded-full transition-colors flex items-center space-x-1">
+                                <span>Support This Region ($50)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (window.lucide) {
+                lucide.createIcons();
             }
+        }
 
-            m1.innerText = `${currentCalcAmt > 50 ? 'Full Vet Trauma Kit' : 'Antibiotic & Wound Supplies'}`;
-            m2.innerText = `${acres} Acres Secured`;
-            m3.innerText = 'Direct Field Dispatch Logs';
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const success = document.getElementById('contact-success');
+            success.classList.remove('hidden');
+            document.getElementById('contact-form').reset();
+            setTimeout(() => {
+                success.classList.add('hidden');
+            }, 6000);
+        }
+
+        function handleNewsletterSubmit(event) {
+            event.preventDefault();
+            const toast = document.getElementById('newsletter-toast');
+            toast.classList.remove('hidden');
+            document.getElementById('newsletter-email').value = '';
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+<!-- ============ EZ CUSTOMIZE PANEL — markup ============ -->
+<div id="ezFrameToolbar">
+<button data-act="color" title="Color" type="button"><span class="ez-dot"></span></button>
+<button data-act="image" title="Insert Image" type="button">
+<svg fill="none" height="15" viewbox="0 0 24 24" width="15"><rect height="18" rx="2" stroke="currentColor" stroke-width="1.6" width="18" x="3" y="3"></rect><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="1.6"></circle><path d="M21 15l-5-5-11 11" stroke="currentColor" stroke-width="1.6"></path></svg>
+</button>
+<button data-act="video" title="Insert Video" type="button">
+<svg fill="none" height="15" viewbox="0 0 24 24" width="15"><rect height="14" rx="2" stroke="currentColor" stroke-width="1.6" width="15" x="2" y="5"></rect><path d="M17 9l5-3v12l-5-3" stroke="currentColor" stroke-linejoin="round" stroke-width="1.6"></path></svg>
+</button>
+<button data-act="embed" title="Embed Video Link" type="button">
+<svg fill="none" height="15" viewbox="0 0 24 24" width="15"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 6l-2 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
+</button>
+<button data-act="gif" title="Insert GIF" type="button">GIF</button>
+<span class="ez-mt-sep"></span>
+<button data-act="text" title="Typography" type="button">Aa</button>
+<button data-act="border" title="Border weight / radius / padding" type="button">▢</button>
+<button data-act="resize" title="Resize / fill" type="button">↔</button>
+<button data-act="link" title="Link" type="button">
+<svg fill="none" height="15" viewbox="0 0 24 24" width="15"><path d="M9 15l6-6M8 16l-2 2a4 4 0 01-6-6l3-3a4 4 0 016 0M16 8l2-2a4 4 0 016 6l-3 3a4 4 0 01-6 0" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" transform="scale(0.65) translate(6,6)"></path></svg>
+</button>
+<span class="ez-mt-sep"></span>
+<button data-act="duplicate" title="Duplicate" type="button">⎕</button>
+<button data-act="delete" title="Delete" type="button">×</button>
+<span class="ez-mt-sep"></span>
+<button data-act="inspect" title="Attribute Inspector" type="button">ⓘ</button>
+</div>
+<div id="ezStylePanel">
+<div class="sep-head">
+<strong id="ezStyleTitle">ELEMENT</strong>
+<button class="ez-close" id="ezStyleClose" type="button">×</button>
+</div>
+<div id="ezStyleBody">
+<div id="ezSecBackground">
+<h4>Background</h4>
+<div class="ez-row"><input id="ezBgColor" type="color" value="#0A0A0A"/><label>Solid Color</label></div>
+<div class="ez-row"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Opacity</label><input id="ezBgOpacity" max="100" min="0" type="range" value="100"/><span class="ez-val" id="ezBgOpacityVal">100%</span></div>
+<label style="display:flex;align-items:center;gap:8px;font-size:13.5px;margin:4px 0 12px;"><input id="ezBgGradToggle" style="width:auto;" type="checkbox"/> Linear Gradient</label>
+<div id="ezBgGradFields" style="display:none;">
+<div class="ez-row"><input id="ezBgColorB" type="color" value="#8A8A8A"/><label>Color B</label></div>
+<div class="ez-row"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Angle</label><input id="ezBgAngle" max="360" min="0" type="range" value="135"/><span class="ez-val" id="ezBgAngleVal">135°</span></div>
+</div>
+</div>
+<div class="ez-divider"></div>
+<div id="ezSecBorder">
+<h4>Border | Outline</h4>
+<div class="ez-tabs">
+<button class="ez-tab" data-border-style="none" type="button">Transparent</button>
+<button class="ez-tab" data-border-style="solid" type="button">Solid</button>
+<button class="ez-tab" data-border-style="gradient" type="button">Gradient</button>
+</div>
+<div id="ezBorderSolidFields" style="display:none;">
+<div class="ez-row"><input id="ezBorderColor" type="color" value="#C9A15A"/><label>Border Color</label></div>
+</div>
+<div id="ezBorderGradFields" style="display:none;">
+<div class="ez-row"><input id="ezBorderColorA" type="color" value="#C9A15A"/><label>Color A</label></div>
+<div class="ez-row"><input id="ezBorderColorB" type="color" value="#8A8A8A"/><label>Color B</label></div>
+</div>
+<div class="ez-row" id="ezBorderWidthRow" style="display:none;"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Weight</label><input id="ezBorderWidth" max="20" min="0" type="range" value="1"/><span class="ez-val" id="ezBorderWidthVal">1px</span></div>
+<div class="ez-row"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Radius</label><input id="ezBorderRadius" max="60" min="0" type="range" value="0"/><span class="ez-val" id="ezBorderRadiusVal">0px</span></div>
+<h4>Padding</h4>
+<div class="ez-row"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Top</label><input id="ezPadTop" max="160" min="0" type="range" value="0"/><span class="ez-val" id="ezPadTopVal">0px</span></div>
+<div class="ez-row"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Right</label><input id="ezPadRight" max="160" min="0" type="range" value="0"/><span class="ez-val" id="ezPadRightVal">0px</span></div>
+<div class="ez-row"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Bottom</label><input id="ezPadBottom" max="160" min="0" type="range" value="0"/><span class="ez-val" id="ezPadBottomVal">0px</span></div>
+<div class="ez-row"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Left</label><input id="ezPadLeft" max="160" min="0" type="range" value="0"/><span class="ez-val" id="ezPadLeftVal">0px</span></div>
+</div>
+<div id="ezSecLogo" style="display:none;">
+<h4>Logo</h4>
+<div class="ez-field">
+<label>Replace Logo</label>
+<input accept="image/*" id="ezLogoUpload" type="file"/>
+</div>
+<div class="ez-field">
+<label>Logo URL</label>
+<input id="ezLogoUrl" placeholder="https://example.com/logo.svg" type="text"/>
+</div>
+<div class="ez-row">
+<label style="min-width:52px;color:#9A9A96;font-size:12px;">Width</label>
+<input id="ezLogoWidth" max="600" min="20" type="range" value="154"/>
+<span class="ez-val" id="ezLogoWidthVal">154px</span>
+</div>
+<div class="ez-row">
+<label style="min-width:52px;color:#9A9A96;font-size:12px;">Height</label>
+<input id="ezLogoHeight" max="180" min="10" type="range" value="30"/>
+<span class="ez-val" id="ezLogoHeightVal">30px</span>
+</div>
+<div class="ez-field">
+<label>Logo Alt Text</label>
+<input id="ezLogoAlt" placeholder="Logo" type="text"/>
+</div>
+<div class="ez-btn-row" style="display:flex;gap:8px;">
+<button class="cp-action-btn" id="ezLogoResetSize" style="flex:1;" type="button">Reset size</button>
+<button class="cp-action-btn" id="ezLogoRemove" style="flex:1;border-color:rgba(226,131,111,0.6);color:#e2836f;" type="button">Remove</button>
+</div>
+<div class="cp-note">Upload any PNG, JPG, WEBP, GIF, or SVG. Width and height resize the actual logo image, not the navbar link.</div>
+</div>
+<div class="ez-divider" id="ezLogoDivider" style="display:none;"></div>
+<div id="ezSecSize">
+<h4>Size &amp; Fill</h4>
+<div class="ez-tabs">
+<button class="ez-tab" data-size-w="auto" type="button">Auto</button>
+<button class="ez-tab" data-size-w="fill" type="button">Fill width</button>
+<button class="ez-tab" data-size-w="fixed" type="button">Fixed</button>
+</div>
+<div class="ez-row" id="ezSizeWidthRow" style="display:none;"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Width</label><input id="ezSizeWidth" max="1600" min="20" type="range" value="300"/><span class="ez-val" id="ezSizeWidthVal">300px</span></div>
+<div class="ez-tabs" style="margin-top:8px;">
+<button class="ez-tab" data-size-h="auto" type="button">Auto height</button>
+<button class="ez-tab" data-size-h="fill" type="button">Fill height</button>
+<button class="ez-tab" data-size-h="fixed" type="button">Fixed</button>
+</div>
+<div class="ez-row" id="ezSizeHeightRow" style="display:none;"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Height</label><input id="ezSizeHeight" max="1200" min="20" type="range" value="300"/><span class="ez-val" id="ezSizeHeightVal">300px</span></div>
+</div>
+<div class="ez-divider"></div>
+<div id="ezSecMedia">
+<h4>Media</h4>
+<div class="ez-field"><label>Upload Image</label><input accept="image/*" id="ezMediaImageUpload" type="file"/></div>
+<div class="ez-field"><label>Image Link (advanced)</label><input id="ezMediaImageInput" placeholder="Link here" type="text"/></div>
+<div class="ez-field"><label>Video Link</label><input id="ezMediaVideoInput" placeholder="Link here" type="text"/></div>
+<div class="ez-field"><label>GIF Link</label><input id="ezMediaGifInput" placeholder="Link here" type="text"/></div>
+<div class="ez-field"><label>Embed Link</label><input id="ezMediaEmbedInput" placeholder="Link here" type="text"/></div>
+<button class="cp-action-btn" id="ezMediaRemoveBtn" style="width:100%;border-color:rgba(226,131,111,0.6);color:#e2836f;" type="button">Remove Uploaded File</button>
+</div>
+<div class="ez-divider"></div>
+<div id="ezSecText">
+<h4>Text</h4>
+<div class="ez-row"><input id="ezTextColor" type="color" value="#F2F2F0"/><label>Text Color</label></div>
+<div class="ez-row"><label style="min-width:52px;color:#9A9A96;font-size:12px;">Opacity</label><input id="ezTextOpacity" max="100" min="0" type="range" value="100"/><span class="ez-val" id="ezTextOpacityVal">100%</span></div>
+<div class="ez-field" style="margin-top:10px;"><label>Text Size</label><input id="ezTextSize" max="120" min="8" type="number"/></div>
+<div class="ez-field"><label>Line height</label><input id="ezTextLineHeight" max="200" min="10" type="number"/></div>
+<div class="ez-field"><label>Insert Link</label><input id="ezTextLink" placeholder="Link here" type="text"/></div>
+</div>
+<div class="ez-divider" id="ezCounterDivider" style="display:none;"></div>
+<div id="ezSecCounter" style="display:none;">
+<h4>Counter</h4>
+<div class="ez-field"><label>Count</label><input id="statCountInput" step="any" type="number"/></div>
+<div class="ez-field"><label>Suffix</label><input id="statSuffixInput" placeholder="e.g. +, %, k, yrs" type="text"/></div>
+<div class="ez-field"><label>Decimal places</label><input id="statDecimalsInput" max="6" min="0" step="1" type="number"/></div>
+</div>
+</div>
+<button class="ez-save" id="ezStyleSave" type="button">Save</button>
+</div>
+<div id="ezAttrInspector">
+<div class="ai-title">Attribute Inspector</div>
+<div class="ai-chips" id="ezAiChips"></div>
+<div class="ai-sel" id="ezAiSelector"></div>
+</div>
+<div id="ezLinkPopup">
+<label>Link URL</label>
+<input id="ezLinkUrlInput" placeholder="https://example.com or #section" type="text"/>
+<label class="ez-link-newtab"><input id="ezLinkNewTab" type="checkbox"/> Open new tab</label>
+<div class="row">
+<button id="ezLinkCancel" type="button">Cancel</button>
+<button class="save" id="ezLinkSave" type="button">Save link</button>
+</div>
+</div>
+<div id="ezIdListPanel">
+<h4>HTML IDs on this page</h4>
+<input id="ezIdListFilter" placeholder="Filter…" type="text"/>
+<div id="ezIdListRows"></div>
+<div class="rc-row"><button id="ezIdListClose" type="button">Close</button></div>
+</div>
+<div id="ezCustomCodeModal">
+<div class="box">
+<div class="box-head">
+<div>
+<div class="box-head-title">Custom Code</div>
+<div class="box-head-note">Install and manage independent HTML, CSS, or JavaScript effects.</div>
+</div>
+<button aria-label="Close Custom Code" class="box-close" id="ezCustomCodeClose" type="button">×</button>
+</div>
+<div class="effects-scroll" id="ezCustomEffectsList"></div>
+<div class="box-foot">
+<div class="box-foot-left">
+<button class="add-effect" id="ezCustomCodeAdd" type="button">+ Add Effect</button>
+</div>
+<div class="box-foot-right">
+<button id="ezCustomCodeDiscard" type="button">Discard Changes</button>
+<button class="save" id="ezCustomCodeSave" type="button">Save</button>
+</div>
+</div>
+</div>
+</div>
+<div id="ezPhase2Modal">
+<div class="box">
+<div class="box-head"><div>
+<div class="box-head-title">Donations &amp; Animal System</div>
+<div class="box-head-note">Manage the Phase 2 configuration in one isolated workspace. Changes stay synchronized with the website and embed output.</div>
+</div>
+<button aria-label="Close Donations and Animal System" class="box-close" id="ezPhase2Close" type="button">×</button>
+</div>
+<div class="phase2-scroll">
+<section class="cp-phase2" id="cpPhase2Section">
+<div class="cp-phase2-head">
+<div>
+<div class="cp-phase2-kicker">PHASE 2</div>
+<strong>Donations &amp; Animal System</strong>
+<p class="cp-note" style="margin:4px 0 0;">Manage announcement donations, categories, animal display cards, and the highlighted Hero animal from one synced configuration.</p>
+</div>
+</div>
+<div class="cp-phase2-block">
+<div class="cp-phase2-block-title">Announcement Bar</div>
+<label class="cp-check-row"><input checked="" id="p2AnnouncementEnabled" type="checkbox"/><span>Show sponsor button</span></label>
+<label>Announcement Text</label>
+<input id="p2AnnouncementText" placeholder="Announcement text" type="text"/>
+<div class="cp-phase2-grid two">
+<div><label>Sponsor Button</label><input id="p2AnnouncementButtonText" placeholder="Sponsor" type="text"/></div>
+<div><label>Sponsor Amount</label><input id="p2AnnouncementAmount" placeholder="$25" type="text"/></div>
+</div>
+<div class="cp-id-preview">Payment Target ID: <code id="p2AnnouncementTargetId">—</code><span class="cp-note" style="display:block;margin-top:4px;">System-generated from the Sponsor Amount. This field is not editable.</span></div>
+</div>
+<div class="cp-phase2-block">
+<div class="cp-phase2-block-title">Featured Hero Animal</div>
+<label>Select from Animal Display Cards</label>
+<select id="p2FeaturedAnimal"><option value="">Select an existing animal</option></select>
+<div class="cp-phase2-grid two">
+<div><label>Total Donations</label><input id="p2FeaturedTotalDonations" min="0" placeholder="0" step="0.01" type="number"/></div>
+<div><label>Donation Goal</label><input id="p2FeaturedDonationGoal" min="0" placeholder="1200" step="0.01" type="number"/></div>
+</div>
+<p class="cp-note">The selected animal is displayed in the Hero. Donation total and goal are managed here.</p>
+</div>
+<div class="cp-phase2-block">
+<div class="cp-phase2-block-title">Animal Categories</div>
+<div class="cp-phase2-list" id="p2CategoryList"></div>
+<div class="cp-phase2-add-row">
+<input id="p2NewCategory" placeholder="New category name" type="text"/>
+<button class="cp-action-btn cp-action-primary" id="p2AddCategory" type="button">+ Create Category</button>
+</div>
+<p class="cp-note">Categories are the single source of truth for the filters and Animal Card category selector.</p>
+</div>
+<div class="cp-phase2-block">
+<div class="cp-phase2-block-title cp-phase2-title-row"><span>Animal Display Cards</span><button class="cp-action-btn cp-action-primary cp-small-btn" id="p2AddAnimal" type="button">+ Add Product / Animal</button></div>
+<div class="cp-phase2-list" id="p2AnimalList"></div>
+</div>
+
+<div class="cp-phase2-block" id="cpImpactSimulatorBlock">
+<div class="cp-phase2-block-title">Interactive Impact Simulator — Fully Configurable</div>
+<label class="cp-check-row"><input checked="" id="p4ImpactEnabled" type="checkbox"/><span>Enable Interactive Impact Simulator</span></label>
+<div class="cp-phase2-grid two"><div><label>Section Label</label><input id="p4ImpactKicker" type="text"/></div><div><label>Default Mode</label><select id="p4ImpactDefaultFrequency"><option value="monthly">Monthly Giving</option><option value="onetime">One-time Gift</option></select></div></div>
+<label>Heading</label><input id="p4ImpactTitle" type="text"/>
+<label>Description</label><textarea id="p4ImpactDescription" rows="2"></textarea>
+<div class="cp-phase2-grid two"><div><label>Custom Amount Label</label><input id="p4ImpactCustomLabel" type="text"/></div><div><label>Minimum Custom Amount</label><input id="p4ImpactMinAmount" type="text"/></div></div>
+<div class="cp-phase2-block" style="margin-top:10px;margin-bottom:0;">
+<div class="cp-phase2-block-title">Monthly Giving</div>
+<label>Tab Label</label><input id="p4MonthlyLabel" type="text"/>
+<div class="cp-phase2-grid two"><div><label>Default Amount</label><input id="p4MonthlyDefault" type="text"/></div><div><label>CTA Text Template</label><input id="p4MonthlyCta" type="text"/></div></div>
+<div class="cp-phase2-item-meta" style="margin-top:8px;">Preset Amounts</div>
+<div class="cp-phase2-grid two">
+<div><label>Preset 1 Amount</label><input id="p4MonthlyAmt1" type="text"/><label>Preset 1 Label</label><input id="p4MonthlyTag1" type="text"/></div>
+<div><label>Preset 2 Amount</label><input id="p4MonthlyAmt2" type="text"/><label>Preset 2 Label</label><input id="p4MonthlyTag2" type="text"/></div>
+<div><label>Preset 3 Amount</label><input id="p4MonthlyAmt3" type="text"/><label>Preset 3 Label</label><input id="p4MonthlyTag3" type="text"/></div>
+<div><label>Preset 4 Amount</label><input id="p4MonthlyAmt4" type="text"/><label>Preset 4 Label</label><input id="p4MonthlyTag4" type="text"/></div>
+</div>
+<label>Impact Headline Template</label><textarea id="p4MonthlyHeadline" rows="2"></textarea>
+<div class="cp-note">Placeholders: <code>{amount}</code> <code>{daysRations}</code> <code>{acres}</code> <code>{acres3}</code> <code>{vetImpact}</code></div>
+<div class="cp-phase2-grid two"><div><label>Metric 1</label><input id="p4MonthlyMetric1" type="text"/></div><div><label>Metric 2</label><input id="p4MonthlyMetric2" type="text"/></div></div>
+<label>Metric 3</label><input id="p4MonthlyMetric3" type="text"/>
+</div>
+<div class="cp-phase2-block" style="margin-top:10px;margin-bottom:0;">
+<div class="cp-phase2-block-title">One-time Gift</div>
+<label>Tab Label</label><input id="p4OnetimeLabel" type="text"/>
+<div class="cp-phase2-grid two"><div><label>Default Amount</label><input id="p4OnetimeDefault" type="text"/></div><div><label>CTA Text Template</label><input id="p4OnetimeCta" type="text"/></div></div>
+<div class="cp-phase2-item-meta" style="margin-top:8px;">Preset Amounts</div>
+<div class="cp-phase2-grid two">
+<div><label>Preset 1 Amount</label><input id="p4OnetimeAmt1" type="text"/><label>Preset 1 Label</label><input id="p4OnetimeTag1" type="text"/></div>
+<div><label>Preset 2 Amount</label><input id="p4OnetimeAmt2" type="text"/><label>Preset 2 Label</label><input id="p4OnetimeTag2" type="text"/></div>
+<div><label>Preset 3 Amount</label><input id="p4OnetimeAmt3" type="text"/><label>Preset 3 Label</label><input id="p4OnetimeTag3" type="text"/></div>
+<div><label>Preset 4 Amount</label><input id="p4OnetimeAmt4" type="text"/><label>Preset 4 Label</label><input id="p4OnetimeTag4" type="text"/></div>
+</div>
+<label>Impact Headline Template</label><textarea id="p4OnetimeHeadline" rows="2"></textarea>
+<div class="cp-note">Placeholders: <code>{amount}</code> <code>{daysRations}</code> <code>{acres}</code> <code>{acres3}</code> <code>{vetImpact}</code></div>
+<div class="cp-phase2-grid two"><div><label>Metric 1</label><input id="p4OnetimeMetric1" type="text"/></div><div><label>Metric 2</label><input id="p4OnetimeMetric2" type="text"/></div></div>
+<label>Metric 3</label><input id="p4OnetimeMetric3" type="text"/>
+</div>
+<p class="cp-note">The Simulator remains a presentation/configuration layer. Purchase actions continue to use the centralized Product System.</p>
+</div>
+<div class="cp-phase2-footnote">Phase 2 prepares synchronized product presentation data and product target mappings for the centralized Product System. Commerce processing is intentionally external to the website template.</div>
+</section>
+</div>
+<div class="box-foot">
+<div class="box-foot-left"><button id="ezPhase2CloseBottom" type="button">Close</button></div>
+<div class="box-foot-right"><button class="save" id="ezPhase2Save" type="button">Save Settings</button></div>
+</div>
+</div>
+</div>
+<div id="ezPhase3Modal">
+<div class="box">
+<div class="box-head">
+<div>
+<div class="box-head-title" id="p3ModalTitle">Product / Animal Builder</div>
+<div class="box-head-note">Create, edit, or duplicate a single product / animal shown on the website.</div>
+</div>
+<button aria-label="Close Product Builder" class="box-close" id="ezPhase3Close" type="button">×</button>
+</div>
+<div class="phase3-scroll">
+<input type="hidden" id="p3EditingId" value="">
+      <div class="p3-builder-wrap">
+<div class="p3-builder-grid two">
+<div>
+<label>Product Name</label>
+<input id="p3Name" placeholder="Aria" type="text"/>
+</div>
+<div>
+<label>Species</label>
+<input id="p3Species" placeholder="Sumatran Tiger" type="text"/>
+</div>
+</div>
+<div class="p3-builder-grid two">
+<div>
+<label>Category</label>
+<select id="p3Category"></select>
+</div>
+<div>
+<label>Category Badge</label>
+<input id="p3Badge" placeholder="Big Cats" type="text"/>
+</div>
+</div>
+<div>
+<label>Image URL</label>
+<input id="p3Image" placeholder="https://..." type="text"/>
+<div class="p3-image-preview-wrap" id="p3ImagePreviewWrap">
+<img alt="Product image preview" id="p3ImagePreview"/>
+<span id="p3ImagePreviewFallback">Image preview</span>
+</div>
+</div>
+<div class="p3-builder-grid two">
+<div>
+<label>Condition Badge</label>
+<input id="p3Condition" placeholder="Critical" type="text"/>
+</div>
+<div>
+<label>Button Name</label>
+<input id="p3Button" placeholder="View Product" type="text"/>
+</div>
+</div>
+<div>
+<label>Button Link</label>
+<input id="p3ButtonLink" placeholder="youtube.com" type="text"/>
+<label class="p3-check-row" style="margin-top:8px;"><input id="p3ButtonNewTab" type="checkbox"/><span>✅ Open new tab</span></label>
+</div>
+<div>
+<label>Description</label>
+<textarea id="p3Description" placeholder="Product / animal description" rows="3"></textarea>
+</div>
+<div>
+<label>Care Plan</label>
+<textarea id="p3CarePlan" placeholder="Care plan details" rows="2"></textarea>
+</div>
+<div>
+<label>Sanctuary / Product Location</label>
+<input id="p3Location" placeholder="Sanctuary location" type="text"/>
+</div>
+<div class="p3-builder-grid two">
+<div>
+<label>Payment Type</label>
+<select id="p3PaymentType">
+<option value="monthly">Monthly Payment (Subscription)</option>
+<option value="onetime">One-time Payment</option>
+</select>
+</div>
+<div>
+<label>Product Price</label>
+<input id="p3Price" placeholder="$25" type="text"/>
+</div>
+</div>
+<div>
+<label>Total Donations</label>
+<input id="p3TotalDonations" min="0" placeholder="0" step="0.01" type="number"/>
+</div>
+<div class="p3-identity-grid">
+<div class="p3-identity-card">
+<div class="p3-identity-label">Product ID</div>
+<code id="p3ProductId">New ID on Save</code>
+<small>Stable internal identity. System-generated.</small>
+</div>
+<div class="p3-identity-card accent">
+<div class="p3-identity-label">Payment Target ID</div>
+<code id="p3TargetId">price-25</code>
+<small>System-generated from the product price. Not editable.</small>
+</div>
+</div>
+</div>
+</div>
+<div class="box-foot">
+<div class="box-foot-left">
+<button id="p3DuplicateFromEditor" type="button">Duplicate as New Product</button>
+<button id="ezPhase3Cancel" type="button">Cancel</button>
+</div>
+<div class="box-foot-right">
+<button class="save" id="ezPhase3Save" type="button">Save Product</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="ezUnsavedPill">Unsaved changes — click Save Settings to keep them</div>
+<script id="ez-customize-click-bridge">
+(function(){
+  "use strict";
+  function bridgeHandler(e){
+    var panel = document.getElementById("customizePanel");
+    if(!panel || !panel.contains(e.target)) return;
+
+    var el = e.target.closest ? e.target.closest("button,input,select,textarea") : null;
+    if(!el) return;
+
+    if(el.id === "cpToggle"){
+      var body = document.getElementById("cpBody");
+      if(body){
+        var hidden = body.style.display === "none";
+        body.style.display = hidden ? "block" : "none";
+        el.textContent = hidden ? "Hide" : "Show";
+      }
+      e.stopImmediatePropagation();
+      return;
+    }
+
+    if(el.id === "cpCollapse"){
+      var collapsed = panel.classList.toggle("cp-collapsed");
+      el.textContent = collapsed ? "Expand <" : "Collapsed >";
+      el.setAttribute("aria-expanded", collapsed ? "false" : "true");
+      e.stopImmediatePropagation();
+      return;
+    }
+
+    if(el.id === "cpEditPage" && typeof window.ezSetEditMode === "function"){
+      window.ezSetEditMode();
+      e.stopImmediatePropagation();
+      return;
+    }
+
+    if(el.tagName === "BUTTON"){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      document.removeEventListener("click", bridgeHandler, true);
+      setTimeout(function(){
+        try{ el.click(); }catch(err){}
+        document.addEventListener("click", bridgeHandler, true);
+      }, 0);
+    }
+  }
+  document.addEventListener("click", bridgeHandler, true);
+})();
+</script>
+<div id="customizePanel">
+<div class="cp-head">
+<strong>Customize</strong>
+<div class="cp-head-btns">
+<button class="cp-collapse-btn" id="cpCollapse" title="Collapse Customize panel" type="button">Collapsed &gt;</button>
+<button class="cp-history-btn" id="cpUndo" title="Undo" type="button">↺ Undo</button>
+<button class="cp-history-btn" id="cpRedo" title="Redo" type="button">↻ Redo</button>
+<button class="cp-toggle" id="cpToggle" type="button">Hide</button>
+</div>
+</div>
+<div id="cpBody">
+<button class="cp-editpage-btn" id="cpEditPage" type="button">
+<span class="cp-editpage-dot"></span> Edit Page: <b id="cpEditPageState">OFF</b>
+</button>
+<p class="cp-note" style="margin:6px 0 14px;">When ON, click any box/frame on the page to recolor it or add media. Click any text or button to format it, recolor it, resize it, or add a link.</p>
+<div class="cp-group">
+<label>Pages</label>
+<div id="cpSections"></div>
+<p class="cp-page-hint">Click a page name to jump straight to it.</p>
+</div>
+<div class="cp-group">
+<label>Quick Color Schemes</label>
+<div class="cp-scheme-row">
+<button class="cp-scheme-swatch" id="scheme0" style="background:linear-gradient(135deg,#F2F1EC 50%,#2B3FDD 50%);" title="Default"></button>
+<button class="cp-scheme-swatch" id="scheme1" style="background:linear-gradient(135deg,#0A0A0A 50%,#C9A15A 50%);" title="Gold Noir"></button>
+<button class="cp-scheme-swatch" id="scheme2" style="background:linear-gradient(135deg,#FAF7F1 50%,#1F4B3F 50%);" title="Ivory Editorial"></button>
+<button class="cp-scheme-swatch" id="scheme3" style="background:linear-gradient(135deg,#0D0B14 50%,#9A7BD1 50%);" title="Midnight Violet"></button>
+<button class="cp-scheme-swatch" id="scheme4" style="background:linear-gradient(135deg,#171310 50%,#CE9155 50%);" title="Terracotta"></button>
+</div>
+</div>
+<div class="cp-divider"></div>
+<div class="cp-group">
+<label>Heading Font</label>
+<select id="fHeading">
+<option value="Space Grotesk">Space Grotesk (default)</option>
+<option value="Playfair Display">Playfair Display</option>
+<option value="Cormorant Garamond">Cormorant Garamond</option>
+<option value="Poppins">Poppins</option>
+<option value="Montserrat">Montserrat</option>
+<option value="Fraunces">Fraunces</option>
+<option value="DM Serif Display">DM Serif Display</option>
+</select>
+</div>
+<div class="cp-group" style="margin-bottom:4px;">
+<label>Body Font</label>
+<select id="fBody">
+<option value="Inter">Inter (default)</option>
+<option value="Poppins">Poppins</option>
+<option value="Roboto">Roboto</option>
+<option value="Work Sans">Work Sans</option>
+<option value="Manrope">Manrope</option>
+<option value="Nunito Sans">Nunito Sans</option>
+</select>
+</div>
+<div class="cp-divider"></div>
+<div class="cp-divider"></div>
+<div class="cp-group" style="margin-bottom:10px;">
+<label>Owner Email (for inquiries)</label>
+<p class="cp-note" style="margin:4px 0 8px;">Where the contact form's "Send message" button opens Gmail Compose to. Also updates the "Prefer email?" link on the Contact section.</p>
+<input id="cpOwnerEmail" placeholder="e.g. hello@yourdomain.com" type="text"/>
+</div>
+<div class="cp-divider cp-phase2-divider"></div>
+<div class="cp-group" style="margin-bottom:10px;">
+<label>Phase 2</label>
+<p class="cp-note" style="margin:4px 0 8px;">Configure the synced announcement, donations, categories, animal display cards, and highlighted Hero animal in a dedicated editor.</p>
+<button class="cp-action-btn" id="cpEditPhase2" type="button">Edit Donations &amp; Animal System</button>
+</div>
+<div class="cp-divider cp-phase2-divider"></div>
+<div class="cp-divider cp-phase2-divider"></div>
+<div class="cp-group" style="margin-bottom:10px;">
+<label>Custom Code</label>
+<p class="cp-note" style="margin:4px 0 8px;">Paste third-party scripts, widgets, or custom HTML/CSS. Everything here is injected into your page on load.</p>
+<button class="cp-action-btn" id="cpEditCustomCode" type="button">Edit Custom Code</button>
+</div>
+<div class="cp-group" style="margin-bottom:10px;">
+<label>HTML IDs</label>
+<p class="cp-note" style="margin:4px 0 8px;">List every element ID on the page — copy one to paste into an external tool's "Target ID" field.</p>
+<button class="cp-action-btn" id="cpShowIdList" type="button">List HTML IDs</button>
+</div>
+<div class="cp-divider"></div>
+<div class="cp-group" style="margin-bottom:10px;">
+<label>Your hosted domain</label>
+<input id="cpDomain" placeholder="e.g. yourname.netlify.app" type="text"/>
+</div>
+<div class="cp-btn-row" style="flex-wrap:wrap;">
+<button class="cp-action-btn" id="cpSave" type="button">Save Settings</button>
+<button class="cp-action-btn cp-action-primary" id="cpCopy" type="button">Copy Embed Code</button>
+<button class="cp-action-btn" id="cpReset" style="flex:1 1 100%;margin-top:6px;" type="button">Back to Default</button>
+</div>
+<textarea id="cpEmbedOut" readonly="" style="margin-top:10px;height:64px;color:#8fd18f;display:none;"></textarea>
+<p class="cp-note">1) I-adjust ang kulay/fonts sa itaas. 2) Save Settings. 3) I-download itong page bilang <code>sv-website-5.html</code>, at i-upload kasama ang <code>embed-loader-5.js</code> (parehong file, same folder) sa hosting mo. 4) Ilagay ang domain sa field sa itaas. 5) Copy Embed Code, i-paste sa Systeme.io / GHL / ClickFunnels bilang Custom HTML block.</p>
+</div>
+</div>
+<script id="ez-panel-script">
+(function(){
+  "use strict";
+  var LS_SETTINGS = "ez_customizer_settings";
+  var LS_DRAFT = "ez_customizer_draft";
+  var LS_HISTORY = "ez_customizer_history";
+  var root = document.getElementById("main") ? document : document; // whole doc is in scope
+  var body = document.body;
+
+  // ---------- helpers ----------
+  function $(sel, ctx){ return (ctx||document).querySelector(sel); }
+  function $all(sel, ctx){ return Array.prototype.slice.call((ctx||document).querySelectorAll(sel)); }
+  function hexToRgba(hex, a){
+    hex = hex.replace("#","");
+    if(hex.length===3){ hex = hex.split("").map(function(c){return c+c;}).join(""); }
+    var r=parseInt(hex.substr(0,2),16), g=parseInt(hex.substr(2,2),16), b=parseInt(hex.substr(4,2),16);
+    return "rgba("+r+","+g+","+b+","+a+")";
+  }
+  function debounce(fn, ms){ var t; return function(){ var a=arguments,c=this; clearTimeout(t); t=setTimeout(function(){fn.apply(c,a);}, ms); }; }
+  function loadGoogleFont(family){
+    var id = "ez-gfont-"+family.replace(/\s+/g,"-");
+    if(document.getElementById(id)) return;
+    var link = document.createElement("link");
+    link.id = id; link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=" + family.replace(/\s+/g,"+") + ":wght@400;500;600;700&display=swap";
+    document.head.appendChild(link);
+  }
+
+  // ---------- state ----------
+  var editOn = false;
+  var viewOnly = false;
+  var selectedFrame = null;
+  var mediaTargetImg = null;
+  var history = [];
+  var historyIndex = -1;
+  var unsaved = false;
+
+  // ---------- DOM refs ----------
+  var customizePanel = $("#customizePanel");
+  var cpToggle = $("#cpToggle");
+  var cpCollapse = $("#cpCollapse");
+  var frameToolbar = $("#ezFrameToolbar");
+  var stylePanel = $("#ezStylePanel");
+  var attrInspector = $("#ezAttrInspector");
+  var linkPopup = $("#ezLinkPopup");
+  var idListPanel = $("#ezIdListPanel");
+  var customCodeModal = $("#ezCustomCodeModal");
+  var phase2Modal = $("#ezPhase2Modal");
+  var unsavedPill = $("#ezUnsavedPill");
+
+  // ============================================================
+  // EDIT MODE TOGGLE
+  // ============================================================
+  function setEditMode(on){
+    if(typeof on === "undefined") on = !editOn;
+    editOn = viewOnly ? false : on;
+    body.classList.toggle("ez-edit-on", editOn);
+    $("#cpEditPage").classList.toggle("active", editOn);
+    $("#cpEditPageState").textContent = editOn ? "ON" : "OFF";
+    $all(".editable-text,.ez-editable-leaf").forEach(function(el){ el.setAttribute("contenteditable", editOn ? "true" : "false"); });
+    if(!editOn){ hideAllFloating(); }
+  }
+  window.ezSetEditMode = function(){ setEditMode(!editOn); };
+  $("#cpEditPage").addEventListener("click", function(){ setEditMode(!editOn); });
+
+  // Editable text inside a <label for="...">: the label's default behavior
+  // steals the click and focuses the associated input, making the text
+  // impossible to edit. In edit mode, claim the click for the text instead.
+  document.addEventListener("click", function(e){
+    if(!editOn) return;
+    var t = e.target && e.target.closest ? e.target.closest("label[for] .editable-text") : null;
+    if(!t) return;
+    e.preventDefault();
+    try { t.focus(); } catch(err){}
+  }, true);
+
+  document.addEventListener("beforeinput", function(e){
+    if(!editOn && e.target && e.target.closest && e.target.closest(".editable-text")) e.preventDefault();
+  }, true);
+
+  var cpBody = $("#cpBody");
+  cpToggle.addEventListener("click", function(){
+    var hidden = cpBody.style.display === "none";
+    cpBody.style.display = hidden ? "block" : "none";
+    cpToggle.textContent = hidden ? "Hide" : "Show";
+  });
+  cpCollapse.addEventListener("click", function(){
+    var collapsed = customizePanel.classList.toggle("cp-collapsed");
+    cpCollapse.textContent = collapsed ? "Expand <" : "Collapsed >";
+    cpCollapse.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  });
+
+  function hideAllFloating(){
+    frameToolbar.style.display = "none";
+    stylePanel.classList.remove("show");
+    attrInspector.style.display = "none";
+    linkPopup.style.display = "none";
+    if(selectedFrame){ selectedFrame.classList.remove("ez-selected"); selectedFrame = null; }
+  }
+
+  // ============================================================
+  // CLICK ROUTING
+  // Every clickable UI element — plain text or a full box/frame — always
+  // opens the SAME full toolbar (color, image, video, embed, gif, Aa,
+  // border, resize, link, duplicate, delete, inspect). There is no
+  // separate 3-button text-only toolbar anymore: one consistent
+  // experience for every element on the page.
+  // ============================================================
+  document.addEventListener("click", function(e){
+    if(!editOn) return;
+    var insidePanelUi = e.target.closest && e.target.closest("#customizePanel,#ezStylePanel,#ezFrameToolbar,#ezAttrInspector,#ezLinkPopup,#ezIdListPanel,#ezCustomCodeModal,#ezPhase2Modal,#ezUnsavedPill");
+    if(insidePanelUi) return;
+
+    // In Edit Page mode the page is an editor, not a live website. Stop
+    // navigation, buttons, tabs, legacy commerce actions, etc. from firing while selecting.
+    var target = e.target && e.target.closest ? e.target.closest("[data-ez-editor-ignore]") : null;
+    if(target) return;
+
+    var node = e.target;
+    if(!node || node === document.body || node === document.documentElement) return;
+    if(node.closest && (node.closest("script,style,link") || node.closest("#ezRoot"))) return;
+
+    // Phase 1 read-only components are intentionally locked from direct editing
+    // and picking. They will become configurable through dedicated settings
+    // in later phases instead of being edited as raw page elements.
+    if(node.closest && node.closest('[data-ez-phase1-readonly="true"]')){
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    // SVG internals (path/circle/etc.) deliberately have no IDs; select the
+    // nearest authored SVG/container instead.
+    if(node.nodeType === 1){
+      var tag = (node.tagName || "").toLowerCase();
+      if(["path","rect","circle","line","polyline","polygon","g","defs","stop","clippath","use"].indexOf(tag) !== -1){
+        node = node.closest("svg") || node.parentElement;
+      }
+    }
+
+    // Every authored element receives an ID during initialization. If a
+    // runtime-created element somehow has none, make it selectable immediately.
+    if(node && node.nodeType === 1 && !node.id && typeof ezNextId === "function"){
+      node.id = ezNextId(ezIdPrefix(node));
+    }
+
+    if(node && node.nodeType === 1 && node.id){
+      e.preventDefault();
+      e.stopPropagation();
+      selectFrame(node);
+      if(node.classList.contains("ez-editable-leaf") || node.isContentEditable){
+        try{
+          node.focus();
+          // Put the caret at the clicked location without opening the live page action.
+          var sel = window.getSelection && window.getSelection();
+          if(sel && document.caretRangeFromPoint){
+            var range = document.caretRangeFromPoint(e.clientX, e.clientY);
+            if(range){ sel.removeAllRanges(); sel.addRange(range); }
+          }
+        }catch(err){}
+      }
+      return;
+    }
+
+    hideAllFloating();
+  }, true);
+
+  // ============================================================
+  // FRAME SELECT + FRAME TOOLBAR
+  // ============================================================
+  function selectFrame(el){
+    if(selectedFrame) selectedFrame.classList.remove("ez-selected");
+    selectedFrame = el;
+    el.classList.add("ez-selected");
+    syncLogoControls();
+    var r = el.getBoundingClientRect();
+    frameToolbar.style.display = "flex";
+    var top = r.top - 40;
+    if(top < 4) top = Math.min(r.top + 4, window.innerHeight - 44);
+    frameToolbar.style.top = top + "px";
+    frameToolbar.style.left = Math.max(4, r.left) + "px";
+  }
+
+  $all("#ezFrameToolbar [data-act]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var act = btn.getAttribute("data-act");
+      if(!selectedFrame) return;
+      switch(act){
+        case "color": openStylePanel(["background"]); break;
+        case "text": openStylePanel(["text"]); break;
+        case "border": openStylePanel(["border"]); break;
+        case "resize": openStylePanel(["size"]); break;
+        case "image":
+          if(isLogoSelection(selectedFrame)){ openStylePanel(["logo"]); }
+          else { openStylePanel(["media"]); }
+          break;
+        case "video": case "embed": case "gif":
+          openStylePanel(["media"]); break;
+        case "link": openLinkPopup(selectedFrame, frameToolbar); break;
+        case "duplicate": duplicateFrame(); break;
+        case "delete": deleteFrame(); break;
+        case "inspect": showAttrInspector(); break;
+      }
+    });
+  });
+
+  // Make a cloned subtree fully independent: every element (including the
+  // root) gets a brand-new unique id, and id-derived references such as
+  // data-recolor-key / aria-controls are re-pointed at the new ids so that
+  // editing or saving the copy never writes back onto the original.
+  function ezMakeCloneUnique(clone){
+    if(!clone || clone.nodeType !== 1) return clone;
+    var nodes = [clone].concat(Array.prototype.slice.call(clone.querySelectorAll("*")));
+    var map = {};
+    nodes.forEach(function(el){
+      var tag = (el.tagName || "").toLowerCase();
+      if(tag === "path" || tag === "rect" || tag === "circle" || tag === "line" ||
+         tag === "polyline" || tag === "polygon" || tag === "g" || tag === "defs" ||
+         tag === "stop" || tag === "clippath" || tag === "use") return;
+      var oldId = el.id;
+      var newId = ezNextId(ezIdPrefix(el));
+      el.id = newId;
+      if(oldId) map[oldId] = newId;
+      if(el.hasAttribute("data-recolor-key")) el.setAttribute("data-recolor-key", newId);
+    });
+    nodes.forEach(function(el){
+      ["aria-controls","aria-labelledby","aria-describedby","for","href"].forEach(function(attr){
+        var v = el.getAttribute && el.getAttribute(attr);
+        if(!v) return;
+        if(attr === "href"){
+          if(v.charAt(0) !== "#") return;
+          if(map[v.slice(1)]) el.setAttribute(attr, "#" + map[v.slice(1)]);
+          return;
+        }
+        if(map[v]) el.setAttribute(attr, map[v]);
+      });
+    });
+    if(typeof captureTextBaselines === "function"){ try { captureTextBaselines(); } catch(err){} }
+    return clone;
+  }
+
+  function duplicateFrame(){
+    if(!selectedFrame) return;
+    var clone = ezMakeCloneUnique(selectedFrame.cloneNode(true));
+    clone.classList.remove("ez-selected");
+    selectedFrame.parentNode.insertBefore(clone, selectedFrame.nextSibling);
+    pushHistory();
+    markUnsaved();
+  }
+  function deleteFrame(){
+    if(!selectedFrame) return;
+    if(!confirm("Delete this element?")) return;
+    var el = selectedFrame;
+    hideAllFloating();
+    el.remove();
+    pushHistory();
+    markUnsaved();
+  }
+
+  // ============================================================
+  // HOVER DUPLICATE / DELETE ON REPEATABLE ITEMS
+  // ============================================================
+  var DELETABLE_SELECTORS = [".work-grid > .project-card", ".quote-stage > .quote", ".client-grid > .client-cell", "#journalList > .journal-item", "#journalPageList > .journal-item", "#services-accordion > .acc-item"];
+  function ensureItemActions(){
+    DELETABLE_SELECTORS.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(item){
+        item.classList.add("deletable-item");
+        if(item.querySelector(":scope > .item-actions")) return;
+        var bar = document.createElement("div");
+        bar.className = "item-actions";
+        bar.innerHTML = '<button type="button" class="item-action-btn" data-action="duplicate" title="Duplicate">\u29C9</button><button type="button" class="item-action-btn" data-action="delete" title="Delete">\u00D7</button>';
+        item.appendChild(bar);
+      });
+    });
+  }
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest(".item-action-btn");
+    if(!btn) return;
+    if(!editOn) return;
+    e.preventDefault(); e.stopPropagation();
+    var item = btn.closest(".deletable-item");
+    if(!item) return;
+    var groupEl = item.parentElement;
+    var action = btn.getAttribute("data-action");
+    if(action === "duplicate"){
+      var clone = ezMakeCloneUnique(item.cloneNode(true));
+      clone.classList.remove("ez-selected");
+      item.after(clone);
+      ensureItemActions();
+    } else if(action === "delete"){
+      if(groupEl.children.length <= 1){ alert("At least one item must remain in this section."); return; }
+      item.remove();
+    }
+    if(groupEl && groupEl.classList.contains("quote-stage") && window.ezRefreshQuotes){ window.ezRefreshQuotes(false); }
+    pushHistory();
+    markUnsaved();
+  }, true);
+
+  // ============================================================
+  // "+ ADD" BUTTONS — new project card / testimonial / client / journal
+  // Bound via delegation on document so they keep working after any
+  // Undo/Redo replaces #main's innerHTML (which would detach direct
+  // listeners bound to the original button nodes).
+  // ============================================================
+  function addProjectCard(){
+    var grid = document.querySelector(".work-grid");
+    if(!grid) return;
+    var cards = grid.querySelectorAll(".project-card");
+    var template = cards[cards.length - 1];
+    if(!template) return;
+    var clone = ezMakeCloneUnique(template.cloneNode(true));
+    clone.classList.remove("ez-selected");
+    var seed = "project" + Date.now();
+    var img = clone.querySelector(".project-cover img");
+    if(img){ img.src = "https://picsum.photos/seed/" + seed + "/640/400"; img.alt = "New project preview"; }
+    var badge = clone.querySelector(".project-badge");
+    if(badge){ badge.textContent = "NEW PROJECT"; }
+    var h3 = clone.querySelector(".project-meta h3");
+    if(h3){ h3.textContent = "New Project"; }
+    var p = clone.querySelector(".project-meta p");
+    if(p){ p.textContent = "Project type · " + new Date().getFullYear(); }
+    grid.appendChild(clone);
+    pushHistory();
+    markUnsaved();
+    selectFrame(clone.querySelector(".project-cover") || clone);
+  }
+
+  function addTestimonial(){
+    var stage = document.querySelector(".quote-stage");
+    if(!stage) return;
+    var quotesEls = stage.querySelectorAll(".quote");
+    var template = quotesEls[quotesEls.length - 1];
+    if(!template) return;
+    var clone = ezMakeCloneUnique(template.cloneNode(true));
+    clone.classList.remove("ez-selected", "is-active");
+    var bq = clone.querySelector("blockquote");
+    if(bq){ bq.textContent = "“Write the new testimonial here — click to edit this quote.”"; }
+    var avatar = clone.querySelector(".avatar");
+    if(avatar){ avatar.textContent = "NA"; }
+    var strong = clone.querySelector(".quote-author strong");
+    if(strong){ strong.textContent = "New Author"; }
+    var span = clone.querySelector(".quote-author div span");
+    if(span){ span.textContent = "Title, Company"; }
+    stage.appendChild(clone);
+    if(window.ezRefreshQuotes) window.ezRefreshQuotes(false);
+    pushHistory();
+    markUnsaved();
+    selectFrame(clone);
+  }
+
+  function addClient(){
+    var grid = document.querySelector(".client-grid");
+    if(!grid) return;
+    var cells = grid.querySelectorAll(".client-cell");
+    var template = cells[cells.length - 1];
+    if(!template) return;
+    var clone = ezMakeCloneUnique(template.cloneNode(true));
+    clone.classList.remove("ez-selected");
+    clone.textContent = "New Client";
+    grid.appendChild(clone);
+    pushHistory();
+    markUnsaved();
+    selectFrame(clone);
+  }
+
+  function addJournalEntryTo(listId){
+    var list = document.getElementById(listId);
+    if(!list) return;
+    var items = list.querySelectorAll(".journal-item");
+    var template = items[items.length - 1];
+    if(!template) return;
+    var clone = ezMakeCloneUnique(template.cloneNode(true));
+    clone.classList.remove("ez-selected");
+    var h3 = clone.querySelector("h3");
+    if(h3){ h3.textContent = "New journal entry — click to edit"; }
+    var time = clone.querySelector("time");
+    if(time){
+      var now = new Date();
+      var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      time.textContent = months[now.getMonth()] + " " + now.getFullYear();
+      time.setAttribute("datetime", now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0") + "-01");
+    }
+    var rt = clone.querySelector(".read-time");
+    if(rt){ rt.textContent = "5 min read"; }
+    var img = clone.querySelector(".journal-post-media img");
+    if(img){ img.src = "https://picsum.photos/seed/journal" + Date.now() + "/600/450"; img.alt = "New journal entry"; }
+    var excerpt = clone.querySelector(".journal-post-body p");
+    if(excerpt){ excerpt.textContent = "Write a short excerpt for this entry — click to edit."; }
+    list.appendChild(clone);
+    pushHistory();
+    markUnsaved();
+    selectFrame(clone);
+  }
+  function addJournal(){ addJournalEntryTo("journalList"); }
+  function addJournalPageEntry(){ addJournalEntryTo("journalPageList"); }
+
+  function addService(){
+    var accordion = document.getElementById("services-accordion");
+    if(!accordion) return;
+    var items = accordion.querySelectorAll(".acc-item");
+    var template = items[items.length - 1];
+    if(!template) return;
+    var clone = ezMakeCloneUnique(template.cloneNode(true));
+    clone.classList.remove("ez-selected");
+    var uid = "svc-new-" + Date.now();
+    var trigger = clone.querySelector(".acc-trigger");
+    var panel = clone.querySelector(".acc-panel");
+    if(trigger){ trigger.setAttribute("aria-controls", uid); trigger.setAttribute("aria-expanded", "false"); }
+    if(panel){ panel.id = uid; panel.style.maxHeight = "0px"; }
+    var h3 = clone.querySelector("h3");
+    if(h3){ h3.textContent = "New service — click to edit"; }
+    var p = clone.querySelector(".acc-panel-inner p");
+    if(p){ p.textContent = "Describe this service here."; }
+    var tags = clone.querySelector(".acc-tags");
+    if(tags){
+      // Fresh services get their own badges, each with a brand-new unique id.
+      tags.innerHTML = "";
+      ["Discovery", "Design", "Delivery"].forEach(function(label){
+        var tag = document.createElement("span");
+        tag.className = "editable-text";
+        tag.setAttribute("contenteditable", "true");
+        tag.setAttribute("spellcheck", "false");
+        tag.id = ezNextId("text");
+        tag.textContent = label;
+        tags.appendChild(tag);
+      });
+      if(typeof captureTextBaselines === "function"){ try { captureTextBaselines(); } catch(err){} }
+    }
+    accordion.appendChild(clone);
+    pushHistory();
+    markUnsaved();
+    selectFrame(clone);
+  }
+
+  document.addEventListener("click", function(e){
+    if(e.target.closest("#ezAddCard")){ addProjectCard(); return; }
+    if(e.target.closest("#ezAddTestimonial")){ addTestimonial(); return; }
+    if(e.target.closest("#ezAddClient")){ addClient(); return; }
+    if(e.target.closest("#ezAddJournal")){ addJournal(); return; }
+    if(e.target.closest("#ezAddJournalPage")){ addJournalPageEntry(); return; }
+    if(e.target.closest("#ezAddService")){ addService(); return; }
+  });
+
+  // ============================================================
+  // STYLE EDITOR PANEL
+  // ============================================================
+  // STYLE EDITOR PANEL — always shows every section together (Background,
+  // Border, Padding, Size & Fill, Media, Text), matching the reference 1:1.
+  // The triggering toolbar button just scrolls the panel to that section.
+  // ============================================================
+  var styleSections = { logo: $("#ezSecLogo"), background: $("#ezSecBackground"), border: $("#ezSecBorder"), size: $("#ezSecSize"), media: $("#ezSecMedia"), text: $("#ezSecText"), counter: $("#ezSecCounter") };
+  function openStylePanel(sections){
+    syncStylePanelFromEl(selectedFrame);
+    stylePanel.classList.add("show");
+    var target = styleSections[(sections && sections[0]) || "background"];
+    if(target){
+      // let the panel render/measure first, then scroll to the section
+      setTimeout(function(){ target.scrollIntoView({ block: "start", behavior: "auto" }); }, 0);
+    }
+  }
+  $("#ezStyleClose").addEventListener("click", function(){ stylePanel.classList.remove("show"); pushHistory(); markUnsaved(); });
+  $("#ezStyleSave").addEventListener("click", function(){ stylePanel.classList.remove("show"); pushHistory(); markUnsaved(); });
+
+  function getLogoImage(){
+    var logo = selectedFrame && selectedFrame.matches && selectedFrame.matches("a.logo") ? selectedFrame : (selectedFrame && selectedFrame.closest ? selectedFrame.closest("a.logo") : null);
+    if(!logo) logo = document.querySelector("a.logo");
+    if(!logo) return null;
+    var img = logo.querySelector("img.logo-img");
+    if(!img){ img=document.createElement("img"); img.className="logo-img"; img.alt="Logo"; logo.appendChild(img); }
+    return img;
+  }
+  function isLogoSelection(el){
+    return !!(el && (el.matches("a.logo, img.logo-img") || el.closest("a.logo")));
+  }
+  function syncLogoControls(){
+    var logoImg = getLogoImage();
+    var show = !!logoImg && isLogoSelection(selectedFrame);
+    var sec = $("#ezSecLogo"), divider = $("#ezLogoDivider");
+    if(sec) sec.style.display = show ? "" : "none";
+    if(divider) divider.style.display = show ? "" : "none";
+    if(!show) return;
+    var w = Math.round(logoImg.getBoundingClientRect().width || parseFloat(getComputedStyle(logoImg).width) || 154);
+    var h = Math.round(logoImg.getBoundingClientRect().height || parseFloat(getComputedStyle(logoImg).height) || 30);
+    $("#ezLogoWidth").value = Math.max(20, Math.min(600, w));
+    $("#ezLogoWidthVal").textContent = w + "px";
+    $("#ezLogoHeight").value = Math.max(10, Math.min(180, h));
+    $("#ezLogoHeightVal").textContent = h + "px";
+    $("#ezLogoAlt").value = logoImg.alt || "";
+  }
+  function syncStylePanelFromEl(el){
+    if(!el) return;
+    syncLogoControls();
+    syncCounterControls(el);
+    var cs = getComputedStyle(el);
+    $("#ezBgColor").value = rgbToHex(cs.backgroundColor) || "#ffffff";
+    $("#ezBorderRadius").value = parseInt(cs.borderRadius,10) || 0;
+    $("#ezBorderRadiusVal").textContent = ($("#ezBorderRadius").value)+"px";
+    $("#ezBorderWidth").value = parseInt(cs.borderWidth,10) || 0;
+    $("#ezBorderWidthVal").textContent = ($("#ezBorderWidth").value)+"px";
+    $("#ezPadTop").value = parseInt(cs.paddingTop,10)||0; $("#ezPadTopVal").textContent = $("#ezPadTop").value+"px";
+    $("#ezPadRight").value = parseInt(cs.paddingRight,10)||0; $("#ezPadRightVal").textContent = $("#ezPadRight").value+"px";
+    $("#ezPadBottom").value = parseInt(cs.paddingBottom,10)||0; $("#ezPadBottomVal").textContent = $("#ezPadBottom").value+"px";
+    $("#ezPadLeft").value = parseInt(cs.paddingLeft,10)||0; $("#ezPadLeftVal").textContent = $("#ezPadLeft").value+"px";
+    $("#ezTextColor").value = rgbToHex(cs.color) || "#16181d";
+    $("#ezTextSize").value = parseInt(cs.fontSize,10) || 16;
+    $("#ezTextLineHeight").value = parseInt(cs.lineHeight,10) || 24;
+    var hVal = parseInt(cs.height,10);
+    if(hVal){ $("#ezSizeHeight").value = hVal; $("#ezSizeHeightVal").textContent = hVal+"px"; }
+  }
+
+  function getSelectedCounter(el){
+    var stat = el && el.closest ? el.closest(".stat") : null;
+    return stat ? stat.querySelector("[data-count]") : null;
+  }
+  function syncCounterControls(el){
+    var counter = getSelectedCounter(el);
+    var sec = $("#ezSecCounter"), divider = $("#ezCounterDivider");
+    if(sec) sec.style.display = counter ? "" : "none";
+    if(divider) divider.style.display = counter ? "" : "none";
+    if(!counter) return;
+    $("#statCountInput").value = counter.getAttribute("data-count") || "0";
+    $("#statSuffixInput").value = counter.getAttribute("data-suffix") || "";
+    $("#statDecimalsInput").value = counter.getAttribute("data-decimals") || "0";
+  }
+  function updateSelectedCounter(){
+    var counter = getSelectedCounter(selectedFrame);
+    if(!counter) return;
+    counter.setAttribute("data-count", $("#statCountInput").value || "0");
+    counter.setAttribute("data-suffix", $("#statSuffixInput").value);
+    counter.setAttribute("data-decimals", String(Math.max(0, Math.min(6, parseInt($("#statDecimalsInput").value || "0", 10) || 0))));
+    if(window.ezRenderCounter) window.ezRenderCounter(counter);
+    markUnsaved();
+  }
+  ["statCountInput", "statSuffixInput", "statDecimalsInput"].forEach(function(id){
+    $("#" + id).addEventListener("input", updateSelectedCounter);
+    $("#" + id).addEventListener("change", function(){ updateSelectedCounter(); pushHistory(); });
+  });
+  function rgbToHex(rgb){
+    var m = rgb && rgb.match(/\d+/g);
+    if(!m) return null;
+    return "#" + m.slice(0,3).map(function(n){ return ("0"+parseInt(n,10).toString(16)).slice(-2); }).join("");
+  }
+
+  // Background
+  $("#ezBgColor").addEventListener("input", function(){ if(selectedFrame){ selectedFrame.style.backgroundColor = hexToRgba(this.value, ($("#ezBgOpacity").value/100)); markUnsaved(); } });
+  $("#ezBgOpacity").addEventListener("input", function(){ $("#ezBgOpacityVal").textContent = this.value+"%"; if(selectedFrame){ selectedFrame.style.backgroundColor = hexToRgba($("#ezBgColor").value, this.value/100); markUnsaved(); } });
+  $("#ezBgGradToggle").addEventListener("change", function(){
+    $("#ezBgGradFields").style.display = this.checked ? "" : "none";
+    if(this.checked){ applyGradient(); } else if(selectedFrame){ selectedFrame.style.backgroundImage = "none"; markUnsaved(); }
+  });
+  function applyGradient(){
+    if(!selectedFrame) return;
+    selectedFrame.style.backgroundImage = "linear-gradient("+$("#ezBgAngle").value+"deg,"+$("#ezBgColor").value+","+$("#ezBgColorB").value+")";
+    markUnsaved();
+  }
+  $("#ezBgColorB").addEventListener("input", applyGradient);
+  $("#ezBgAngle").addEventListener("input", function(){ $("#ezBgAngleVal").textContent = this.value+"°"; applyGradient(); });
+
+  // Border tabs
+  $all("[data-border-style]").forEach(function(tab){
+    tab.addEventListener("click", function(){
+      $all("[data-border-style]").forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      var style = tab.getAttribute("data-border-style");
+      $("#ezBorderSolidFields").style.display = style==="solid" ? "" : "none";
+      $("#ezBorderGradFields").style.display = style==="gradient" ? "" : "none";
+      $("#ezBorderWidthRow").style.display = style==="none" ? "none" : "";
+      if(!selectedFrame) return;
+      if(style==="none"){ selectedFrame.style.borderStyle = "none"; }
+      else if(style==="solid"){ selectedFrame.style.borderStyle = "solid"; selectedFrame.style.borderColor = $("#ezBorderColor").value; }
+      else { selectedFrame.style.borderStyle="solid"; selectedFrame.style.borderImage = "linear-gradient(90deg,"+$("#ezBorderColorA").value+","+$("#ezBorderColorB").value+") 1"; }
+      markUnsaved();
+    });
+  });
+  $("#ezBorderColor").addEventListener("input", function(){ if(selectedFrame){ selectedFrame.style.borderColor = this.value; markUnsaved(); } });
+  $("#ezBorderWidth").addEventListener("input", function(){ $("#ezBorderWidthVal").textContent=this.value+"px"; if(selectedFrame){ selectedFrame.style.borderWidth = this.value+"px"; markUnsaved(); } });
+  $("#ezBorderRadius").addEventListener("input", function(){ $("#ezBorderRadiusVal").textContent=this.value+"px"; if(selectedFrame){ selectedFrame.style.borderRadius = this.value+"px"; markUnsaved(); } });
+  ["Top","Right","Bottom","Left"].forEach(function(side){
+    $("#ezPad"+side).addEventListener("input", function(){
+      $("#ezPad"+side+"Val").textContent = this.value+"px";
+      if(selectedFrame){ selectedFrame.style["padding"+side] = this.value+"px"; markUnsaved(); }
+    });
+  });
+
+  // Size target: for the navbar logo, resize the actual image asset rather
+  // than the <a class="logo"> container. For all other elements, preserve
+  // the existing selected-frame behavior.
+  function sizeTarget(){
+    if(!selectedFrame) return null;
+    if(isLogoSelection(selectedFrame)) return getLogoImage();
+    return selectedFrame;
+  }
+
+  // Size
+  $all("[data-size-w]").forEach(function(tab){
+    tab.addEventListener("click", function(){
+      $all("[data-size-w]").forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      var mode = tab.getAttribute("data-size-w");
+      $("#ezSizeWidthRow").style.display = mode==="fixed" ? "" : "none";
+      var target = sizeTarget();
+      if(!target) return;
+      if(mode==="auto"){ target.style.width = ""; }
+      else if(mode==="fill"){ target.style.width = "100%"; }
+      else { target.style.width = $("#ezSizeWidth").value+"px"; }
+      markUnsaved();
+    });
+  });
+  $("#ezSizeWidth").addEventListener("input", function(){
+    $("#ezSizeWidthVal").textContent=this.value+"px";
+    var target = sizeTarget();
+    if(target){ target.style.width=this.value+"px"; markUnsaved(); }
+  });
+
+  $all("[data-size-h]").forEach(function(tab){
+    tab.addEventListener("click", function(){
+      $all("[data-size-h]").forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      var mode = tab.getAttribute("data-size-h");
+      $("#ezSizeHeightRow").style.display = mode==="fixed" ? "" : "none";
+      var target = sizeTarget();
+      if(!target) return;
+      if(mode==="auto"){ target.style.height = ""; }
+      else if(mode==="fill"){ target.style.height = "100%"; }
+      else { target.style.height = $("#ezSizeHeight").value+"px"; }
+      markUnsaved();
+    });
+  });
+  $("#ezSizeHeight").addEventListener("input", function(){
+    $("#ezSizeHeightVal").textContent=this.value+"px";
+    var target = sizeTarget();
+    if(target){ target.style.height=this.value+"px"; markUnsaved(); }
+  });
+
+  // Dedicated navbar-logo controls. These always target the actual <img>,
+  // even when the editor selected the surrounding <a class="logo">.
+  $("#ezLogoUpload").addEventListener("change", function(e){
+    var file = e.target.files[0], img = getLogoImage();
+    if(!file || !img) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      img.src = ev.target.result;
+      img.classList.add("has-image");
+      pushHistory(); markUnsaved(); syncLogoControls();
+    };
+    reader.readAsDataURL(file);
+    this.value = "";
+  });
+  $("#ezLogoUrl").addEventListener("change", function(){
+    var img = getLogoImage(), url = this.value.trim();
+    if(img && url){ img.src = url; img.classList.add("has-image"); pushHistory(); markUnsaved(); }
+  });
+  $("#ezLogoWidth").addEventListener("input", function(){
+    var img = getLogoImage(); if(!img) return;
+    img.style.width = this.value + "px";
+    $("#ezLogoWidthVal").textContent = this.value + "px";
+    markUnsaved();
+  });
+  $("#ezLogoHeight").addEventListener("input", function(){
+    var img = getLogoImage(); if(!img) return;
+    img.style.height = this.value + "px";
+    $("#ezLogoHeightVal").textContent = this.value + "px";
+    markUnsaved();
+  });
+  $("#ezLogoAlt").addEventListener("input", function(){
+    var img = getLogoImage(); if(img){ img.alt = this.value; markUnsaved(); }
+  });
+  $("#ezLogoResetSize").addEventListener("click", function(){
+    var img = getLogoImage(); if(!img) return;
+    img.style.width = "";
+    img.style.height = "30px";
+    syncLogoControls(); pushHistory(); markUnsaved();
+  });
+  $("#ezLogoRemove").addEventListener("click", function(){
+    var img = getLogoImage(); if(!img) return;
+    if(!confirm("Remove the current logo?")) return;
+    img.removeAttribute("src");
+    img.style.width = "";
+    img.style.height = "30px";
+    img.classList.remove("has-image");
+    img.alt = "Logo";
+    pushHistory(); markUnsaved(); syncLogoControls();
+  });
+
+  // Media
+  function currentMediaTarget(){
+    if(!selectedFrame) return null;
+    return selectedFrame.querySelector("img,video,iframe") || selectedFrame;
+  }
+  $("#ezMediaImageUpload").addEventListener("change", function(e){
+    var file = e.target.files[0]; if(!file || !selectedFrame) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){ setFrameImage(ev.target.result); };
+    reader.readAsDataURL(file);
+  });
+  $("#ezMediaImageInput").addEventListener("change", function(){ if(this.value) setFrameImage(this.value); });
+  $("#ezMediaVideoInput").addEventListener("change", function(){ if(this.value && selectedFrame) setFrameVideo(this.value); });
+  $("#ezMediaGifInput").addEventListener("change", function(){ if(this.value) setFrameImage(this.value); });
+  $("#ezMediaEmbedInput").addEventListener("change", function(){ if(this.value && selectedFrame) setFrameEmbed(this.value); });
+  $("#ezMediaRemoveBtn").addEventListener("click", function(){
+    if(!selectedFrame) return;
+    if(isLogoSelection(selectedFrame)){
+      var logoImg = selectedFrame.querySelector("img.logo-img");
+      if(logoImg){
+        logoImg.src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='154' height='30' viewBox='0 0 154 30'%3E%3Ccircle cx='10' cy='15' r='6' fill='%23C9A15A'/%3E%3Ctext x='26' y='20' font-family='Arial,sans-serif' font-size='16' font-weight='700' fill='%23171717'%3Eines.marlow%3C/text%3E%3C/svg%3E";
+        logoImg.classList.remove("has-image");
+        pushHistory(); markUnsaved();
+        return;
+      }
+    }
+    if(selectedFrame.tagName === "IMG"){
+      selectedFrame.removeAttribute("src");
+      selectedFrame.style.backgroundImage = "none";
+      pushHistory(); markUnsaved();
+      return;
+    }
+    var m = selectedFrame.querySelector("img,video,iframe");
+    if(m) m.remove();
+    selectedFrame.style.backgroundImage = "none";
+    pushHistory(); markUnsaved();
+  });
+  function setFrameImage(src){
+    if(!selectedFrame) return;
+    if(isLogoSelection(selectedFrame)){
+      var logoImg = selectedFrame.querySelector("img.logo-img");
+      if(!logoImg){
+        logoImg = document.createElement("img");
+        logoImg.className = "logo-img";
+        logoImg.id = "logoImage";
+        logoImg.alt = "Logo";
+        selectedFrame.appendChild(logoImg);
+      }
+      logoImg.src = src;
+      logoImg.classList.add("has-image");
+      pushHistory(); markUnsaved();
+      return;
+    }
+    // The click router selects the most specific element, so clicking a photo
+    // selects the <img> itself — swap its src directly instead of painting a
+    // background on it (which would never show).
+    if(selectedFrame.tagName === "IMG"){
+      selectedFrame.src = src;
+      selectedFrame.removeAttribute("srcset");
+      pushHistory(); markUnsaved();
+      return;
+    }
+    var img = selectedFrame.querySelector("img");
+    if(img){ img.src = src; img.removeAttribute("srcset"); }
+    else { selectedFrame.style.backgroundImage = "url('"+src+"')"; selectedFrame.style.backgroundSize = "cover"; selectedFrame.style.backgroundPosition = "center"; }
+    pushHistory(); markUnsaved();
+  }
+  // When the selection is a media element itself, its parent is the container
+  // that should host a video/embed replacement.
+  function mediaHost(){
+    if(!selectedFrame) return null;
+    if(selectedFrame.tagName === "IMG" || selectedFrame.tagName === "VIDEO" || selectedFrame.tagName === "IFRAME"){
+      return selectedFrame.parentNode || selectedFrame;
+    }
+    return selectedFrame;
+  }
+  function setFrameVideo(url){
+    var host = mediaHost(); if(!host) return;
+    var vid = document.createElement("video");
+    vid.src = url; vid.controls = true; vid.style.width = "100%";
+    host.innerHTML = ""; host.appendChild(vid);
+    pushHistory(); markUnsaved();
+  }
+  function setFrameEmbed(url){
+    var host = mediaHost(); if(!host) return;
+    var ifr = document.createElement("iframe");
+    ifr.src = url; ifr.style.width = "100%"; ifr.style.minHeight = "260px"; ifr.style.border = "0";
+    host.innerHTML = ""; host.appendChild(ifr);
+    pushHistory(); markUnsaved();
+  }
+
+
+  // Text section (frame-level typography, applies to first text node inside)
+  function frameTextTarget(){
+    if(!selectedFrame) return null;
+    return selectedFrame.matches(".editable-text") ? selectedFrame : (selectedFrame.querySelector(".editable-text") || selectedFrame);
+  }
+  $("#ezTextColor").addEventListener("input", function(){ var t=frameTextTarget(); if(t){ t.style.color = hexToRgba(this.value, $("#ezTextOpacity").value/100); markUnsaved(); } });
+  $("#ezTextOpacity").addEventListener("input", function(){ $("#ezTextOpacityVal").textContent=this.value+"%"; var t=frameTextTarget(); if(t){ t.style.color = hexToRgba($("#ezTextColor").value, this.value/100); markUnsaved(); } });
+  $("#ezTextSize").addEventListener("input", function(){ var t=frameTextTarget(); if(t){ t.style.fontSize = this.value+"px"; markUnsaved(); } });
+  $("#ezTextLineHeight").addEventListener("input", function(){ var t=frameTextTarget(); if(t){ t.style.lineHeight = this.value+"px"; markUnsaved(); } });
+  $("#ezTextLink").addEventListener("change", function(){
+    var t = frameTextTarget(); if(!t || !this.value) return;
+    wrapInLink(t, this.value);
+    markUnsaved();
+  });
+
+  // ============================================================
+  // LINK POPUP
+  // ============================================================
+  var linkTargetEl = null;
+  function openLinkPopup(el, anchorEl){
+    linkTargetEl = el;
+    var existingA = el.tagName === "A" ? el : el.querySelector("a");
+    $("#ezLinkUrlInput").value = existingA ? existingA.getAttribute("href") : "";
+    $("#ezLinkNewTab").checked = !!(existingA && existingA.getAttribute("target") === "_blank");
+    var r = anchorEl.getBoundingClientRect();
+    linkPopup.style.top = (window.scrollY + r.bottom + 6) + "px";
+    linkPopup.style.left = (window.scrollX + r.left) + "px";
+    linkPopup.style.display = "block";
+  }
+  $("#ezLinkCancel").addEventListener("click", function(){ linkPopup.style.display = "none"; });
+  $("#ezLinkSave").addEventListener("click", function(){
+    if(linkTargetEl){ wrapInLink(linkTargetEl, $("#ezLinkUrlInput").value, $("#ezLinkNewTab").checked); markUnsaved(); }
+    linkPopup.style.display = "none";
+  });
+  function ezNormalizeUrl(url){
+    url = (url || "").trim();
+    if(!url) return url;
+    if(/^(https?:|mailto:|tel:|ftp:|#|\/)/i.test(url)) return url;
+    return "https://" + url;
+  }
+  function wrapInLink(el, url, newTab){
+    if(!url) return;
+    url = ezNormalizeUrl(url);
+    function applyTarget(a){
+      if(newTab){ a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener noreferrer"); }
+      else { a.removeAttribute("target"); a.removeAttribute("rel"); }
+    }
+    if(el.tagName === "A"){ el.setAttribute("href", url); applyTarget(el); return; }
+    var existing = el.querySelector("a");
+    if(existing){ existing.setAttribute("href", url); applyTarget(existing); return; }
+    var a = document.createElement("a");
+    a.href = url;
+    applyTarget(a);
+    while(el.firstChild) a.appendChild(el.firstChild);
+    el.appendChild(a);
+  }
+
+  // ============================================================
+  // ATTRIBUTE INSPECTOR
+  // ============================================================
+  function showAttrInspector(){
+    if(!selectedFrame) return;
+    var chips = $("#ezAiChips"); chips.innerHTML = "";
+    var parts = [];
+    if(selectedFrame.id){ parts.push("#"+selectedFrame.id); }
+    Array.prototype.forEach.call(selectedFrame.classList, function(c){ if(c!=="ez-frame" && c!=="ez-selected") parts.push("."+c); });
+    parts.forEach(function(p){
+      var chip = document.createElement("span");
+      chip.textContent = p;
+      chip.addEventListener("click", function(){ navigator.clipboard && navigator.clipboard.writeText(p); chip.style.background = "rgba(143,209,143,0.3)"; });
+      chips.appendChild(chip);
+    });
+    var selector = selectedFrame.tagName.toLowerCase() + (selectedFrame.id ? "#"+selectedFrame.id : "") + (selectedFrame.className ? "."+Array.prototype.slice.call(selectedFrame.classList).filter(function(c){return c!=="ez-frame"&&c!=="ez-selected";}).join(".") : "");
+    $("#ezAiSelector").textContent = selector;
+    attrInspector.style.display = "block";
+  }
+
+  // ============================================================
+  // CUSTOMIZE PANEL — SECTIONS LIST
+  // ============================================================
+  var currentEzPage = "home";
+  var pageRows = {};
+  function showEzPage(id, opts){
+    opts = opts || {};
+    currentEzPage = id;
+    $all(".ez-page").forEach(function(el){ el.style.display = el.id === (id === "home" ? "homePage" : "page-" + id) ? "" : "none"; });
+    Object.keys(pageRows).forEach(function(k){ if(pageRows[k]) pageRows[k].classList.toggle("active", k === id); });
+    if(!opts.silent){ window.scrollTo({ top: 0, behavior: "smooth" }); }
+  }
+  window.ezShowPage = showEzPage;
+
+  // Always-on site navigation: works whether Edit Page is ON or OFF.
+  document.addEventListener("click", function(e){
+    var link = e.target.closest("a[href]");
+    if(!link) return;
+    var href = link.getAttribute("href") || "";
+    if(href.indexOf("#page-") === 0){
+      e.preventDefault();
+      showEzPage(href.slice(6));
+      return;
+    }
+    if(currentEzPage !== "home" && href.charAt(0) === "#" && href.length > 1){
+      e.preventDefault();
+      showEzPage("home");
+      setTimeout(function(){ var target=document.getElementById(href.slice(1)); if(target) target.scrollIntoView({behavior:"smooth",block:"start"}); },60);
+    }
+  });
+
+  function buildSectionsList(){
+    var wrap = $("#cpSections");
+    wrap.innerHTML = "";
+    pageRows = {};
+    var pages = [
+      ["home","Homepage"],
+      ["privacy","Privacy Policy"]
+    ];
+    pages.forEach(function(pair){
+      var id=pair[0], label=pair[1], row=document.createElement("div");
+      row.className="cp-page-row"+(currentEzPage===id?" active":"");
+      var b=document.createElement("button"); b.type="button"; b.className="cp-page-name"; b.textContent=label; b.addEventListener("click",function(){showEzPage(id);});
+      var eye=document.createElement("button"); eye.type="button"; eye.className="cp-page-eye on"; eye.textContent="\u25C9"; eye.disabled=true; eye.title="Page";
+      row.appendChild(b); row.appendChild(eye); wrap.appendChild(row); pageRows[id]=row;
+    });
+  }
+
+  // ============================================================
+  // QUICK COLOR SCHEMES
+  // ============================================================
+  var schemes = {
+    scheme0: { "--color-bg":"#F2F1EC", "--color-surface":"#FFFFFF", "--color-ink":"#16181D", "--color-accent":"#2B3FDD", "--color-line":"rgba(22, 24, 29, 0.14)" },
+    scheme1: { "--color-bg":"#0A0A0A", "--color-surface":"#141414", "--color-ink":"#F2F2F0", "--color-accent":"#C9A15A", "--color-line":"rgba(242, 242, 240, 0.16)" },
+    scheme2: { "--color-bg":"#F7F4EE", "--color-surface":"#FFFFFF", "--color-ink":"#1C1B18", "--color-accent":"#2F5D50", "--color-line":"rgba(28, 27, 24, 0.14)" },
+    scheme3: { "--color-bg":"#0D0B14", "--color-surface":"#17131F", "--color-ink":"#F0EDF5", "--color-accent":"#9A7BD1", "--color-line":"rgba(240, 237, 245, 0.16)" },
+    scheme4: { "--color-bg":"#171310", "--color-surface":"#211B16", "--color-ink":"#F5EEE6", "--color-accent":"#CE9155", "--color-line":"rgba(245, 238, 230, 0.16)" }
+  };
+  Object.keys(schemes).forEach(function(id){
+    $("#"+id).addEventListener("click", function(){ applyScheme(schemes[id]); markUnsaved(); });
+  });
+  function applyScheme(vars){
+    Object.keys(vars).forEach(function(k){ document.documentElement.style.setProperty(k, vars[k]); });
+    var root=document.documentElement;
+    var bg=vars["--color-bg"]||"#FAF7F2", ink=vars["--color-ink"]||"#112217", accent=vars["--color-accent"]||"#C86D3B", surface=vars["--color-surface"]||"#FFFFFF", line=vars["--color-line"]||"#EAE3D2";
+    root.style.setProperty("--w-bg",bg); root.style.setProperty("--w-ink",ink); root.style.setProperty("--w-accent",accent); root.style.setProperty("--w-surface",surface); root.style.setProperty("--w-line",line); root.style.setProperty("--w-soft",surface);
+    document.body.classList.add("wildlife-scheme");
+  }
+
+  // ============================================================
+  // FONTS
+  // ============================================================
+  $("#fHeading").addEventListener("change", function(){
+    loadGoogleFont(this.value);
+    document.documentElement.style.setProperty("--font-heading", '"'+this.value+'", system-ui, sans-serif');
+    markUnsaved();
+  });
+  $("#fBody").addEventListener("change", function(){
+    loadGoogleFont(this.value);
+    document.documentElement.style.setProperty("--font-body", '"'+this.value+'", system-ui, sans-serif');
+    markUnsaved();
+  });
+
+  // ============================================================
+  // CUSTOM CODE / EFFECTS MANAGER
+  // ============================================================
+  var customCodeContainers = [];
+  var customEffects = [];
+  var customEffectsDraft = [];
+  var customEffectsRemoved = false;
+  // Compatibility string used by existing Undo/Redo logic.
+  var lastAppliedCustomCode = "";
+
+  function cloneCustomEffects(list){
+    return (list || []).map(function(effect){
+      return { code: String(effect && effect.code != null ? effect.code : "") };
+    });
+  }
+
+  function normalizeCustomEffects(settings){
+    if(settings && Array.isArray(settings.customEffects)){
+      return cloneCustomEffects(settings.customEffects);
+    }
+    // Backward compatibility: existing versions stored one raw customCode string.
+    if(settings && typeof settings.customCode === "string" && settings.customCode.trim()){
+      return [{ code: settings.customCode }];
+    }
+    return [];
+  }
+
+  function customEffectsCode(list){
+    return (list || []).map(function(effect){ return effect.code || ""; }).filter(function(code){ return code.trim(); }).join("\n\n");
+  }
+
+  function updateLastAppliedCustomCode(){
+    lastAppliedCustomCode = customEffectsCode(customEffects);
+  }
+
+  function clearInjectedCustomEffects(){
+    customCodeContainers.forEach(function(container){
+      if(container && container.parentNode) container.parentNode.removeChild(container);
+    });
+    customCodeContainers = [];
+  }
+
+  function injectCustomEffects(effects){
+    // Remember the page's clean ("default") state while no effect is running,
+    // so ANY effect — present or future — can be fully rolled back later.
+    if(!customCodeContainers.length && typeof capturePreEffectState === "function"){
+      capturePreEffectState();
+    }
+    clearInjectedCustomEffects();
+
+    (effects || []).forEach(function(effect, index){
+      var code = String(effect && effect.code != null ? effect.code : "");
+      if(!code.trim()) return;
+
+      var container = document.createElement("div");
+      container.id = "ez-custom-effect-" + (index + 1);
+      container.setAttribute("data-ez-custom-effect", String(index + 1));
+      container.innerHTML = code;
+
+      // Re-execute script tags exactly as the previous Custom Code editor did.
+      $all("script", container).forEach(function(old){
+        var script = document.createElement("script");
+        Array.prototype.forEach.call(old.attributes, function(a){ script.setAttribute(a.name, a.value); });
+        script.textContent = old.textContent;
+        old.parentNode.replaceChild(script, old);
+      });
+
+      document.body.appendChild(container);
+      customCodeContainers.push(container);
+    });
+  }
+
+  function persistCustomEffectsState(){
+    var effects = cloneCustomEffects(customEffects);
+    var code = customEffectsCode(customEffects);
+    // Write the SAME effect list into every place settings can be read back
+    // from (saved settings AND the autosave draft). Otherwise a stale draft
+    // can resurrect an effect the user just removed, and the removed effect
+    // reappears in the generated Embed Script.
+    [LS_SETTINGS, LS_DRAFT].forEach(function(key){
+      try{
+        var raw = localStorage.getItem(key);
+        if(key === LS_DRAFT && !raw) return;
+        var obj = {};
+        try{ obj = JSON.parse(raw || "{}") || {}; }catch(e){}
+        obj.customEffects = effects;
+        // Keep the old property in sync for compatibility with older states.
+        obj.customCode = code;
+        // Re-save page content from the clean snapshot as well, so markup an
+        // effect injected into the page never survives its removal.
+        if(typeof obj.mainHTML === "string"){ obj.mainHTML = snapshotMain(); }
+        if(typeof obj.headerHTML === "string"){ obj.headerHTML = snapshotHeader(); }
+        if(typeof obj.footerHTML === "string"){ obj.footerHTML = snapshotFooter(); }
+
+
+        localStorage.setItem(key, JSON.stringify(obj));
+      }catch(e){
+        // The existing editor treats localStorage as optional; do the same here.
+      }
+    });
+  }
+
+
+  function renderCustomEffects(){
+    var list = $("#ezCustomEffectsList");
+    if(!list) return;
+    list.innerHTML = "";
+
+    if(!customEffectsDraft.length){
+      list.innerHTML = '<div class="effects-empty"><strong>No custom effects yet.</strong><span>Click “+ Add Effect” to install one or more HTML/CSS/JS effects.</span></div>';
+      return;
+    }
+
+    customEffectsDraft.forEach(function(effect, index){
+      var card = document.createElement("div");
+      card.className = "effect-card";
+      card.setAttribute("data-effect-index", String(index));
+
+      var head = document.createElement("div");
+      head.className = "effect-card-head";
+
+      var title = document.createElement("div");
+      title.className = "effect-title";
+      title.textContent = "Effect " + (index + 1);
+
+      var remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "effect-remove";
+      remove.textContent = "Remove";
+      remove.setAttribute("data-effect-remove", String(index));
+
+      head.appendChild(title);
+      head.appendChild(remove);
+
+      var textarea = document.createElement("textarea");
+      textarea.className = "effect-code";
+      textarea.setAttribute("data-effect-code", String(index));
+      textarea.setAttribute("spellcheck", "false");
+      textarea.setAttribute("autocomplete", "off");
+      textarea.placeholder = "<!-- HTML -->\n<style>/* CSS */</style>\n<" + "script>/* JavaScript */<" + "/script>";
+      textarea.value = effect.code || "";
+
+      textarea.addEventListener("input", function(){
+        customEffectsDraft[index].code = textarea.value;
+      });
+
+      remove.addEventListener("click", function(){
+        customEffectsDraft.splice(index, 1);
+        customEffectsRemoved = true;
+        renderCustomEffects();
+        var next = $("#ezCustomEffectsList textarea");
+        if(next) next.focus();
+      });
+
+      card.appendChild(head);
+      card.appendChild(textarea);
+      list.appendChild(card);
+    });
+  }
+
+  function openCustomCodeManager(){
+    customEffectsDraft = cloneCustomEffects(customEffects);
+    customEffectsRemoved = false;
+    renderCustomEffects();
+    customCodeModal.style.display = "flex";
+    var first = $("#ezCustomEffectsList textarea");
+    if(first && !customEffectsDraft.length) $("#ezCustomCodeAdd").focus();
+  }
+
+  function discardCustomEffects(){
+    customEffectsDraft = cloneCustomEffects(customEffects);
+    customEffectsRemoved = false;
+    customCodeModal.style.display = "none";
+    if(phase2Modal) phase2Modal.style.display = "none";
+  }
+
+  function saveCustomEffects(){
+    var nextEffects = cloneCustomEffects(customEffectsDraft);
+    var hadActiveCode = customEffectsCode(customEffects).trim().length > 0;
+    var hasActiveCode = customEffectsCode(nextEffects).trim().length > 0;
+
+    customEffects = nextEffects;
+    // Roll the page back to its clean pre-effect state BEFORE re-injecting the
+    // remaining effects. This is effect-agnostic: whatever classes, inline
+    // styles, attributes or nodes any effect left behind are undone.
+    resetElementsToDefault();
+    injectCustomEffects(customEffects);
+    updateLastAppliedCustomCode();
+    persistCustomEffectsState();
+
+
+    customCodeModal.style.display = "none";
+
+    // Removing an installed effect can leave timers/listeners from its script
+    // alive in the current document. Persist first, then reload so the page
+    // starts cleanly with only the remaining effects.
+    if(customEffectsRemoved){
+      customEffectsRemoved = false;
+      location.reload();
+      return;
+    }
+
+    // Preserve the previous empty/non-empty transition behavior.
+    if(hadActiveCode && !hasActiveCode){
+      location.reload();
+      return;
+    }
+
+    customEffectsRemoved = false;
+  }
+
+  function openPhase2Manager(){
+    if(phase2Modal) phase2Modal.style.display = "flex";
+  }
+  function closePhase2Manager(){ if(phase2Modal) phase2Modal.style.display = "none"; }
+
+  $("#cpEditPhase2").addEventListener("click", openPhase2Manager);
+  $("#ezPhase2Close").addEventListener("click", closePhase2Manager);
+  $("#ezPhase2CloseBottom").addEventListener("click", closePhase2Manager);
+  $("#ezPhase2Save").addEventListener("click", function(){
+    var saveButton=$("#cpSave");
+    if(saveButton) saveButton.click();
+    closePhase2Manager();
+  });
+
+  $("#cpEditCustomCode").addEventListener("click", openCustomCodeManager);
+  $("#ezCustomCodeClose").addEventListener("click", discardCustomEffects);
+  $("#ezCustomCodeDiscard").addEventListener("click", discardCustomEffects);
+  $("#ezCustomCodeAdd").addEventListener("click", function(){
+    customEffectsDraft.push({ code: "" });
+    renderCustomEffects();
+    var fields = $all("#ezCustomEffectsList textarea");
+    var last = fields[fields.length - 1];
+    if(last){
+      last.focus();
+      last.selectionStart = last.value.length;
+      last.selectionEnd = last.value.length;
+      last.scrollIntoView({ block:"nearest" });
+    }
+  });
+  $("#ezCustomCodeSave").addEventListener("click", saveCustomEffects);
+
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && phase2Modal && phase2Modal.style.display === "flex") closePhase2Manager();
+  });
+
+  // ============================================================
+  // HTML ID LISTER
+  // ============================================================
+  $("#cpShowIdList").addEventListener("click", function(){
+    renderIdList("");
+    idListPanel.style.display = "block";
+  });
+  $("#ezIdListClose").addEventListener("click", function(){ idListPanel.style.display = "none"; });
+  $("#ezIdListFilter").addEventListener("input", function(){ renderIdList(this.value.toLowerCase()); });
+  function renderIdList(filter){
+    var rows = $("#ezIdListRows"); rows.innerHTML = "";
+    $all("[id]").forEach(function(el){
+      if(["ezStylePanel","customizePanel","ezMiniToolbar","ezFrameToolbar","ezAttrInspector","ezLinkPopup","ezIdListPanel","ezCustomCodeModal","ezUnsavedPill","cpBody","cpToggle","cpCollapse"].indexOf(el.id) > -1) return;
+      if(el.id.indexOf("ez")===0) return;
+      if(filter && el.id.toLowerCase().indexOf(filter) === -1) return;
+      var row = document.createElement("div"); row.className = "id-row";
+      var span = document.createElement("span"); span.textContent = "#"+el.id;
+      var btn = document.createElement("button"); btn.textContent = "Copy";
+      btn.addEventListener("click", function(){ navigator.clipboard && navigator.clipboard.writeText("#"+el.id); btn.textContent = "Copied"; setTimeout(function(){btn.textContent="Copy";},1200); });
+      row.appendChild(span); row.appendChild(btn);
+      rows.appendChild(row);
+    });
+  }
+
+  // ============================================================
+  // UNDO / REDO
+  // ============================================================
+  var cpUndoBtn = $("#cpUndo"), cpRedoBtn = $("#cpRedo");
+  // ---- Text baselines -------------------------------------------------
+  // Custom effects (typewriter, scramble, counters, etc.) rewrite the text of
+  // page elements at runtime. Those runtime mutations must never be saved as
+  // page content, otherwise removing the effect leaves the half-typed text
+  // behind forever. We remember the authored text of every editable element
+  // and use it when snapshotting, updating the baseline only when the USER
+  // actually types into the element.
+  var ezTextBaselines = {};
+  function captureTextBaselines(){
+    var main = document.getElementById("main");
+    if(!main) return;
+    ezTextBaselines = {};
+    $all(".editable-text[id]", main).forEach(function(el){
+      ezTextBaselines[el.id] = el.innerHTML;
+    });
+  }
+  // Typing directly into an animated stat (e.g. "150%") must update the
+  // counter's own data-count / data-suffix / data-decimals, otherwise the
+  // saved settings and the embed payload keep animating to the OLD number.
+  function syncCounterFromText(el){
+    if(!el || !el.hasAttribute("data-count")) return;
+    var txt = (el.textContent || "").replace(/\u00a0/g, " ");
+    var m = txt.match(/-?\d[\d.,\s]*/);
+    if(!m) return;
+    var raw = m[0].trim();
+    var numeric = raw.replace(/[,\s]/g, "");
+    if(!numeric || isNaN(parseFloat(numeric))) return;
+    var dot = numeric.indexOf(".");
+    var decimals = dot > -1 ? Math.min(numeric.length - dot - 1, 4) : 0;
+    var suffix = txt.slice(m.index + m[0].length);
+    el.setAttribute("data-count", String(parseFloat(numeric)));
+    el.setAttribute("data-decimals", String(decimals));
+    el.setAttribute("data-suffix", suffix);
+    if(typeof syncCounterControls === "function"){
+      try{ syncCounterControls(); }catch(e){}
+    }
+  }
+
+  document.addEventListener("input", function(e){
+    var el = e.target && e.target.closest ? e.target.closest(".editable-text[id],.ez-editable-leaf[id]") : null;
+    if(el && editOn){
+      syncCounterFromText(el);
+      ezTextBaselines[el.id] = el.innerHTML;
+    }
+  }, true);
+
+  // Custom effects can also inject their own markup into the page (cursor
+  // spans, wrappers, <style>/<script> blocks). None of that is page content,
+  // so it must never be written into the saved snapshot / embed payload.
+  function stripEffectResidue(root){
+    if(!root) return;
+    $all("script,style,link[rel='stylesheet'],[data-ez-effect],[data-ez-runtime],.ez-effect,.typewriter-cursor,.ez-cursor", root)
+      .forEach(function(node){ if(node.parentNode) node.parentNode.removeChild(node); });
+    // Anything inside #main that was not part of the authored page (or added
+    // deliberately through the editor) is effect residue: overlays, glow
+    // wrappers, canvases, borders. Remove it regardless of what it looks like.
+    if(ezPreEffectState){
+      $all("*", root).forEach(function(node){
+        if(node.hasAttribute && node.hasAttribute("data-ez-authored")) return;
+        if(node.closest && node.closest(".item-actions")) return;
+        if(node.parentNode) node.parentNode.removeChild(node);
+      });
+    }
+  }
+
+  // ---- Generalized "default state" baselines -------------------------------
+  // Effects don't only inject markup: they add classes, inline styles and
+  // arbitrary attributes (borders, glows, transforms, wrappers) directly onto
+  // the elements they target. We snapshot every element's attributes while the
+  // page is effect-free, so removing ANY effect (now or in the future) can put
+  // every element back to exactly that state.
+  var ezPreEffectState = null;
+  var ezAuthoredHeadNodes = null;
+
+  // Tag every currently-present node as "authored" so later teardown can tell
+  // page content apart from anything an effect injects.
+  function markAuthored(root){
+    if(!root) return;
+    if(root.setAttribute) root.setAttribute("data-ez-authored", "1");
+    $all("*", root).forEach(function(node){
+      if(node.setAttribute) node.setAttribute("data-ez-authored", "1");
+    });
+  }
+
+  function capturePreEffectState(){
+    var main = document.getElementById("main");
+    if(!main) return;
+    markAuthored(main);
+    var map = {};
+    $all("[id]", main).forEach(function(el){
+      var attrs = {};
+      Array.prototype.forEach.call(el.attributes, function(a){ attrs[a.name] = a.value; });
+      map[el.id] = attrs;
+    });
+    ezPreEffectState = { attrs: map };
+    ezAuthoredHeadNodes = Array.prototype.slice.call(document.head ? document.head.childNodes : []);
+  }
+
+  // Effects frequently append <style>/<script>/overlay nodes straight to
+  // <head> or <body> (outside their own container), which is why a removed
+  // effect could still paint a border somewhere else on the page. Remove every
+  // node that appeared after the clean capture.
+  function teardownEffectArtifacts(){
+    if(ezAuthoredHeadNodes && document.head){
+      Array.prototype.slice.call(document.head.childNodes).forEach(function(node){
+        if(ezAuthoredHeadNodes.indexOf(node) === -1 && node.parentNode) node.parentNode.removeChild(node);
+      });
+    }
+    var main = document.getElementById("main");
+    Array.prototype.slice.call(document.body ? document.body.children : []).forEach(function(node){
+      if(node === main) return;
+      if(node.id === "main" || node.id === "customizePanel") return;
+      if(node.id && node.id.indexOf("ez") === 0) return;
+      if(node.tagName === "STYLE" || node.tagName === "SCRIPT" || node.hasAttribute("data-ez-custom-effect")){
+        if(node.parentNode) node.parentNode.removeChild(node);
+      }
+    });
+  }
+
+
+  // Classes the page itself toggles at runtime (scroll reveals, editor frames).
+  // They are not part of the authored markup but must survive a rollback.
+  var EZ_RUNTIME_CLASSES = ["is-visible","ez-frame","ez-selected","ez-hover","active","open","show"];
+  function applyBaselineAttrs(el, attrs){
+    if(!el || !attrs) return;
+    var keepClasses = EZ_RUNTIME_CLASSES.filter(function(c){ return el.classList.contains(c); });
+    // Drop attributes an effect added…
+    Array.prototype.slice.call(el.attributes).forEach(function(a){
+      if(a.name === "contenteditable") return;
+      if(!(a.name in attrs)) el.removeAttribute(a.name);
+    });
+    // …and restore the authored values (class/style included).
+    Object.keys(attrs).forEach(function(name){
+      if(name === "contenteditable") return;
+      if(el.getAttribute(name) !== attrs[name]) el.setAttribute(name, attrs[name]);
+    });
+    keepClasses.forEach(function(c){ el.classList.add(c); });
+  }
+
+
+  // Re-baseline an element (and its children) after a deliberate user edit.
+  function refreshBaselineFor(el){
+    if(!el || !ezPreEffectState || !el.getAttribute) return;
+    markAuthored(el);
+    var nodes = [el].concat($all("[id]", el));
+    nodes.forEach(function(node){
+      if(!node.id) return;
+      var attrs = {};
+      Array.prototype.forEach.call(node.attributes, function(a){ attrs[a.name] = a.value; });
+      ezPreEffectState.attrs[node.id] = attrs;
+    });
+  }
+
+
+
+  // Restore the LIVE DOM to its pre-effect state (used when custom code is
+  // removed or edited, before the page re-saves and reloads).
+  function resetElementsToDefault(){
+    var main = document.getElementById("main");
+    if(!main || !ezPreEffectState) return;
+    teardownEffectArtifacts();
+    stripEffectResidue(main);
+    Object.keys(ezPreEffectState.attrs).forEach(function(id){
+      var el = main.querySelector('[id="' + id.replace(/"/g, '\\"') + '"]');
+      applyBaselineAttrs(el, ezPreEffectState.attrs[id]);
+    });
+    $all(".editable-text[id]", main).forEach(function(el){
+      var base = ezTextBaselines[el.id];
+      if(typeof base === "string" && el.innerHTML !== base) el.innerHTML = base;
+    });
+  }
+
+  function snapshotNode(root){
+    if(!root) return "";
+    var clone = root.cloneNode(true);
+    stripEffectResidue(clone);
+    if(ezPreEffectState){
+      $all("[id]", clone).forEach(function(el){
+        var attrs = ezPreEffectState.attrs[el.id];
+        if(attrs) applyBaselineAttrs(el, attrs);
+      });
+    }
+    $all(".editable-text[id]", clone).forEach(function(el){
+      var base = ezTextBaselines[el.id];
+      if(typeof base === "string" && el.innerHTML !== base) el.innerHTML = base;
+    });
+    // Counter metadata always comes from the LIVE element: it is data the user
+    // just edited, never something a baseline snapshot should roll back.
+    $all("[data-count][id]", clone).forEach(function(el){
+      var live = document.getElementById(el.id);
+      if(!live || !live.hasAttribute("data-count")) return;
+      el.setAttribute("data-count", live.getAttribute("data-count") || "0");
+      el.setAttribute("data-suffix", live.getAttribute("data-suffix") || "");
+      el.setAttribute("data-decimals", live.getAttribute("data-decimals") || "0");
+    });
+    // Internal bookkeeping attribute must not leak into saved HTML / embeds.
+    $all("[data-ez-authored]", clone).forEach(function(el){ el.removeAttribute("data-ez-authored"); });
+    clone.removeAttribute("data-ez-authored");
+    return clone.innerHTML;
+  }
+
+  function snapshotMain(){
+    return snapshotNode(document.getElementById("main"));
+  }
+  // Header (logo/nav) and footer live OUTSIDE #main, so they need their own
+  // snapshot or logo + footer edits never reach the saved settings or embed.
+  function snapshotHeader(){ return snapshotNode(document.querySelector("header.site-header") || document.getElementById("navbar")); }
+  function snapshotFooter(){ return snapshotNode(document.querySelector(".site-footer") || document.querySelector("footer")); }
+  function restoreRegion(root, html){
+    if(!root || typeof html !== "string" || !html) return;
+    root.innerHTML = html;
+    if(typeof markAuthored === "function") markAuthored(root);
+    ensurePageElementIds();
+    ensurePhase1EditableSurface();
+    $all(".editable-text,.ez-editable-leaf", root).forEach(function(el){ el.setAttribute("contenteditable", editOn ? "true" : "false"); });
+  }
+
+
+
+
+  function updateHistoryButtons(){
+    if(cpUndoBtn) cpUndoBtn.disabled = historyIndex <= 0;
+    if(cpRedoBtn) cpRedoBtn.disabled = historyIndex >= history.length - 1;
+  }
+
+  function pushHistory(){
+    ensureItemActions();
+    var snap = snapshotMain();
+    history = history.slice(0, historyIndex+1);
+    history.push(snap);
+    historyIndex = history.length - 1;
+    if(history.length > 40){ history.shift(); historyIndex--; }
+    updateHistoryButtons();
+  }
+  function restoreSnapshot(html){
+    var main = document.getElementById("main");
+    if(main){
+      main.innerHTML = html;
+      markAuthored(main);
+      $all(".editable-text", main).forEach(function(el){ el.setAttribute("contenteditable", editOn ? "true" : "false"); });
+      captureTextBaselines();
+      ensureItemActions();
+      showEzPage(currentEzPage, { silent: true });
+      if(window.ezRebindContent){ window.ezRebindContent(); }
+    }
+  }
+
+  cpUndoBtn.addEventListener("click", function(){
+    if(historyIndex <= 0) return;
+    historyIndex--; restoreSnapshot(history[historyIndex]); updateHistoryButtons(); markUnsaved();
+    if(lastAppliedCustomCode.trim()){
+      // Active custom code (timers, observers, etc.) can hold references to
+      // DOM nodes that Undo just replaced. Reload so it re-initializes
+      // cleanly against the restored content — Undo itself only ever
+      // touches page content, never the custom effects.
+      persistSettingsAndReload();
+    }
+  });
+  cpRedoBtn.addEventListener("click", function(){
+    if(historyIndex >= history.length-1) return;
+    historyIndex++; restoreSnapshot(history[historyIndex]); updateHistoryButtons(); markUnsaved();
+    if(lastAppliedCustomCode.trim()){
+      persistSettingsAndReload();
+    }
+  });
+
+  // ============================================================
+  // UNSAVED PILL / AUTOSAVE DRAFT
+  // ============================================================
+  function markUnsaved(){
+    unsaved = true;
+    unsavedPill.style.display = "block";
+    // A deliberate edit becomes part of the element's new "default" state, so
+    // effect rollback never wipes out styling the user chose themselves.
+    if(typeof refreshBaselineFor === "function" && typeof selectedFrame !== "undefined"){
+      refreshBaselineFor(selectedFrame);
+    }
+    // Anything the user added through the editor counts as page content — but
+    // only trust the DOM while no effect is running, otherwise effect-injected
+    // nodes would be mistaken for authored content.
+    if(typeof markAuthored === "function" && !customCodeContainers.length){
+      markAuthored(document.getElementById("main"));
+    }
+    saveDraft();
+  }
+
+  var saveDraft = debounce(function(){
+    try{ localStorage.setItem(LS_DRAFT, JSON.stringify(collectSettings())); }catch(e){}
+  }, 600);
+
+  // ============================================================
+  // SAVE SETTINGS / EMBED CODE
+  // ============================================================
+  function collectSettings(){
+    var stats = {};
+    $all(".stat[data-recolor-key]").forEach(function(stat){
+      var counter = stat.querySelector("[data-count]");
+      if(!counter) return;
+      stats[stat.getAttribute("data-recolor-key")] = {
+        count: counter.getAttribute("data-count") || "0",
+        suffix: counter.getAttribute("data-suffix") || "",
+        decimals: counter.getAttribute("data-decimals") || "0"
+      };
+    });
+    return {
+      schemaVersion: 1,
+      configModel: "vana-embed-site",
+      siteConfig: {
+        branding: {
+          navbarLogoId: "navbarLogoImage",
+          footerLogoId: "footerLogoImage"
+        },
+        navigation: {
+          navbarId: "navbar-nav",
+          homeTarget: "#hero"
+        },
+        embed: {
+          mode: "url-payload",
+          target: "systeme.io"
+        }
+      },
+      mainHTML: snapshotMain(),
+      headerHTML: snapshotHeader(),
+      footerHTML: snapshotFooter(),
+
+      stats: stats,
+      cssVars: {
+        "--color-bg": document.documentElement.style.getPropertyValue("--color-bg"),
+        "--color-surface": document.documentElement.style.getPropertyValue("--color-surface"),
+        "--color-ink": document.documentElement.style.getPropertyValue("--color-ink"),
+        "--color-accent": document.documentElement.style.getPropertyValue("--color-accent"),
+        "--color-line": document.documentElement.style.getPropertyValue("--color-line"),
+        "--font-heading": document.documentElement.style.getPropertyValue("--font-heading"),
+        "--font-body": document.documentElement.style.getPropertyValue("--font-body")
+      },
+      headingFont: $("#fHeading").value,
+      bodyFont: $("#fBody").value,
+      customEffects: cloneCustomEffects(customEffects),
+      // Keep the legacy field synchronized so older versions can still read
+      // the saved settings without losing the user's effects.
+      customCode: customEffectsCode(customEffects),
+      ownerEmail: $("#cpOwnerEmail").value
+    };
+  }
+  function applySettings(s){
+    if(!s) return;
+    // Phase 1 config foundation: older saves remain compatible.
+    if(!s.schemaVersion) s.schemaVersion = 1;
+    if(!s.configModel) s.configModel = "vana-embed-site";
+    if(s.mainHTML){ restoreSnapshot(s.mainHTML); }
+    if(s.headerHTML){ restoreRegion(document.querySelector("header.site-header") || document.getElementById("navbar"), s.headerHTML); }
+    if(s.footerHTML){ restoreRegion(document.querySelector(".site-footer") || document.querySelector("footer"), s.footerHTML); }
+
+    if(s.cssVars){ Object.keys(s.cssVars).forEach(function(k){ if(s.cssVars[k]) document.documentElement.style.setProperty(k, s.cssVars[k]); }); }
+    if(s.headingFont){ $("#fHeading").value = s.headingFont; loadGoogleFont(s.headingFont); }
+    if(s.bodyFont){ $("#fBody").value = s.bodyFont; loadGoogleFont(s.bodyFont); }
+    customEffects = normalizeCustomEffects(s);
+    customEffectsDraft = cloneCustomEffects(customEffects);
+    injectCustomEffects(customEffects);
+    updateLastAppliedCustomCode();
+    if(s.ownerEmail){ $("#cpOwnerEmail").value = s.ownerEmail; }
+    if(s.stats){
+      Object.keys(s.stats).forEach(function(key){
+        var stat = document.querySelector('.stat[data-recolor-key="' + key.replace(/"/g, '\\"') + '"]');
+        var counter = stat && stat.querySelector("[data-count]");
+        var savedStat = s.stats[key];
+        if(!counter || !savedStat) return;
+        counter.setAttribute("data-count", savedStat.count == null ? "0" : String(savedStat.count));
+        counter.setAttribute("data-suffix", savedStat.suffix == null ? "" : String(savedStat.suffix));
+        counter.setAttribute("data-decimals", savedStat.decimals == null ? "0" : String(savedStat.decimals));
+        if(window.ezObserveCounters) window.ezObserveCounters([counter]);
+        else if(window.ezRenderCounter) window.ezRenderCounter(counter);
+
+      });
+    }
+    buildSectionsList();
+  }
+
+  // Owner Email: auto-detect from the existing "Prefer email?" mailto link
+  // on first load, then keep everything in sync going forward.
+  function syncOwnerEmailDisplays(email){
+    var link = document.querySelector(".contact-direct a[href^='mailto:']");
+    if(link){ link.setAttribute("href", "mailto:" + email); link.textContent = email; }
+    $all(".fact-value").forEach(function(el){
+      var prevLabel = el.previousElementSibling;
+      if(prevLabel && prevLabel.classList.contains("fact-label") && /say hello/i.test(prevLabel.textContent)){
+        el.textContent = email;
+      }
+    });
+  }
+  var ownerEmailInput = $("#cpOwnerEmail");
+  if(ownerEmailInput){
+    ownerEmailInput.addEventListener("input", function(){
+      var val = ownerEmailInput.value.trim();
+      if(val){ syncOwnerEmailDisplays(val); }
+      markUnsaved();
+    });
+  }
+
+  $("#cpSave").addEventListener("click", function(){
+    try{
+      localStorage.setItem(LS_SETTINGS, JSON.stringify(collectSettings()));
+      localStorage.removeItem(LS_DRAFT);
+      unsaved = false;
+      unsavedPill.style.display = "none";
+      var btn = $("#cpSave"); var old = btn.textContent; btn.textContent = "Saved ✓";
+      setTimeout(function(){ btn.textContent = old; }, 1400);
+    }catch(e){ alert("Could not save settings in this browser."); }
+  });
+
+  // ---- settings <-> URL payload (base64 JSON, unicode-safe) ----
+  function encodeSettings(obj){
+    try{ return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); }catch(e){ return ""; }
+  }
+  function decodeSettings(str){
+    try{ return JSON.parse(decodeURIComponent(escape(atob(str)))); }catch(e){ return null; }
+  }
+  function readUrlSettings(){
+    var raw = "";
+    try{
+      var h = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+      var q = new URLSearchParams(location.search || "");
+      raw = h.get("p") || h.get("data") || q.get("p") || q.get("data") || "";
+    }catch(e){}
+    if(!raw) return null;
+    return decodeSettings(decodeURIComponent(raw));
+  }
+
+  $("#cpCopy").addEventListener("click", function(){
+    var domain = $("#cpDomain").value.trim() || "yourname.example.com";
+    var proto = domain.indexOf("http") === 0 ? "" : "https://";
+    var base = proto + domain.replace(/\/$/,"");
+    var payload = encodeSettings(collectSettings());
+    var snippet = '<script src="' + base + '/embed-loader-5.js' +
+      (payload ? '#p=' + encodeURIComponent(payload) : '') +
+      '" data-page="sv-website-5.html" data-ez-embed data-ez-schema="1" defer><' + '/script>';
+    var out = $("#cpEmbedOut");
+    out.style.display = "block";
+    out.value = snippet;
+    out.select();
+    if(navigator.clipboard){ navigator.clipboard.writeText(snippet); }
+  });
+
+
+  $("#cpReset").addEventListener("click", function(){
+    if(!confirm("Reset everything back to the original design? This can't be undone.")) return;
+    try{
+      localStorage.removeItem(LS_DRAFT);
+      localStorage.removeItem(LS_SETTINGS);
+    }catch(e){}
+    location.href = location.pathname;
+  });
+
+
+  // ============================================================
+  // AUTO-ID ALL PAGE UI ELEMENTS
+  // Existing IDs are preserved. Missing UI-element IDs are generated
+  // using the same friendly conventions already used by this editor:
+  // text#, marquetext#, cards#, cardmedia#, arrow#, journal#, etc.
+  // SVG drawing internals (path/rect/circle/etc.) are intentionally skipped.
+  // ============================================================
+  function ezIdPrefix(el){
+    var c = el.classList || { contains:function(){return false;} };
+    if(c.contains("marquee-item")) return "marquetext";
+    if(c.contains("project-card")) return "cards";
+    if(c.contains("project-cover")) return "cardmedia";
+    if(c.contains("project-arrow")) return "arrow";
+    if(c.contains("journal-item")) return "journal";
+    if(c.contains("journal-post-media")) return "journalmedia";
+    if(c.contains("client-cell")) return "client";
+    if(c.contains("acc-item")) return "service";
+    if(c.contains("quote")) return "quote";
+    if(c.contains("avatar")) return "avatar";
+    if(c.contains("stat")) return "stat";
+    if(c.contains("btn")) return "btn";
+    if(c.contains("scheme-swatch")) return "scheme";
+    if(c.contains("tab")) return "tab";
+    if(c.contains("badge")) return "badge";
+    if(c.contains("icon")) return "icon";
+    if(c.contains("container")) return "container";
+    if(c.contains("work-grid")) return "cardsgrid";
+    if(c.contains("client-grid")) return "clientsgrid";
+    if(c.contains("marquee")) return "marquee";
+    if(c.contains("field")) return "field";
+    if(c.contains("contact")) return "contact";
+    if(c.contains("form-success")) return "message";
+    if(c.contains("section-title") || c.contains("kicker")) return "text";
+
+    var tag = el.tagName.toLowerCase();
+    if(tag === "p" || tag === "h1" || tag === "h2" || tag === "h3" || tag === "h4" ||
+       tag === "strong" || tag === "span" || tag === "time" || tag === "em" ||
+       tag === "label" || tag === "a") return "text";
+    if(tag === "img") return "image";
+    if(tag === "svg") return "icon";
+    if(tag === "button") return "button";
+    if(tag === "input") return "input";
+    if(tag === "textarea") return "textarea";
+    if(tag === "select") return "select";
+    if(tag === "li") return "item";
+    if(tag === "section") return "section";
+    if(tag === "nav") return "nav";
+    if(tag === "header") return "header";
+    if(tag === "footer") return "footer";
+    if(tag === "main") return "main";
+    return "frame";
+  }
+
+  // Ids already handed out during this session. Elements being built inside a
+  // detached clone are not in the document yet, so document.getElementById()
+  // alone would hand the SAME id to several nodes of one clone — duplicate ids
+  // then make id-keyed data (text baselines, recolor keys) bleed between
+  // elements and wreck the saved layout.
+  var ezIssuedIds = Object.create(null);
+  function ezIdTaken(id){
+    return !!ezIssuedIds[id] || !!document.getElementById(id);
+  }
+  function ezNextId(prefix){
+    var n = 1, candidate;
+    do {
+      candidate = prefix + n++;
+    } while(ezIdTaken(candidate));
+    ezIssuedIds[candidate] = true;
+    return candidate;
+  }
+
+  function ensurePageElementIds(){
+    var roots = [];
+    var main = document.getElementById("main");
+    var footer = document.querySelector(".site-footer") || document.querySelector("footer");
+    var header = document.querySelector("header.site-header") || document.getElementById("navbar");
+    if(main) roots.push(main);
+    if(footer && roots.indexOf(footer) === -1) roots.push(footer);
+    if(header && roots.indexOf(header) === -1) roots.push(header);
+
+    var seen = Object.create(null);
+    roots.forEach(function(root){
+      var nodes = [root].concat(Array.prototype.slice.call(root.querySelectorAll("*")));
+      nodes.forEach(function(el){
+        var tag = el.tagName.toLowerCase();
+        if(tag === "path" || tag === "rect" || tag === "circle" || tag === "line" ||
+           tag === "polyline" || tag === "polygon" || tag === "g" || tag === "defs" ||
+           tag === "stop" || tag === "clipPath" || tag === "use") return;
+        // Repair duplicates that may already exist in a previously saved payload.
+        if(el.id && seen[el.id]){
+          el.removeAttribute("id");
+          if(el.hasAttribute("data-recolor-key")) el.removeAttribute("data-recolor-key");
+        }
+        if(!el.id) el.id = ezNextId(ezIdPrefix(el));
+        else ezIssuedIds[el.id] = true;
+        seen[el.id] = true;
+        if(el.hasAttribute && el.hasAttribute("data-recolor-key") && !el.getAttribute("data-recolor-key")){
+          el.setAttribute("data-recolor-key", el.id);
+        }
+      });
+    });
+  }
+
+
+  // PHASE 1: turn authored text nodes into real editor fields.
+  // Mixed-content headings/paragraphs are split into independently editable
+  // text spans so text before/after an inline formatted child remains editable.
+  // Explicit Phase 1 read-only regions are never given contenteditable fields.
+  function isPhase1ReadOnly(el){
+    return !!(el && el.closest && el.closest('[data-ez-phase1-readonly="true"]'));
+  }
+  function isAnimalDisplayRegion(el){return !!(el && el.closest && el.closest('[data-ez-animal-display="true"]'));}
+
+
+  function makeEditableLeaf(el){
+    if(!el || el.nodeType !== 1) return;
+    if(isPhase1ReadOnly(el) || isAnimalDisplayRegion(el)) return;
+    if(!el.id && typeof ezNextId === "function") el.id = ezNextId(ezIdPrefix(el));
+    el.classList.add("ez-editable-leaf");
+    el.classList.add("editable-text");
+    el.setAttribute("contenteditable", editOn ? "true" : "false");
+    el.setAttribute("spellcheck", "false");
+  }
+
+  function wrapDirectTextNodesAsEditable(el){
+    if(!el || el.nodeType !== 1 || isPhase1ReadOnly(el) || isAnimalDisplayRegion(el)) return;
+    var nodes = Array.prototype.slice.call(el.childNodes || []);
+    nodes.forEach(function(node){
+      if(node.nodeType !== 3) return; // text node only
+      if(!(node.nodeValue || "").trim()) return; // preserve formatting whitespace
+      var span = document.createElement("span");
+      if(typeof ezNextId === "function") span.id = ezNextId("text");
+      span.className = "ez-editable-leaf editable-text";
+      span.setAttribute("contenteditable", editOn ? "true" : "false");
+      span.setAttribute("spellcheck", "false");
+      span.textContent = node.nodeValue;
+      node.parentNode.replaceChild(span, node);
+    });
+  }
+
+  function ensurePhase1EditableSurface(){
+    var roots = [];
+    var main = document.getElementById("main");
+    var header = document.querySelector("header.site-header") || document.getElementById("navbar");
+    var footer = document.querySelector("footer.site-footer") || document.querySelector("footer");
+    if(main) roots.push(main);
+    if(header) roots.push(header);
+    if(footer) roots.push(footer);
+
+    roots.forEach(function(root){
+      // Explicitly clean editor state from the three Phase 1 exceptions.
+      $all(".editable-text,.ez-editable-leaf,[contenteditable]", root).forEach(function(el){
+        if(isPhase1ReadOnly(el)){
+          el.classList.remove("editable-text","ez-editable-leaf");
+          el.removeAttribute("contenteditable");
+          el.removeAttribute("spellcheck");
+        }
+      });
+
+      // First handle all existing leaf text elements (including inline spans,
+      // strong/em, labels, headings without children, etc.).
+      var leaves = $all("h1,h2,h3,h4,h5,h6,p,span,a,button,label,li,strong,em,small,blockquote,figcaption,td,th,option", root);
+      Array.prototype.forEach.call(leaves, function(el){
+        if(isPhase1ReadOnly(el)) return;
+        if(el.children.length === 0 && (el.textContent || "").trim()) makeEditableLeaf(el);
+      });
+
+      // Then handle mixed-content elements such as the Hero H1:
+      //   text node + <span>formatted text</span> + text node
+      // Each direct text node becomes its own editable span while the existing
+      // formatted inline element remains independently editable.
+      var allEls = Array.prototype.slice.call(root.querySelectorAll("*"));
+      allEls.forEach(function(el){
+        if(isPhase1ReadOnly(el)) return;
+        var tag = (el.tagName || "").toLowerCase();
+        if(tag === "script" || tag === "style" || tag === "svg" || tag === "path" || tag === "rect" ||
+           tag === "circle" || tag === "line" || tag === "polyline" || tag === "polygon" ||
+           tag === "g" || tag === "defs" || tag === "stop" || tag === "clippath" || tag === "use") return;
+        wrapDirectTextNodesAsEditable(el);
+      });
+    });
+  }
+
+
+  // ============================================================
+  // PHASE 1 FOUNDATION
+  // - Stable structural hooks for navbar/footer snapshots
+  // - Central configuration metadata in collectSettings()
+  // - Every authored element is pickable; human-readable leaves are editable
+  // - Existing auto-ID system remains the source of truth for stable element IDs
+  // - Embed payload remains backward-compatible with embed-loader-5.js
+  // ============================================================
+  // INIT
+  // ============================================================
+  function init(){
+    var urlFlags = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+    var queryFlags = new URLSearchParams(location.search || "");
+    viewOnly = urlFlags.get("live") === "1" || queryFlags.get("live") === "1";
+    if(viewOnly) body.classList.add("ez-view-only");
+    setEditMode(false);
+    ensurePageElementIds();
+    ensurePhase1EditableSurface();
+    captureTextBaselines();
+
+    buildSectionsList();
+    pushHistory();
+    // Auto-detect the existing owner email from the "Prefer email?" link so
+    // the panel field starts in sync with whatever the page already shows.
+    if(ownerEmailInput && !ownerEmailInput.value.trim()){
+      ownerEmailInput.value = window.getOwnerEmail ? window.getOwnerEmail() : "";
+    }
+    // Settings can arrive from the embed snippet itself (#p= / #data= / ?data=),
+    // which is how the customization travels to Systeme.io / GHL / ClickFunnels.
+    var urlSettings = readUrlSettings();
+    var saved = null, draft = null;
+    try{ saved = JSON.parse(localStorage.getItem(LS_SETTINGS) || "null"); }catch(e){}
+    try{ draft = JSON.parse(localStorage.getItem(LS_DRAFT) || "null"); }catch(e){}
+    if(urlSettings){
+      applySettings(urlSettings);
+    } else if(draft && !viewOnly){
+      if(confirm("May nakita kaming hindi pa na-save na draft. I-resume ang draft na ito?")){
+        applySettings(draft); unsaved = true; unsavedPill.style.display = "block";
+      } else {
+        localStorage.removeItem(LS_DRAFT);
+        if(saved) applySettings(saved);
+      }
+    } else if(saved){
+      applySettings(saved);
+    }
+    // Settings can replace DOM regions; re-assert the complete Phase 1 editor surface.
+    ensurePageElementIds();
+    ensurePhase1EditableSurface();
+    captureTextBaselines();
+
+    pushHistory();
+
+    // reposition floating UI on scroll/resize
+    window.addEventListener("scroll", function(){ if(selectedFrame && frameToolbar.style.display==="flex"){ selectFrame(selectedFrame); } }, {passive:true});
+  }
+
+  if(document.readyState === "loading"){ document.addEventListener("DOMContentLoaded", init); }
+  else { init(); }
+
+})();
+</script><script id="vana-phase2-script">
+(function(){
+  "use strict";
+  var LS_SETTINGS="ez_customizer_settings", LS_DRAFT="ez_customizer_draft";
+  var phase2={
+    enabled:true,
+    announcement:{text:"EMERGENCY CONSERVATION ALERT: All wildlife sponsorships doubled 2x by the Global Earth Alliance until midnight!",buttonText:"Sponsor",amount:"$25",enabled:true,targetId:"price-25"},
+    featuredAnimalId:"animal-aria",
+    categories:[
+      {id:"cat-cats",name:"Big Cats"},{id:"cat-primates",name:"Elephants & Primates"},
+      {id:"cat-marine",name:"Marine Life"},{id:"cat-birds",name:"Endangered Birds"}
+    ],
+    animals:[
+      {id:"animal-aria",name:"Aria",species:"Sumatran Tiger (Panthera tigris sumatrae)",image:"https://images.unsplash.com/photo-1561731216-c3a4d99437d5?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Critical",description:"Recovering after wire snare extraction. Requires daily physical therapy and enriched rainforest habitat enclosure.",carePlan:"Raw carnivore protein + bone supplements",location:"Sumatra Deep Reserve",price:"$25",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-25"},
+      {id:"animal-kibo",name:"Kibo",species:"Mountain Gorilla (Gorilla beringei beringei)",image:"https://images.unsplash.com/photo-1540573133985-7523134d2185?q=80&w=800&auto=format&fit=crop",categoryId:"cat-primates",badge:"Elephants & Primates",condition:"Stable",description:"Orphaned infant rescued from illegal pet trade traffickers. Now integrated into Virunga sanctuary troop.",carePlan:"Bamboo shoot forage & infant gorilla milk formula",location:"Virunga Highlands",price:"$35",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-35"},
+      {id:"animal-nala",name:"Nala",species:"African Savannah Elephant",image:"https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=800&auto=format&fit=crop",categoryId:"cat-primates",badge:"Elephants & Primates",condition:"Priority",description:"Rescued after surviving poacher ambush in Tsavo East. Receiving leg wound treatment and herd re-socialization.",carePlan:"180kg Acacia foliage & vet wound dressings",location:"Tsavo East Haven",price:"$50",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-50"},
+      {id:"animal-kai",name:"Kai",species:"Green Sea Turtle (Chelonia mydas)",image:"https://images.unsplash.com/photo-1518467166778-b88f373ffec7?q=80&w=800&auto=format&fit=crop",categoryId:"cat-marine",badge:"Marine Life",condition:"Rehabbed",description:"Saved after ingestion of ocean plastics and flipper entanglement. Prepped for ocean re-release next month.",carePlan:"Sea grass diet + GPS ocean satellite tag",location:"Coral Reef Marine Lab",price:"$15",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-15"},
+      {id:"animal-zephyr",name:"Zephyr",species:"Snow Leopard (Panthera uncia)",image:"https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Vulnerable",description:"Rescued from a high-altitude snare corridor and now receiving rehabilitation and protected habitat care.",carePlan:"High-protein carnivore diet + mobility conditioning",location:"Himalayan Sanctuary",price:"$40",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-40"},
+      {id:"animal-soleil",name:"Soleil",species:"Hyacinth Macaw (Anodorhynchus hyacinthinus)",image:"https://images.unsplash.com/photo-1552728089-57bdde30beb3?q=80&w=800&auto=format&fit=crop",categoryId:"cat-birds",badge:"Endangered Birds",condition:"Stable",description:"Confiscated from illegal wildlife traffickers. Now learning natural flight dynamics in our aviary canopy sanctuary.",carePlan:"Palm nuts & flight rehabilitation enclosure",location:"Pantanal Aviary Haven",price:"$20",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-20"}
+    ],
+    impactSimulator:{
+      enabled:true,kicker:"Interactive Impact Simulator",title:"Calculate Your Direct Impact",
+      description:"See exactly how your contributions translate into tangible emergency care, ranger rations, and wilderness acreage protection.",
+      customAmountLabel:"Or enter custom amount ($USD)",minAmount:"5",defaultFrequency:"monthly",
+      monthly:{label:"Monthly Giving",defaultAmount:"$35",presets:[{amount:"$15",label:"Supporter"},{amount:"$35",label:"Guardian Tier"},{amount:"$75",label:"Protector"},{amount:"$150",label:"Champion"}],headline:"Provides {daysRations} days of anti-poaching ranger field rations & protects {acres} acres of endangered wildlife habitat.",metrics:["{vetImpact}","{acres} Acres Secured","Direct Field Dispatch Logs"],cta:"Pledge {amount} / Month Sponsorship"},
+      onetime:{label:"One-Time Gift",defaultAmount:"$35",presets:[{amount:"$15",label:"Supporter"},{amount:"$35",label:"Guardian Tier"},{amount:"$75",label:"Protector"},{amount:"$150",label:"Champion"}],headline:"One-time contribution funds emergency veterinary medical kits & secures {acres3} acres of forest reserve.",metrics:["{vetImpact}","{acres3} Acres Secured","Direct Field Dispatch Logs"],cta:"Make a {amount} One-Time Gift"}
+    },
+  };
+
+  function $(id){return document.getElementById(id);}
+  function esc(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#39;");}
+  function clone(o){return JSON.parse(JSON.stringify(o));}
+  function num(v,d){var n=parseFloat(v);return isFinite(n)?n:(d||0);}
+  function priceNumber(v,d){var s=String(v==null?"":v).replace(/,/g,""),m=s.match(/-?\d+(?:\.\d+)?/),n=m?parseFloat(m[0]):NaN;return isFinite(n)?n:(d||0);}
+  function priceText(v){var s=String(v==null?"":v).trim();if(!s)return "";if(/^[-+]?\d+(?:\.\d+)?$/.test(s)){var n=parseFloat(s);return "$"+n.toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2});}return s;}
+  function slug(s){return String(s||"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"-").replace(/-+$/g,"").slice(0,28)||"category";}
+  function money(v){return priceText(v);}
+  function impactNumber(v,d){var n=priceNumber(v,d);return isFinite(n)?n:(d||0);}
+  function impactModeDefault(mode){return mode==="onetime"?{label:"One-Time Gift",defaultAmount:"$35",presets:[{amount:"$15",label:"Supporter"},{amount:"$35",label:"Guardian Tier"},{amount:"$75",label:"Protector"},{amount:"$150",label:"Champion"}],headline:"One-time contribution funds emergency veterinary medical kits & secures {acres3} acres of forest reserve.",metrics:["{vetImpact}","{acres3} Acres Secured","Direct Field Dispatch Logs"],cta:"Make a {amount} One-Time Gift"}:{label:"Monthly Giving",defaultAmount:"$35",presets:[{amount:"$15",label:"Supporter"},{amount:"$35",label:"Guardian Tier"},{amount:"$75",label:"Protector"},{amount:"$150",label:"Champion"}],headline:"Provides {daysRations} days of anti-poaching ranger field rations & protects {acres} acres of endangered wildlife habitat.",metrics:["{vetImpact}","{acres} Acres Secured","Direct Field Dispatch Logs"],cta:"Pledge {amount} / Month Sponsorship"};}
+  function normalizeImpactMode(src,mode){var base=impactModeDefault(mode),out=Object.assign({},base,src||{}),presets=Array.isArray(src&&src.presets)?src.presets.slice(0,4):[];while(presets.length<4)presets.push(clone(base.presets[presets.length]));out.presets=presets.map(function(p,i){return {amount:priceText(p&&p.amount||base.presets[i].amount),label:String(p&&p.label!=null?p.label:base.presets[i].label)};});out.metrics=Array.isArray(src&&src.metrics)?src.metrics.slice(0,3):base.metrics.slice();while(out.metrics.length<3)out.metrics.push(base.metrics[out.metrics.length]||"");out.label=String(out.label||base.label);out.defaultAmount=priceText(out.defaultAmount||base.defaultAmount);out.headline=String(out.headline||base.headline);out.cta=String(out.cta||base.cta);return out;}
+  function normalizeImpactSimulator(src){var base=phase2.impactSimulator,next=Object.assign({},base,src||{});next.monthly=normalizeImpactMode(src&&src.monthly,"monthly");next.onetime=normalizeImpactMode(src&&src.onetime,"onetime");next.enabled=next.enabled!==false;next.kicker=String(next.kicker||base.kicker);next.title=String(next.title||base.title);next.description=String(next.description||base.description);next.customAmountLabel=String(next.customAmountLabel||base.customAmountLabel);next.minAmount=priceText(next.minAmount||base.minAmount||"5");next.defaultFrequency=next.defaultFrequency==="onetime"?"onetime":"monthly";return next;}
+  function impactConfig(){try{return window.vanaPhase2GetImpactSimulator?window.vanaPhase2GetImpactSimulator():phase2.impactSimulator;}catch(e){return phase2.impactSimulator;}}
+  function renderImpactPresets(){var wrap=$("calc-amount-presets");if(!wrap)return;var cfg=impactConfig(),mode=cfg&&cfg[currentCalcFreq]?cfg[currentCalcFreq]:impactModeDefault(currentCalcFreq);wrap.innerHTML=(mode.presets||[]).map(function(p,i){var amt=impactNumber(p.amount,0);return '<button class="calc-amt-btn border border-sand/30 bg-forest/50 hover:bg-forest p-4 rounded-xl text-center transition-all" data-amount="'+esc(amt)+'" data-impact-preset="'+i+'" onclick="selectCalcAmount('+esc(amt)+')"><span class="block font-serif text-2xl font-bold text-cream">'+esc(priceText(p.amount))+'</span><span class="text-[11px] text-sand/70 uppercase">'+esc(p.label||"")+'</span></button>';}).join("");}
+  function applyImpactSimulatorConfig(resetAmount){var cfg=phase2.impactSimulator,section=$("calculator");if(!section)return;section.style.display=cfg.enabled===false?"none":"";if($("calc-impact-kicker"))$("calc-impact-kicker").textContent=cfg.kicker;if($("calc-impact-title"))$("calc-impact-title").textContent=cfg.title;if($("calc-impact-description"))$("calc-impact-description").textContent=cfg.description;if($("calc-custom-label"))$("calc-custom-label").textContent=cfg.customAmountLabel;if($("calc-custom-input"))$("calc-custom-input").setAttribute("min",String(impactNumber(cfg.minAmount,5)));if($("calc-freq-monthly"))$("calc-freq-monthly").textContent=cfg.monthly.label;if($("calc-freq-onetime"))$("calc-freq-onetime").textContent=cfg.onetime.label;if(resetAmount){currentCalcFreq=cfg.defaultFrequency;var active=cfg[currentCalcFreq]||cfg.monthly;currentCalcAmt=impactNumber(active.defaultAmount,35);if($("calc-custom-input"))$("calc-custom-input").value=currentCalcAmt;}renderImpactPresets();if(typeof updateCalculatorUI==="function")updateCalculatorUI();}
+  function renderImpactSettings(){var cfg=phase2.impactSimulator;if($("p4ImpactEnabled"))$("p4ImpactEnabled").checked=cfg.enabled!==false;if($("p4ImpactKicker"))$("p4ImpactKicker").value=cfg.kicker;if($("p4ImpactTitle"))$("p4ImpactTitle").value=cfg.title;if($("p4ImpactDescription"))$("p4ImpactDescription").value=cfg.description;if($("p4ImpactCustomLabel"))$("p4ImpactCustomLabel").value=cfg.customAmountLabel;if($("p4ImpactMinAmount"))$("p4ImpactMinAmount").value=cfg.minAmount;if($("p4ImpactDefaultFrequency"))$("p4ImpactDefaultFrequency").value=cfg.defaultFrequency;["monthly","onetime"].forEach(function(mode){var m=cfg[mode],prefix=mode==="monthly"?"Monthly":"Onetime";$("p4"+prefix+"Label").value=m.label;$("p4"+prefix+"Default").value=m.defaultAmount;$("p4"+prefix+"Cta").value=m.cta;$("p4"+prefix+"Headline").value=m.headline;for(var i=1;i<=4;i++){$("p4"+prefix+"Amt"+i).value=m.presets[i-1].amount;$("p4"+prefix+"Tag"+i).value=m.presets[i-1].label;}$("p4"+prefix+"Metric1").value=m.metrics[0];$("p4"+prefix+"Metric2").value=m.metrics[1];$("p4"+prefix+"Metric3").value=m.metrics[2];});}
+  function bindImpactSettings(){var binds=[["p4ImpactEnabled","enabled"],["p4ImpactKicker","kicker"],["p4ImpactTitle","title"],["p4ImpactDescription","description"],["p4ImpactCustomLabel","customAmountLabel"],["p4ImpactMinAmount","minAmount"],["p4ImpactDefaultFrequency","defaultFrequency"],["p4MonthlyLabel","monthly.label"],["p4MonthlyDefault","monthly.defaultAmount"],["p4MonthlyCta","monthly.cta"],["p4MonthlyHeadline","monthly.headline"],["p4MonthlyMetric1","monthly.metrics.0"],["p4MonthlyMetric2","monthly.metrics.1"],["p4MonthlyMetric3","monthly.metrics.2"],["p4OnetimeLabel","onetime.label"],["p4OnetimeDefault","onetime.defaultAmount"],["p4OnetimeCta","onetime.cta"],["p4OnetimeHeadline","onetime.headline"],["p4OnetimeMetric1","onetime.metrics.0"],["p4OnetimeMetric2","onetime.metrics.1"],["p4OnetimeMetric3","onetime.metrics.2"]];binds.forEach(function(pair){var el=$(pair[0]);if(!el)return;el.addEventListener(el.type==="checkbox"?"change":"input",function(){var parts=pair[1].split("."),value=el.type==="checkbox"?el.checked:el.value;if(parts.length===1)phase2.impactSimulator[parts[0]]=value;else if(parts.length===2)phase2.impactSimulator[parts[0]][parts[1]]=value;else phase2.impactSimulator[parts[0]][parts[1]][parseInt(parts[2],10)]=value;applyImpactSimulatorConfig(false);markChanged();});});for(var i=1;i<=4;i++){[["monthly","p4MonthlyAmt"+i,"amount"],["monthly","p4MonthlyTag"+i,"label"],["onetime","p4OnetimeAmt"+i,"amount"],["onetime","p4OnetimeTag"+i,"label"]].forEach(function(item){var el=$(item[1]);if(!el)return;el.addEventListener("input",function(){phase2.impactSimulator[item[0]].presets[i-1][item[2]]=item[2]==="amount"?priceText(this.value):this.value;applyImpactSimulatorConfig(false);markChanged();});});}}
+  function normalizeButtonLink(v){
+    var s=String(v==null?"":v).trim();
+    if(!s)return "";
+    if(/^https?:\/\//i.test(s))return s;
+    if(/^\/\//.test(s))return "https:"+s;
+    return "https://"+s;
+  }
+  function getCat(id){return phase2.categories.find(function(c){return c.id===id;})||null;}
+  function getAnimal(id){return phase2.animals.find(function(a){return a.id===id;})||null;}
+  function uniqueAnimalId(name){var base="animal-"+slug(name),id=base,n=2;while(getAnimal(id))id=base+"-"+(n++);return id;}
+  function uniqueCatId(name){var base="cat-"+slug(name),id=base,n=2;while(getCat(id))id=base+"-"+(n++);return id;}
+  function uniqueTargetId(amount,ignoreId){var nAmount=priceNumber(amount,0),base="price-"+String(nAmount).replace(/\.0+$/g,"").replace(/\./g,"-"),id=base,n=2;while(phase2.animals.some(function(a){return a.id!==ignoreId&&a.targetId===id;}))id=base+"-"+(n++);return id;}
+  function syncAnnouncementTarget(){var base="price-"+String(priceNumber(phase2.announcement.amount,0)).replace(/\.0+$/g,"").replace(/\./g,"-"),clash=phase2.animals.some(function(a){return a.targetId===base;});phase2.announcement.targetId=clash?base+"-announcement":base;}
+
+  function savePhase2(draft){try{
+    var key=draft?LS_DRAFT:LS_SETTINGS,existing={};
+    try{existing=JSON.parse(localStorage.getItem(key)||"null")||{};}catch(e){}
+    var obj=(typeof collectSettings==="function")?collectSettings():existing;
+    obj=obj||existing||{};
+    obj.schemaVersion=Math.max(4,Number(obj.schemaVersion||1));
+    obj.configModel="vana-embed-site";obj.phase2=clone(phase2);
+    localStorage.setItem(key,JSON.stringify(obj));if(!draft)localStorage.removeItem(LS_DRAFT);
+  }catch(e){}}
+  function readPhase2Source(){
+    try{
+      var h=new URLSearchParams((location.hash||"").replace(/^#/,"")),q=new URLSearchParams(location.search||""),raw=h.get("p")||h.get("data")||q.get("p")||q.get("data");
+      if(raw){var data=JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(raw)))));if(data&&data.phase2)return data.phase2;}
+    }catch(e){}
+    try{var draft=JSON.parse(localStorage.getItem(LS_DRAFT)||"null");if(draft&&draft.phase2)return draft.phase2;}catch(e){}
+    try{var saved=JSON.parse(localStorage.getItem(LS_SETTINGS)||"null");if(saved&&saved.phase2)return saved.phase2;}catch(e){}
+    return null;
+  }
+  function normalizePhase2(src){
+    if(!src)return;
+    phase2.enabled=src.enabled!==false;
+    phase2.announcement=Object.assign({},phase2.announcement,src.announcement||{});
+    phase2.announcement.amount=priceText(phase2.announcement.amount||"$25");
+    if(Array.isArray(src.categories)&&src.categories.length)phase2.categories=src.categories.map(function(c){return {id:String(c.id||uniqueCatId(c.name)),name:String(c.name||"Category")};});
+    if(Array.isArray(src.animals)&&src.animals.length)phase2.animals=src.animals.map(function(a){return Object.assign({},a,{id:String(a.id||uniqueAnimalId(a.name)),price:priceText(a.price||"$0"),totalDonations:num(a.totalDonations),targetId:String(a.targetId||""),buttonLink:String(a.buttonLink||""),buttonOpenNewTab:a.buttonOpenNewTab===true});});
+    phase2.featuredAnimalId=getAnimal(src.featuredAnimalId)?src.featuredAnimalId:(getAnimal(phase2.featuredAnimalId)?phase2.featuredAnimalId:(phase2.animals[0]&&phase2.animals[0].id));
+    phase2.impactSimulator=normalizeImpactSimulator(src.impactSimulator||{});
+    syncAllTargetIds();
+  }
+  function syncAllTargetIds(){
+    phase2.animals.forEach(function(a){a.targetId=uniqueTargetId(a.price,a.id);});
+    var base="price-"+String(priceNumber(phase2.announcement.amount,0)).replace(/\.0+$/g,"").replace(/\./g,"-");
+    var clash=phase2.animals.some(function(a){return a.targetId===base;});
+    phase2.announcement.targetId=clash?base+"-announcement":base;
+  }
+
+  window.vanaPhase2GetImpactSimulator=function(){return clone(phase2.impactSimulator);};
+  function renderAnnouncement(){
+    syncAnnouncementTarget();
+    var banner=$("match-banner");if(!banner)return;
+    var text=$("phase2-announcement-text")||banner.querySelector("div.flex.items-center.space-x-2 span:last-child");
+    if(text){text.id="phase2-announcement-text";text.textContent=phase2.announcement.text;}
+    var btn=$("phase2-announcement-sponsor");
+    if(btn){btn.textContent="View Product";btn.style.display=phase2.announcement.enabled===false?"none":"inline-flex";btn.dataset.commerceAction="view-product";btn.dataset.productId=phase2.announcement.targetId||"";btn.dataset.targetId=phase2.announcement.targetId||"";btn.dataset.paymentType="one-time";}
+    if($("p2AnnouncementTargetId"))$("p2AnnouncementTargetId").textContent=phase2.announcement.targetId||"—";
+  }
+  function renderCategoryFilters(){
+    var wrap=$("category-filters");if(!wrap)return;
+    var current=wrap.querySelector(".cat-btn.active"),active=current?current.getAttribute("data-cat"):"all";
+    var html='<button onclick="filterCategory(\'all\')" class="cat-btn '+(active==="all"?"active ":"")+"px-4 py-2 rounded-full text-xs font-semibold transition-all "+(active==="all"?"bg-forest text-cream":"bg-sandlight text-forest hover:bg-sand")+'" data-cat="all">All Animals</button>';
+    phase2.categories.forEach(function(c){var selected=active===c.id;html+='<button onclick="filterCategory(\''+esc(c.id)+'\')" class="cat-btn '+(selected?"active ":"")+"px-4 py-2 rounded-full text-xs font-semibold transition-all "+(selected?"bg-forest text-cream":"bg-sandlight text-forest hover:bg-sand")+'" data-cat="'+esc(c.id)+'">'+esc(c.name)+'</button>';});
+    wrap.innerHTML=html;
+  }
+  function productCta(a,classes,iconClass){
+    var label=String(a.buttonText||"View Product");
+    var link=normalizeButtonLink(a.buttonLink);
+    iconClass=iconClass||"w-3.5 h-3.5";
+    if(link){
+      var target=a.buttonOpenNewTab===true?' target="_blank" rel="noopener noreferrer"':"";
+      return '<a href="'+esc(link)+'"'+target+' class="'+classes+' flex items-center justify-center space-x-1.5"><i data-lucide="external-link" class="'+iconClass+'"></i><span>'+esc(label)+'</span></a>';
+    }
+    return '<button data-target-id="'+esc(a.targetId||"")+'" data-product-id="'+esc(a.targetId||"")+'" data-commerce-action="view-product" data-payment-type="'+esc(a.paymentType||"")+'" class="'+classes+' flex items-center justify-center space-x-1.5"><i data-lucide="eye" class="'+iconClass+'"></i><span>'+esc(label)+'</span></button>';
+  }
+  function renderAnimals(){
+    var grid=$("animal-grid"),main=document.getElementById("main");if(!grid||!main||!main.contains(grid))return;
+    var activeBtn=document.querySelector("#category-filters .cat-btn.active"),activeCat=activeBtn?activeBtn.getAttribute("data-cat"):"all",html="";
+    phase2.animals.forEach(function(a){
+      var c=getCat(a.categoryId),label=c?c.name:(a.badge||"Wildlife"),unit=a.paymentType==="onetime"?"/ one-time":"/ mo";
+      var safeName=String(a.name).replace(/'/g,"\\'");var safeSpecies=String(a.species).replace(/'/g,"\\'");var safeImage=String(a.image).replace(/'/g,"\\'");
+      html+='<div class="animal-card bg-white rounded-2xl overflow-hidden border border-sand/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col" id="animal-card-'+esc(a.id)+'" data-category="'+esc(a.categoryId)+'" data-animal-id="'+esc(a.id)+'">';
+      html+='<div class="relative h-60 overflow-hidden"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Wildlife\'"><span class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs font-semibold px-3 py-1 rounded-full">'+esc(label)+'</span></div>';
+      html+='<div class="p-6 flex-grow flex flex-col justify-between space-y-4"><div><div class="flex justify-between items-start mb-2"><h3 class="font-serif text-2xl font-bold text-forest">'+esc(a.name)+'</h3><span class="text-xs bg-terracotta/10 text-terracotta font-bold px-2.5 py-1 rounded-md">'+esc(a.condition)+'</span></div><p class="text-xs text-slategreen uppercase tracking-wider font-semibold mb-3">'+esc(a.species)+'</p><p class="text-sm text-forest/80 line-clamp-3 mb-4">'+esc(a.description)+'</p><div class="text-xs text-slategreen space-y-1 bg-sandlight p-3 rounded-lg border border-sand/50"><p><strong>Care Plan:</strong> '+esc(a.carePlan)+'</p><p><strong>Sanctuary Location:</strong> '+esc(a.location)+'</p><p><strong>Total Donations:</strong> '+money(a.totalDonations||0)+'</p></div></div>';
+      html+='<div class="pt-4 border-t border-sand flex items-center justify-between"><div><span class="text-xs text-slategreen block">'+(a.paymentType==='onetime'?'One-time Gift':'Monthly Care')+'</span><span class="text-lg font-bold text-forest">'+money(a.price)+' <span class="text-xs font-normal text-slategreen">'+unit+'</span></span></div>'+productCta(a,'px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors','w-3.5 h-3.5')+'</div></div></div>';
+    });
+    grid.innerHTML=html;
+    if(typeof window.filterCategory==='function')window.filterCategory(activeCat||"all");
+    if(window.lucide)lucide.createIcons();
+  }
+  function renderFeatured(){
+    var root=$("featured-animal-card");if(!root)return;var a=getAnimal(phase2.featuredAnimalId)||phase2.animals[0];if(!a)return;
+    var total=num(a.totalDonations),goal=num(a.donationGoal,1200),pct=goal>0?Math.min(100,(total/goal)*100):0,unit=a.paymentType==="onetime"?"/ one-time":"/ mo";
+    var safeName=String(a.name).replace(/'/g,"\\'");var safeSpecies=String(a.species).replace(/'/g,"\\'");var safeImage=String(a.image).replace(/'/g,"\\'");
+    root.innerHTML='<div class="bg-forestlight/90 border border-sand/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md"><div class="absolute top-4 right-4 bg-terracotta text-cream text-xs px-3 py-1.5 rounded-full font-semibold shadow-md flex items-center space-x-1.5"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Featured</span></div><div class="relative h-64 sm:h-72 rounded-xl overflow-hidden mb-5"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Rescued+Wildlife\'"><div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-forest to-transparent p-4 flex justify-between items-end"><div><span class="text-xs uppercase tracking-wider text-terracotta font-bold">Featured Sanctuary Resident</span><h3 class="font-serif text-2xl text-cream font-bold">'+esc(a.name)+' — '+esc(a.species)+'</h3></div><span class="text-xs px-2.5 py-1 bg-moss text-sand rounded-md font-medium">'+esc(a.condition)+'</span></div></div><p class="text-sand/80 text-sm mb-5 leading-relaxed">'+esc(a.description)+'</p><div class="bg-forest/80 rounded-xl p-3.5 mb-5 border border-sand/10 flex justify-between items-center text-xs"><div><p class="text-sand/60">Total Donations</p><p class="text-cream font-bold text-sm">'+money(total)+(goal>0?" / "+money(goal):"")+'</p></div><div class="w-24 bg-sand/20 h-2 rounded-full overflow-hidden"><div class="bg-terracotta h-full" style="width:'+pct.toFixed(1)+'%"></div></div></div>'+productCta(a,'w-full py-3.5 rounded-xl bg-sand text-forest font-bold text-sm hover:bg-cream transition-colors','w-4 h-4')+'</div>';
+    if(window.lucide)lucide.createIcons();
+  }
+  function updateFeaturedEditor(){
+    var sel=$("p2FeaturedAnimal");if(!sel)return;
+    var featured=getAnimal(phase2.featuredAnimalId),fallback=phase2.animals[0];
+    if(!featured&&fallback){phase2.featuredAnimalId=fallback.id;featured=fallback;}
+    sel.innerHTML='<option value="">Select an existing animal</option>'+phase2.animals.map(function(a){return '<option value="'+esc(a.id)+'">'+esc(a.name)+' — '+esc(a.species)+'</option>';}).join("");
+    sel.value=phase2.featuredAnimalId||"";
+    sel.disabled=phase2.animals.length===0;
+    var a=featured||fallback;if(a){$("p2FeaturedTotalDonations").value=num(a.totalDonations);$("p2FeaturedDonationGoal").value=num(a.donationGoal,1200);}
+  }
+  function renderCategoryList(){
+    var box=$("p2CategoryList");if(!box)return;box.innerHTML=phase2.categories.map(function(c){var used=phase2.animals.filter(function(a){return a.categoryId===c.id;}).length;return '<div class="cp-phase2-item"><div class="cp-phase2-item-main"><input data-cat-edit="'+esc(c.id)+'" value="'+esc(c.name)+'" type="text" style="padding:6px 7px"><div class="cp-phase2-item-meta">'+used+' animal'+(used===1?'':'s')+' assigned</div></div><button type="button" data-cat-save="'+esc(c.id)+'">Save</button><button type="button" class="danger" data-cat-delete="'+esc(c.id)+'">Delete</button></div>';}).join("");
+  }
+  function renderAnimalList(){
+    var box=$("p2AnimalList");if(!box)return;
+    box.innerHTML=phase2.animals.map(function(a){
+      var c=getCat(a.categoryId);
+      return '<div class="cp-phase2-item"><div class="cp-phase2-item-main"><div class="cp-phase2-item-name">'+esc(a.name)+' <span style="color:#C9A15A">#'+esc(a.id.replace(/^animal-/,""))+'</span></div><div class="cp-phase2-item-meta">'+esc(c?c.name:(a.badge||"Uncategorized"))+' · '+money(a.price)+' '+(a.paymentType==="onetime"?'one-time':'monthly')+' · '+esc(a.targetId||"")+'</div></div><div class="p3-list-actions"><button type="button" data-animal-edit="'+esc(a.id)+'">Edit</button><button type="button" data-animal-duplicate="'+esc(a.id)+'">Duplicate</button><button type="button" class="danger" data-animal-delete="'+esc(a.id)+'">Delete</button></div></div>';
+    }).join("");
+  }
+  var phase3Modal = $("ezPhase3Modal");
+  var phase2Manager = $("ezPhase2Modal");
+  var phase3ReturnToPhase2 = false;
+  var phase3OriginalId = "";
+  var phase3DuplicateMode = false;
+
+  function phase3SetImagePreview(url){
+    var img=$("p3ImagePreview"),fallback=$("p3ImagePreviewFallback");
+    if(!img||!fallback)return;
+    if(url){img.src=url;img.onload=function(){img.style.display="block";fallback.style.display="none";};img.onerror=function(){img.style.display="none";fallback.style.display="block";};}
+    else{img.removeAttribute("src");img.style.display="none";fallback.style.display="block";}
+  }
+  function phase3UpdateMeta(){
+    var price=priceText($("p3Price")&&$("p3Price").value||"$0"), id=$("p3EditingId")?$("p3EditingId").value.trim():"";
+    var current=getAnimal(id);
+    var target=current && !phase3DuplicateMode ? uniqueTargetId(price,id) : uniqueTargetId(price,"");
+    if($("p3TargetId"))$("p3TargetId").textContent=target;
+  }
+  function phase3Open(a, duplicateMode){
+    if(!phase3Modal)return;
+    phase3DuplicateMode=!!duplicateMode;
+    phase3OriginalId=a?a.id:"";
+    if(a){
+      $("p3EditingId").value=duplicateMode?"":a.id;
+      $("p3Name").value=duplicateMode?(String(a.name||"Product")+" Copy"):String(a.name||"");
+      $("p3Species").value=String(a.species||"");$("p3Category").innerHTML=phase2.categories.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>';}).join("");$("p3Category").value=a.categoryId||((phase2.categories[0]||{}).id||"");
+      $("p3Badge").value=String(a.badge||"");$("p3Image").value=String(a.image||"");$("p3Condition").value=String(a.condition||"");$("p3Button").value=String(a.buttonText||"");$("p3ButtonLink").value=String(a.buttonLink||"");$("p3ButtonNewTab").checked=a.buttonOpenNewTab===true;$("p3Description").value=String(a.description||"");$("p3CarePlan").value=String(a.carePlan||"");$("p3Location").value=String(a.location||"");$("p3PaymentType").value=a.paymentType||"monthly";$("p3Price").value=priceText(a.price||"$25");$("p3TotalDonations").value=num(a.totalDonations);
+      $("p3ProductId").textContent=duplicateMode?"New ID on Save":a.id;
+    }else{
+      $("p3EditingId").value="";$("p3Name").value="";$("p3ButtonLink").value="";$("p3ButtonNewTab").checked=false;$("p3Species").value="Wildlife Species";$("p3Category").innerHTML=phase2.categories.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>';}).join("");$("p3Category").value=((phase2.categories[0]||{}).id||"");$("p3Badge").value=((getCat($("p3Category").value)||{}).name||"Wildlife");$("p3Image").value="";$("p3Condition").value="Stable";$("p3Button").value="View Product";$("p3Description").value="";$("p3CarePlan").value="";$("p3Location").value="";$("p3PaymentType").value="monthly";$("p3Price").value="$25";$("p3TotalDonations").value=0;$("p3ProductId").textContent="New ID on Save";
+    }
+    $("p3ModalTitle").textContent=duplicateMode?"Duplicate Product / Animal":(a?"Edit Product / Animal":"Create Product / Animal");
+    phase3SetImagePreview($("p3Image").value.trim());phase3UpdateMeta();
+    if(phase2Manager)phase2Manager.style.display="none";
+    phase3ReturnToPhase2=true;phase3Modal.style.display="flex";
+    $("p3Name").focus();
+  }
+  function phase3Close(){
+    if(!phase3Modal)return;
+    phase3Modal.style.display="none";
+    if(phase3ReturnToPhase2 && phase2Manager){phase2Manager.style.display="flex";renderAll();}
+    phase3ReturnToPhase2=false;phase3OriginalId="";phase3DuplicateMode=false;
+  }
+  function phase3Save(){
+    var editingId=$("p3EditingId").value.trim(), price=priceText($("p3Price").value||"$0"), name=$("p3Name").value.trim()||"New Product";
+    var data={
+      id:editingId||uniqueAnimalId(name),
+      name:name,
+      species:$("p3Species").value.trim()||"Wildlife Species",
+      image:$("p3Image").value.trim()||"https://placehold.co/800x600/112217/FAF7F2?text=Wildlife",
+      categoryId:$("p3Category").value,
+      badge:$("p3Badge").value.trim()||((getCat($("p3Category").value)||{}).name||"Wildlife"),
+      condition:$("p3Condition").value.trim()||"Stable",
+      buttonText:$("p3Button").value.trim()||"View Product",
+      buttonLink:normalizeButtonLink($("p3ButtonLink").value),
+      buttonOpenNewTab:$("p3ButtonNewTab").checked,
+      description:$("p3Description").value.trim(),
+      carePlan:$("p3CarePlan").value.trim(),
+      location:$("p3Location").value.trim(),
+      price:price,
+      paymentType:$("p3PaymentType").value||"monthly",
+      totalDonations:num($("p3TotalDonations").value),
+      targetId:""
+    };
+    data.targetId=uniqueTargetId(data.price,editingId||"");
+    var index=phase2.animals.findIndex(function(a){return a.id===editingId;});
+    if(index>=0 && !phase3DuplicateMode){phase2.animals[index]=data;}
+    else{phase2.animals.push(data);index=phase2.animals.length-1;}
+    if(!phase2.featuredAnimalId)phase2.featuredAnimalId=data.id;
+    syncAllTargetIds();renderAll();markChanged();phase3Close();
+  }
+
+  function renderAll(){
+    var footer=document.querySelector(".site-footer")||document.querySelector("footer"),footerParent=footer?footer.parentNode:null,footerNext=footer?footer.nextSibling:null;
+    var header=document.querySelector("header.site-header")||document.getElementById("navbar"),headerParent=header?header.parentNode:null,headerNext=header?header.nextSibling:null;
+    renderAnnouncement();renderCategoryFilters();renderAnimals();renderFeatured();renderCategoryList();renderAnimalList();renderImpactSettings();applyImpactSimulatorConfig(false);updateFeaturedEditor();
+    if(footerParent&&footer&&!document.contains(footer))footerParent.insertBefore(footer,footerNext&&footerNext.parentNode===footerParent?footerNext:null);
+    if(headerParent&&header&&!document.contains(header))headerParent.insertBefore(header,headerNext&&headerNext.parentNode===headerParent?headerNext:null);
+  }
+  function markChanged(){savePhase2(true);var pill=$("ezUnsavedPill");if(pill)pill.style.display="block";}
+
+  window.vanaPhase2GetMoney=function(v){return money(v);};
+  function bind(){
+    $("p2AnnouncementEnabled").addEventListener("change",function(){phase2.announcement.enabled=this.checked;renderAnnouncement();markChanged();});
+    $("p2AnnouncementText").addEventListener("input",function(){phase2.announcement.text=this.value;renderAnnouncement();markChanged();});
+    $("p2AnnouncementButtonText").addEventListener("input",function(){phase2.announcement.buttonText=this.value;renderAnnouncement();markChanged();});
+    $("p2AnnouncementAmount").addEventListener("input",function(){phase2.announcement.amount=priceText(this.value);syncAnnouncementTarget();renderAnnouncement();markChanged();});
+    $("p2FeaturedAnimal").addEventListener("change",function(){phase2.featuredAnimalId=this.value;updateFeaturedEditor();renderFeatured();markChanged();});
+    bindImpactSettings();
+    $("p2FeaturedTotalDonations").addEventListener("input",function(){var a=getAnimal(phase2.featuredAnimalId);if(a){a.totalDonations=num(this.value);renderAnimals();renderFeatured();renderAnimalList();markChanged();}});
+    $("p2FeaturedDonationGoal").addEventListener("input",function(){var a=getAnimal(phase2.featuredAnimalId);if(a){a.donationGoal=num(this.value);renderFeatured();markChanged();}});
+    $("p2AddCategory").addEventListener("click",function(){var name=$("p2NewCategory").value.trim();if(!name)return;if(phase2.categories.some(function(c){return c.name.toLowerCase()===name.toLowerCase();})){alert("That category already exists.");return;}phase2.categories.push({id:uniqueCatId(name),name:name});$("p2NewCategory").value="";renderAll();markChanged();});
+    $("p2CategoryList").addEventListener("click",function(e){
+      var save=e.target.closest&&e.target.closest("[data-cat-save]"),del=e.target.closest&&e.target.closest("[data-cat-delete]");
+      if(save){var id=save.getAttribute("data-cat-save"),c=getCat(id),inputs=document.querySelectorAll("[data-cat-edit]");for(var i=0;i<inputs.length;i++){if(inputs[i].getAttribute("data-cat-edit")===id&&c){var next=inputs[i].value.trim();if(next){c.name=next;}break;}}renderAll();markChanged();}
+      if(del){var id2=del.getAttribute("data-cat-delete");if(phase2.animals.some(function(a){return a.categoryId===id2;})){alert("This category is still used by an Animal Card. Reassign those animals first, then delete the category.");return;}if(phase2.categories.length<=1){alert("At least one category must remain.");return;}phase2.categories=phase2.categories.filter(function(c){return c.id!==id2;});renderAll();markChanged();}
+    });
+    $("p2AddAnimal").addEventListener("click",function(){phase3Open(null,false);});
+    $("p2AnimalList").addEventListener("click",function(e){
+      var edit=e.target.closest&&e.target.closest("[data-animal-edit]"),dup=e.target.closest&&e.target.closest("[data-animal-duplicate]"),del=e.target.closest&&e.target.closest("[data-animal-delete]");
+      if(edit){phase3Open(getAnimal(edit.getAttribute("data-animal-edit")),false);return;}
+      if(dup){phase3Open(getAnimal(dup.getAttribute("data-animal-duplicate")),true);return;}
+      if(del){
+        var id=del.getAttribute("data-animal-delete");
+        if(phase2.animals.length<=1){alert("At least one product must remain.");return;}
+        if(phase2.featuredAnimalId===id){var replacement=phase2.animals.find(function(a){return a.id!==id;});phase2.featuredAnimalId=replacement?replacement.id:"";updateFeaturedEditor();}
+        phase2.animals=phase2.animals.filter(function(a){return a.id!==id;});
+        renderAll();markChanged();
+      }
+    });
+    $("p3Image").addEventListener("input",function(){phase3SetImagePreview(this.value.trim());});
+    $("p3Price").addEventListener("input",phase3UpdateMeta);
+    $("ezPhase3Close").addEventListener("click",phase3Close);
+    $("ezPhase3Cancel").addEventListener("click",phase3Close);
+    $("ezPhase3Save").addEventListener("click",phase3Save);
+    $("p3DuplicateFromEditor").addEventListener("click",function(){
+      var id=$("p3EditingId").value.trim(),a=getAnimal(id);
+      if(a){phase3Open(a,true);}
+    });
+
+
+    $("cpSave").addEventListener("click",function(){setTimeout(function(){syncAllTargetIds();savePhase2(false);renderAll();var pill=$("ezUnsavedPill");if(pill)pill.style.display="none";},30);});
+    $("cpCopy").addEventListener("click",function(){setTimeout(function(){try{syncAllTargetIds();var domain=$("cpDomain").value.trim()||"yourname.example.com",proto=domain.indexOf("http")===0?"":"https://",baseUrl=proto+domain.replace(/\/$/,"");var base=JSON.parse(localStorage.getItem(LS_SETTINGS)||"null")||{};base.schemaVersion=Math.max(4,Number(base.schemaVersion||1));base.configModel="vana-embed-site";base.phase2=clone(phase2);var payload=btoa(unescape(encodeURIComponent(JSON.stringify(base))));var snippet='<script src="'+baseUrl+'/embed-loader-5.js#p='+encodeURIComponent(payload)+'" data-page="sv-website-5.html" data-ez-embed data-ez-schema="4" defer><\\/script>';var out=$("cpEmbedOut");if(out){out.value=snippet;out.style.display="block";out.select();if(navigator.clipboard)navigator.clipboard.writeText(snippet);}}catch(e){}},50);});
+  }
+
+  function init(){
+    var saved=readPhase2Source();if(saved)normalizePhase2(saved);else syncAllTargetIds();
+    $("p2AnnouncementText").value=phase2.announcement.text;$("p2AnnouncementButtonText").value=phase2.announcement.buttonText;$("p2AnnouncementAmount").value=priceText(phase2.announcement.amount||"$25");$("p2AnnouncementEnabled").checked=phase2.announcement.enabled!==false;
+    bind();renderImpactSettings();applyImpactSimulatorConfig(true);renderAll();document.body.dataset.vanaPhase2="4";
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
+})();
+</script>
+</body>
+</html> + currentCalcAmt,
+                daysRations: daysRations,
+                acres: acres,
+                acres3: acres * 3,
+                vetImpact: currentCalcAmt > 50 ? 'Full Vet Trauma Kit' : 'Antibiotic & Wound Supplies'
+            };
+            if(mode){
+                const fmt = (template) => String(template || '').replace(/\{amount\}/g, ctx.amount).replace(/\{daysRations\}/g, String(ctx.daysRations)).replace(/\{acres\}/g, String(ctx.acres)).replace(/\{acres3\}/g, String(ctx.acres3)).replace(/\{vetImpact\}/g, ctx.vetImpact);
+                headline.innerText = fmt(mode.headline);
+                ctaText.innerText = fmt(mode.cta);
+                m1.innerText = fmt(mode.metrics && mode.metrics[0]);
+                m2.innerText = fmt(mode.metrics && mode.metrics[1]);
+                m3.innerText = fmt(mode.metrics && mode.metrics[2]);
+            }else{
+                headline.innerText = currentCalcFreq === 'monthly'
+                  ? `Provides ${daysRations} days of anti-poaching ranger field rations & protects ${acres} acres of endangered wildlife habitat.`
+                  : `One-time contribution funds emergency veterinary medical kits & secures ${acres * 3} acres of forest reserve.`;
+                ctaText.innerText = currentCalcFreq === 'monthly'
+                  ? `Pledge ${currentCalcAmt} / Month Sponsorship`
+                  : `Make a ${currentCalcAmt} One-Time Gift`;
+                m1.innerText = `${currentCalcAmt > 50 ? 'Full Vet Trauma Kit' : 'Antibiotic & Wound Supplies'}`;
+                m2.innerText = `${acres} Acres Secured`;
+                m3.innerText = 'Direct Field Dispatch Logs';
+            }
         }
 
         function switchHabitatTab(regionKey) {
