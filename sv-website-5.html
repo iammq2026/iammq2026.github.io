@@ -683,7 +683,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 </div>
 <!-- Animal Cards Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-ez-phase1-readonly="true" data-ez-role="animal-display-grid" id="animal-grid">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-ez-animal-display="true" data-ez-role="animal-display-grid" id="animal-grid">
 <!-- Animal Card 1 -->
 <div class="animal-card bg-white rounded-2xl overflow-hidden border border-sand/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col" data-category="cats">
 <div class="relative h-60 overflow-hidden">
@@ -890,11 +890,9 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#FAF7F2_1px,transparent_1px)] [background-size:16px_16px]"></div>
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 <div class="text-center max-w-2xl mx-auto mb-12">
-<span class="text-xs uppercase tracking-widest text-terracotta font-bold">Interactive Impact Simulator</span>
-<h2 class="font-serif text-3xl sm:text-5xl font-bold text-cream mt-2 mb-4">Calculate Your Direct Impact</h2>
-<p class="text-sand/80 text-sm sm:text-base">
-                        See exactly how your contributions translate into tangible emergency care, ranger rations, and wilderness acreage protection.
-                    </p>
+<span class="text-xs uppercase tracking-widest text-terracotta font-bold" id="calc-impact-kicker">Interactive Impact Simulator</span>
+<h2 class="font-serif text-3xl sm:text-5xl font-bold text-cream mt-2 mb-4" id="calc-impact-title">Calculate Your Direct Impact</h2>
+<p class="text-sand/80 text-sm sm:text-base" id="calc-impact-description">See exactly how your contributions translate into tangible emergency care, ranger rations, and wilderness acreage protection.</p>
 </div>
 <div class="bg-forestlight border border-sand/20 rounded-3xl p-6 sm:p-10 shadow-2xl">
 <!-- Frequency Toggle -->
@@ -925,7 +923,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 <!-- Custom Amount Input -->
 <div class="mb-10 max-w-xs mx-auto text-center">
-<label class="block text-xs uppercase tracking-wider text-sand/70 mb-2">Or enter custom amount ($USD)</label>
+<label class="block text-xs uppercase tracking-wider text-sand/70 mb-2" id="calc-custom-label">Or enter custom amount ($USD)</label>
 <div class="relative">
 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sand text-lg font-bold">$</span>
 <input class="w-full bg-forest border border-sand/30 rounded-xl py-3 pl-8 pr-4 text-cream font-serif text-xl font-bold focus:outline-none focus:border-terracotta transition-colors text-center" id="calc-custom-input" min="5" oninput="onCustomCalcInput(this.value)" type="number" value="35"/>
@@ -1758,6 +1756,47 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 <div class="cp-phase2-list" id="p2AnimalList"></div>
 </div>
 
+<div class="cp-phase2-block" id="cpImpactSimulatorBlock">
+<div class="cp-phase2-block-title">Interactive Impact Simulator — Fully Configurable</div>
+<label class="cp-check-row"><input checked="" id="p4ImpactEnabled" type="checkbox"/><span>Enable Interactive Impact Simulator</span></label>
+<div class="cp-phase2-grid two"><div><label>Section Label</label><input id="p4ImpactKicker" type="text"/></div><div><label>Default Mode</label><select id="p4ImpactDefaultFrequency"><option value="monthly">Monthly Giving</option><option value="onetime">One-time Gift</option></select></div></div>
+<label>Heading</label><input id="p4ImpactTitle" type="text"/>
+<label>Description</label><textarea id="p4ImpactDescription" rows="2"></textarea>
+<div class="cp-phase2-grid two"><div><label>Custom Amount Label</label><input id="p4ImpactCustomLabel" type="text"/></div><div><label>Minimum Custom Amount</label><input id="p4ImpactMinAmount" type="text"/></div></div>
+<div class="cp-phase2-block" style="margin-top:10px;margin-bottom:0;">
+<div class="cp-phase2-block-title">Monthly Giving</div>
+<label>Tab Label</label><input id="p4MonthlyLabel" type="text"/>
+<div class="cp-phase2-grid two"><div><label>Default Amount</label><input id="p4MonthlyDefault" type="text"/></div><div><label>CTA Text Template</label><input id="p4MonthlyCta" type="text"/></div></div>
+<div class="cp-phase2-item-meta" style="margin-top:8px;">Preset Amounts</div>
+<div class="cp-phase2-grid two">
+<div><label>Preset 1 Amount</label><input id="p4MonthlyAmt1" type="text"/><label>Preset 1 Label</label><input id="p4MonthlyTag1" type="text"/></div>
+<div><label>Preset 2 Amount</label><input id="p4MonthlyAmt2" type="text"/><label>Preset 2 Label</label><input id="p4MonthlyTag2" type="text"/></div>
+<div><label>Preset 3 Amount</label><input id="p4MonthlyAmt3" type="text"/><label>Preset 3 Label</label><input id="p4MonthlyTag3" type="text"/></div>
+<div><label>Preset 4 Amount</label><input id="p4MonthlyAmt4" type="text"/><label>Preset 4 Label</label><input id="p4MonthlyTag4" type="text"/></div>
+</div>
+<label>Impact Headline Template</label><textarea id="p4MonthlyHeadline" rows="2"></textarea>
+<div class="cp-note">Placeholders: <code>{amount}</code> <code>{daysRations}</code> <code>{acres}</code> <code>{acres3}</code> <code>{vetImpact}</code></div>
+<div class="cp-phase2-grid two"><div><label>Metric 1</label><input id="p4MonthlyMetric1" type="text"/></div><div><label>Metric 2</label><input id="p4MonthlyMetric2" type="text"/></div></div>
+<label>Metric 3</label><input id="p4MonthlyMetric3" type="text"/>
+</div>
+<div class="cp-phase2-block" style="margin-top:10px;margin-bottom:0;">
+<div class="cp-phase2-block-title">One-time Gift</div>
+<label>Tab Label</label><input id="p4OnetimeLabel" type="text"/>
+<div class="cp-phase2-grid two"><div><label>Default Amount</label><input id="p4OnetimeDefault" type="text"/></div><div><label>CTA Text Template</label><input id="p4OnetimeCta" type="text"/></div></div>
+<div class="cp-phase2-item-meta" style="margin-top:8px;">Preset Amounts</div>
+<div class="cp-phase2-grid two">
+<div><label>Preset 1 Amount</label><input id="p4OnetimeAmt1" type="text"/><label>Preset 1 Label</label><input id="p4OnetimeTag1" type="text"/></div>
+<div><label>Preset 2 Amount</label><input id="p4OnetimeAmt2" type="text"/><label>Preset 2 Label</label><input id="p4OnetimeTag2" type="text"/></div>
+<div><label>Preset 3 Amount</label><input id="p4OnetimeAmt3" type="text"/><label>Preset 3 Label</label><input id="p4OnetimeTag3" type="text"/></div>
+<div><label>Preset 4 Amount</label><input id="p4OnetimeAmt4" type="text"/><label>Preset 4 Label</label><input id="p4OnetimeTag4" type="text"/></div>
+</div>
+<label>Impact Headline Template</label><textarea id="p4OnetimeHeadline" rows="2"></textarea>
+<div class="cp-note">Placeholders: <code>{amount}</code> <code>{daysRations}</code> <code>{acres}</code> <code>{acres3}</code> <code>{vetImpact}</code></div>
+<div class="cp-phase2-grid two"><div><label>Metric 1</label><input id="p4OnetimeMetric1" type="text"/></div><div><label>Metric 2</label><input id="p4OnetimeMetric2" type="text"/></div></div>
+<label>Metric 3</label><input id="p4OnetimeMetric3" type="text"/>
+</div>
+<p class="cp-note">The Simulator remains a presentation/configuration layer. Purchase actions continue to use the centralized Product System.</p>
+</div>
 <div class="cp-phase2-footnote">Phase 2 prepares synchronized product presentation data and product target mappings for the centralized Product System. Commerce processing is intentionally external to the website template.</div>
 </section>
 </div>
@@ -3794,10 +3833,12 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   function isPhase1ReadOnly(el){
     return !!(el && el.closest && el.closest('[data-ez-phase1-readonly="true"]'));
   }
+  function isAnimalDisplayRegion(el){return !!(el && el.closest && el.closest('[data-ez-animal-display="true"]'));}
+
 
   function makeEditableLeaf(el){
     if(!el || el.nodeType !== 1) return;
-    if(isPhase1ReadOnly(el)) return;
+    if(isPhase1ReadOnly(el) || isAnimalDisplayRegion(el)) return;
     if(!el.id && typeof ezNextId === "function") el.id = ezNextId(ezIdPrefix(el));
     el.classList.add("ez-editable-leaf");
     el.classList.add("editable-text");
@@ -3806,7 +3847,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   }
 
   function wrapDirectTextNodesAsEditable(el){
-    if(!el || el.nodeType !== 1 || isPhase1ReadOnly(el)) return;
+    if(!el || el.nodeType !== 1 || isPhase1ReadOnly(el) || isAnimalDisplayRegion(el)) return;
     var nodes = Array.prototype.slice.call(el.childNodes || []);
     nodes.forEach(function(node){
       if(node.nodeType !== 3) return; // text node only
@@ -3945,6 +3986,13 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       {id:"animal-zephyr",name:"Zephyr",species:"Snow Leopard (Panthera uncia)",image:"https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Vulnerable",description:"Rescued from a high-altitude snare corridor and now receiving rehabilitation and protected habitat care.",carePlan:"High-protein carnivore diet + mobility conditioning",location:"Himalayan Sanctuary",price:"$40",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-40"},
       {id:"animal-soleil",name:"Soleil",species:"Hyacinth Macaw (Anodorhynchus hyacinthinus)",image:"https://images.unsplash.com/photo-1552728089-57bdde30beb3?q=80&w=800&auto=format&fit=crop",categoryId:"cat-birds",badge:"Endangered Birds",condition:"Stable",description:"Confiscated from illegal wildlife traffickers. Now learning natural flight dynamics in our aviary canopy sanctuary.",carePlan:"Palm nuts & flight rehabilitation enclosure",location:"Pantanal Aviary Haven",price:"$20",paymentType:"monthly",buttonText:"View Product",buttonLink:"",buttonOpenNewTab:false,totalDonations:0,targetId:"price-20"}
     ],
+    impactSimulator:{
+      enabled:true,kicker:"Interactive Impact Simulator",title:"Calculate Your Direct Impact",
+      description:"See exactly how your contributions translate into tangible emergency care, ranger rations, and wilderness acreage protection.",
+      customAmountLabel:"Or enter custom amount ($USD)",minAmount:"5",defaultFrequency:"monthly",
+      monthly:{label:"Monthly Giving",defaultAmount:"$35",presets:[{amount:"$15",label:"Supporter"},{amount:"$35",label:"Guardian Tier"},{amount:"$75",label:"Protector"},{amount:"$150",label:"Champion"}],headline:"Provides {daysRations} days of anti-poaching ranger field rations & protects {acres} acres of endangered wildlife habitat.",metrics:["{vetImpact}","{acres} Acres Secured","Direct Field Dispatch Logs"],cta:"Pledge {amount} / Month Sponsorship"},
+      onetime:{label:"One-Time Gift",defaultAmount:"$35",presets:[{amount:"$15",label:"Supporter"},{amount:"$35",label:"Guardian Tier"},{amount:"$75",label:"Protector"},{amount:"$150",label:"Champion"}],headline:"One-time contribution funds emergency veterinary medical kits & secures {acres3} acres of forest reserve.",metrics:["{vetImpact}","{acres3} Acres Secured","Direct Field Dispatch Logs"],cta:"Make a {amount} One-Time Gift"}
+    },
   };
 
   function $(id){return document.getElementById(id);}
@@ -3978,7 +4026,15 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   function uniqueTargetId(amount,ignoreId){var nAmount=priceNumber(amount,0),base="price-"+String(nAmount).replace(/\.0+$/g,"").replace(/\./g,"-"),id=base,n=2;while(phase2.animals.some(function(a){return a.id!==ignoreId&&a.targetId===id;}))id=base+"-"+(n++);return id;}
   function syncAnnouncementTarget(){var base="price-"+String(priceNumber(phase2.announcement.amount,0)).replace(/\.0+$/g,"").replace(/\./g,"-"),clash=phase2.animals.some(function(a){return a.targetId===base;});phase2.announcement.targetId=clash?base+"-announcement":base;}
 
-  function savePhase2(draft){try{var key=draft?LS_DRAFT:LS_SETTINGS,obj=JSON.parse(localStorage.getItem(key)||"null")||{};obj.schemaVersion=Math.max(4,Number(obj.schemaVersion||1));obj.configModel="vana-embed-site";obj.phase2=clone(phase2);localStorage.setItem(key,JSON.stringify(obj));if(!draft)localStorage.removeItem(LS_DRAFT);}catch(e){}}
+  function savePhase2(draft){try{
+    var key=draft?LS_DRAFT:LS_SETTINGS,existing={};
+    try{existing=JSON.parse(localStorage.getItem(key)||"null")||{};}catch(e){}
+    var obj=(typeof collectSettings==="function")?collectSettings():existing;
+    obj=obj||existing||{};
+    obj.schemaVersion=Math.max(4,Number(obj.schemaVersion||1));
+    obj.configModel="vana-embed-site";obj.phase2=clone(phase2);
+    localStorage.setItem(key,JSON.stringify(obj));if(!draft)localStorage.removeItem(LS_DRAFT);
+  }catch(e){}}
   function readPhase2Source(){
     try{
       var h=new URLSearchParams((location.hash||"").replace(/^#/,"")),q=new URLSearchParams(location.search||""),raw=h.get("p")||h.get("data")||q.get("p")||q.get("data");
@@ -3996,6 +4052,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     if(Array.isArray(src.categories)&&src.categories.length)phase2.categories=src.categories.map(function(c){return {id:String(c.id||uniqueCatId(c.name)),name:String(c.name||"Category")};});
     if(Array.isArray(src.animals)&&src.animals.length)phase2.animals=src.animals.map(function(a){return Object.assign({},a,{id:String(a.id||uniqueAnimalId(a.name)),price:priceText(a.price||"$0"),totalDonations:num(a.totalDonations),targetId:String(a.targetId||""),buttonLink:String(a.buttonLink||""),buttonOpenNewTab:a.buttonOpenNewTab===true});});
     phase2.featuredAnimalId=getAnimal(src.featuredAnimalId)?src.featuredAnimalId:(getAnimal(phase2.featuredAnimalId)?phase2.featuredAnimalId:(phase2.animals[0]&&phase2.animals[0].id));
+    phase2.impactSimulator=normalizeImpactSimulator(src.impactSimulator||{});
     syncAllTargetIds();
   }
   function syncAllTargetIds(){
@@ -4005,6 +4062,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     phase2.announcement.targetId=clash?base+"-announcement":base;
   }
 
+  window.vanaPhase2GetImpactSimulator=function(){return clone(phase2.impactSimulator);};
   function renderAnnouncement(){
     syncAnnouncementTarget();
     var banner=$("match-banner");if(!banner)return;
@@ -4032,7 +4090,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     return '<button data-target-id="'+esc(a.targetId||"")+'" data-product-id="'+esc(a.targetId||"")+'" data-commerce-action="view-product" data-payment-type="'+esc(a.paymentType||"")+'" class="'+classes+' flex items-center justify-center space-x-1.5"><i data-lucide="eye" class="'+iconClass+'"></i><span>'+esc(label)+'</span></button>';
   }
   function renderAnimals(){
-    var grid=$("animal-grid");if(!grid)return;
+    var grid=$("animal-grid"),main=document.getElementById("main");if(!grid||!main||!main.contains(grid))return;
     var activeBtn=document.querySelector("#category-filters .cat-btn.active"),activeCat=activeBtn?activeBtn.getAttribute("data-cat"):"all",html="";
     phase2.animals.forEach(function(a){
       var c=getCat(a.categoryId),label=c?c.name:(a.badge||"Wildlife"),unit=a.paymentType==="onetime"?"/ one-time":"/ mo";
@@ -4144,7 +4202,13 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     syncAllTargetIds();renderAll();markChanged();phase3Close();
   }
 
-  function renderAll(){renderAnnouncement();renderCategoryFilters();renderAnimals();renderFeatured();renderCategoryList();renderAnimalList();updateFeaturedEditor();}
+  function renderAll(){
+    var footer=document.querySelector(".site-footer")||document.querySelector("footer"),footerParent=footer?footer.parentNode:null,footerNext=footer?footer.nextSibling:null;
+    var header=document.querySelector("header.site-header")||document.getElementById("navbar"),headerParent=header?header.parentNode:null,headerNext=header?header.nextSibling:null;
+    renderAnnouncement();renderCategoryFilters();renderAnimals();renderFeatured();renderCategoryList();renderAnimalList();renderImpactSettings();applyImpactSimulatorConfig(false);updateFeaturedEditor();
+    if(footerParent&&footer&&!document.contains(footer))footerParent.insertBefore(footer,footerNext&&footerNext.parentNode===footerParent?footerNext:null);
+    if(headerParent&&header&&!document.contains(header))headerParent.insertBefore(header,headerNext&&headerNext.parentNode===headerParent?headerNext:null);
+  }
   function markChanged(){savePhase2(true);var pill=$("ezUnsavedPill");if(pill)pill.style.display="block";}
 
   window.vanaPhase2GetMoney=function(v){return money(v);};
@@ -4154,6 +4218,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     $("p2AnnouncementButtonText").addEventListener("input",function(){phase2.announcement.buttonText=this.value;renderAnnouncement();markChanged();});
     $("p2AnnouncementAmount").addEventListener("input",function(){phase2.announcement.amount=priceText(this.value);syncAnnouncementTarget();renderAnnouncement();markChanged();});
     $("p2FeaturedAnimal").addEventListener("change",function(){phase2.featuredAnimalId=this.value;updateFeaturedEditor();renderFeatured();markChanged();});
+    bindImpactSettings();
     $("p2FeaturedTotalDonations").addEventListener("input",function(){var a=getAnimal(phase2.featuredAnimalId);if(a){a.totalDonations=num(this.value);renderAnimals();renderFeatured();renderAnimalList();markChanged();}});
     $("p2FeaturedDonationGoal").addEventListener("input",function(){var a=getAnimal(phase2.featuredAnimalId);if(a){a.donationGoal=num(this.value);renderFeatured();markChanged();}});
     $("p2AddCategory").addEventListener("click",function(){var name=$("p2NewCategory").value.trim();if(!name)return;if(phase2.categories.some(function(c){return c.name.toLowerCase()===name.toLowerCase();})){alert("That category already exists.");return;}phase2.categories.push({id:uniqueCatId(name),name:name});$("p2NewCategory").value="";renderAll();markChanged();});
@@ -4193,7 +4258,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   function init(){
     var saved=readPhase2Source();if(saved)normalizePhase2(saved);else syncAllTargetIds();
     $("p2AnnouncementText").value=phase2.announcement.text;$("p2AnnouncementButtonText").value=phase2.announcement.buttonText;$("p2AnnouncementAmount").value=priceText(phase2.announcement.amount||"$25");$("p2AnnouncementEnabled").checked=phase2.announcement.enabled!==false;
-    bind();renderAll();document.body.dataset.vanaPhase2="2";
+    bind();renderImpactSettings();applyImpactSimulatorConfig(true);renderAll();document.body.dataset.vanaPhase2="4";
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
