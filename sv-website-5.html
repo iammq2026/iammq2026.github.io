@@ -528,12 +528,8 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <a class="hover:text-terracotta transition-colors" href="#about">Our Mission</a>
 <a class="hover:text-terracotta transition-colors" href="#dispatches">Field Dispatches</a>
 </nav>
-<!-- Action CTA & Cart Trigger -->
+<!-- Action CTA -->
 <div class="flex items-center space-x-4">
-<button aria-label="Open Sponsorship Cart" class="relative p-2.5 rounded-full bg-sandlight hover:bg-sand text-forest transition-colors flex items-center justify-center" onclick="toggleCartDrawer()">
-<i class="w-5 h-5 text-forest" data-lucide="heart"></i>
-<span class="absolute -top-1 -right-1 bg-terracotta text-cream text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm" id="cart-count-badge">0</span>
-</button>
 <a class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-forest text-cream hover:bg-moss text-xs uppercase tracking-wider font-semibold transition-all duration-300 shadow-sm hover:shadow-md" href="#wildlife">
                     Sponsor an Animal
                 </a>
@@ -636,9 +632,9 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <div class="bg-terracotta h-full w-[70%] rounded-full"></div>
 </div>
 </div>
-<button class="w-full py-3.5 rounded-xl bg-sand text-forest font-bold text-sm hover:bg-cream transition-colors flex items-center justify-center space-x-2" onclick="quickSponsor('Aria', 'Sumatran Tiger', 25, 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?q=80&amp;w=800&amp;auto=format&amp;fit=crop')">
+<button class="w-full py-3.5 rounded-xl bg-sand text-forest font-bold text-sm hover:bg-cream transition-colors flex items-center justify-center space-x-2" data-commerce-action="view-product" data-product-id="price-25">
 <i class="w-4 h-4 text-terracotta" data-lucide="heart"></i>
-<span>Sponsor Aria ($25 / mo)</span>
+<span>View Product</span>
 </button>
 </div>
 </div>
@@ -714,9 +710,9 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <span class="text-xs text-slategreen block">Monthly Care</span>
 <span class="text-lg font-bold text-forest">$25 <span class="text-xs font-normal text-slategreen">/ mo</span></span>
 </div>
-<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" onclick="quickSponsor('Aria', 'Sumatran Tiger', 25, 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?q=80&amp;w=800&amp;auto=format&amp;fit=crop')">
+<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" data-commerce-action="view-product" data-product-id="price-25">
 <i class="w-3.5 h-3.5" data-lucide="plus"></i>
-<span>Sponsor Aria</span>
+<span>View Product</span>
 </button>
 </div>
 </div>
@@ -747,9 +743,9 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <span class="text-xs text-slategreen block">Monthly Care</span>
 <span class="text-lg font-bold text-forest">$35 <span class="text-xs font-normal text-slategreen">/ mo</span></span>
 </div>
-<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" onclick="quickSponsor('Kibo', 'Mountain Gorilla', 35, 'https://images.unsplash.com/photo-1540573133985-7523134d2185?q=80&amp;w=800&amp;auto=format&amp;fit=crop')">
+<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" data-commerce-action="view-product" data-product-id="price-35">
 <i class="w-3.5 h-3.5" data-lucide="plus"></i>
-<span>Sponsor Kibo</span>
+<span>View Product</span>
 </button>
 </div>
 </div>
@@ -780,9 +776,9 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <span class="text-xs text-slategreen block">Monthly Care</span>
 <span class="text-lg font-bold text-forest">$50 <span class="text-xs font-normal text-slategreen">/ mo</span></span>
 </div>
-<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" onclick="quickSponsor('Nala', 'African Elephant', 50, 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&amp;w=800&amp;auto=format&amp;fit=crop')">
+<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" data-commerce-action="view-product" data-product-id="price-50">
 <i class="w-3.5 h-3.5" data-lucide="plus"></i>
-<span>Sponsor Nala</span>
+<span>View Product</span>
 </button>
 </div>
 </div>
@@ -813,9 +809,9 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <span class="text-xs text-slategreen block">Monthly Care</span>
 <span class="text-lg font-bold text-forest">$15 <span class="text-xs font-normal text-slategreen">/ mo</span></span>
 </div>
-<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" onclick="quickSponsor('Kai', 'Green Sea Turtle', 15, 'https://images.unsplash.com/photo-1518467166778-b88f373ffec7?q=80&amp;w=800&amp;auto=format&amp;fit=crop')">
+<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" data-commerce-action="view-product" data-product-id="price-15">
 <i class="w-3.5 h-3.5" data-lucide="plus"></i>
-<span>Sponsor Kai</span>
+<span>View Product</span>
 </button>
 </div>
 </div>
@@ -846,9 +842,9 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <span class="text-xs text-slategreen block">Monthly Care</span>
 <span class="text-lg font-bold text-forest">$40 <span class="text-xs font-normal text-slategreen">/ mo</span></span>
 </div>
-<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" onclick="quickSponsor('Zephyr', 'Snow Leopard', 40, 'https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=80&amp;w=800&amp;auto=format&amp;fit=crop')">
+<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" data-commerce-action="view-product" data-product-id="price-40">
 <i class="w-3.5 h-3.5" data-lucide="plus"></i>
-<span>Sponsor Zephyr</span>
+<span>View Product</span>
 </button>
 </div>
 </div>
@@ -879,9 +875,9 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <span class="text-xs text-slategreen block">Monthly Care</span>
 <span class="text-lg font-bold text-forest">$20 <span class="text-xs font-normal text-slategreen">/ mo</span></span>
 </div>
-<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" onclick="quickSponsor('Soleil', 'Hyacinth Macaw', 20, 'https://images.unsplash.com/photo-1552728089-57bdde30beb3?q=80&amp;w=800&amp;auto=format&amp;fit=crop')">
+<button class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5" data-commerce-action="view-product" data-product-id="price-20">
 <i class="w-3.5 h-3.5" data-lucide="plus"></i>
-<span>Sponsor Soleil</span>
+<span>View Product</span>
 </button>
 </div>
 </div>
@@ -965,7 +961,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 <!-- Submit Sponsorship CTA -->
 <div class="text-center">
-<button class="px-10 py-4 rounded-full bg-terracotta hover:bg-terracottadark text-cream font-bold text-sm tracking-wide transition-all shadow-lg hover:shadow-xl inline-flex items-center space-x-2" onclick="submitCalculatorDonation()">
+<button class="px-10 py-4 rounded-full bg-terracotta hover:bg-terracottadark text-cream font-bold text-sm tracking-wide transition-all shadow-lg hover:shadow-xl inline-flex items-center space-x-2" data-commerce-action="view-product" data-product-context="impact-calculator">
 <i class="w-4 h-4 fill-cream" data-lucide="heart"></i>
 <span id="calc-cta-text">Pledge $35 / Month Sponsorship</span>
 </button>
@@ -1270,125 +1266,13 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 </div>
 </footer>
-<!-- SLIDE-OVER SPONSORSHIP DRAWER -->
-<div class="fixed inset-0 bg-forest/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300" id="cart-drawer-overlay" onclick="toggleCartDrawer()"></div>
-<aside class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-cream z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between border-l border-sand" id="cart-drawer">
-<!-- Drawer Header -->
-<div class="p-6 border-b border-sand flex items-center justify-between bg-sandlight">
-<div class="flex items-center space-x-2">
-<i class="w-5 h-5 text-terracotta fill-terracotta" data-lucide="heart"></i>
-<h3 class="font-serif text-xl font-bold text-forest">Sponsorship Cart</h3>
-</div>
-<button aria-label="Close Cart" class="p-1 rounded-full hover:bg-sand text-forest transition-colors" onclick="toggleCartDrawer()">
-<i class="w-5 h-5" data-lucide="x"></i>
-</button>
-</div>
-<!-- Drawer Body Items List -->
-<div class="p-6 flex-grow overflow-y-auto space-y-4" id="cart-items-container">
-<!-- Empty Cart State -->
-<div class="text-center py-12 space-y-4" id="cart-empty-state">
-<div class="w-16 h-16 rounded-full bg-sandlight border border-sand flex items-center justify-center mx-auto text-slategreen">
-<i class="w-8 h-8" data-lucide="heart-off"></i>
-</div>
-<h4 class="font-serif text-xl font-bold text-forest">Your sponsorship cart is empty</h4>
-<p class="text-xs text-slategreen max-w-xs mx-auto">
-                    Select a sanctuary resident animal from our grid to start sponsoring their food, medicine, and rainforest protection.
-                </p>
-<a class="inline-block px-6 py-2.5 bg-forest text-cream text-xs font-bold rounded-full hover:bg-moss transition-colors" href="#wildlife" onclick="toggleCartDrawer()">
-                    Browse Rescued Wildlife
-                </a>
-</div>
-<!-- Items rendered dynamically in JS -->
-<div class="space-y-4" id="cart-items-list"></div>
-</div>
-<!-- Drawer Footer & Checkout Simulation -->
-<div class="p-6 border-t border-sand bg-sandlight space-y-4" id="cart-footer">
-<!-- Welcome Gift Progress Bar -->
-<div class="bg-cream p-3 rounded-xl border border-sand text-xs space-y-1.5" id="welcome-kit-progress-wrap">
-<div class="flex justify-between items-center font-bold text-forest">
-<span id="welcome-kit-title">Guardian Welcome Kit Progress</span>
-<span id="welcome-kit-status">Pledge $30+ for Free Kit</span>
-</div>
-<div class="w-full bg-sand h-2 rounded-full overflow-hidden">
-<div class="bg-terracotta h-full w-[0%] transition-all duration-500" id="welcome-kit-bar"></div>
-</div>
-</div>
-<div class="space-y-1">
-<div class="flex justify-between text-xs text-slategreen">
-<span>Direct Care &amp; Vet Fund</span>
-<span id="cart-subtotal">$0.00 / mo</span>
-</div>
-<div class="flex justify-between text-xs text-slategreen">
-<span>501(c)(3) Tax Deduction</span>
-<span>100% Eligible</span>
-</div>
-<div class="flex justify-between text-base font-bold text-forest pt-2 border-t border-sand">
-<span>Total Monthly Gift</span>
-<span id="cart-total">$0.00 / mo</span>
-</div>
-</div>
-<button class="w-full py-3.5 rounded-full bg-terracotta disabled:bg-sand disabled:text-slategreen hover:bg-terracottadark text-cream font-bold text-sm transition-all shadow-md flex items-center justify-center space-x-2" disabled="" id="cart-checkout-btn" onclick="openCheckoutModal()">
-<span>Complete Sponsorship</span>
-<i class="w-4 h-4" data-lucide="arrow-right"></i>
-</button>
-</div>
-</aside>
-<!-- CHECKOUT SIMULATION MODAL -->
-<div class="fixed inset-0 bg-forest/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" id="checkout-modal">
-<div class="bg-cream border border-sand rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-<button class="absolute top-4 right-4 p-1 rounded-full hover:bg-sand text-forest" onclick="closeCheckoutModal()">
-<i class="w-5 h-5" data-lucide="x"></i>
-</button>
-<div id="checkout-form-step">
-<div class="text-center mb-6">
-<div class="w-12 h-12 rounded-full bg-terracotta/10 text-terracotta flex items-center justify-center mx-auto mb-2">
-<i class="w-6 h-6" data-lucide="shield-check"></i>
-</div>
-<h3 class="font-serif text-2xl font-bold text-forest">Secure Wildlife Pledge</h3>
-<p class="text-xs text-slategreen">Simulated 256-bit Encrypted Non-Profit Checkout</p>
-</div>
-<form class="space-y-4" onsubmit="processCheckout(event)">
-<div>
-<label class="block text-[11px] font-bold text-forest uppercase mb-1">Guardian Name</label>
-<input class="w-full bg-sandlight border border-sand rounded-xl px-3.5 py-2.5 text-xs text-forest focus:outline-none focus:border-terracotta" placeholder="Full Name" required="" type="text"/>
-</div>
-<div>
-<label class="block text-[11px] font-bold text-forest uppercase mb-1">Email Address (for field updates)</label>
-<input class="w-full bg-sandlight border border-sand rounded-xl px-3.5 py-2.5 text-xs text-forest focus:outline-none focus:border-terracotta" placeholder="guardian@example.com" required="" type="email"/>
-</div>
-<div class="p-3 bg-sandlight rounded-xl border border-sand space-y-2">
-<div class="flex justify-between text-xs">
-<span class="font-bold text-forest">Simulated Payment Method</span>
-<span class="text-terracotta font-semibold">Demo Mode</span>
-</div>
-<input class="w-full bg-white border border-sand/60 rounded-lg px-3 py-2 text-xs text-forest font-mono" disabled="" type="text" value="4242 •••• •••• 4242"/>
-</div>
-<button class="w-full py-3.5 bg-terracotta hover:bg-terracottadark text-cream font-bold text-sm rounded-full transition-all shadow-md flex items-center justify-center space-x-2" data-checkout-target-id="" data-payment-role="confirm-gift" data-product-target-ids="" id="confirm-gift-button" type="submit">
-<i class="w-4 h-4 fill-cream" data-lucide="heart"></i>
-<span>Confirm &amp; Authorize Gift</span>
-</button>
-</form>
-</div>
-<!-- Success Confirmation Screen -->
-<div class="hidden text-center py-8 space-y-4" id="checkout-success-step">
-<div class="w-16 h-16 rounded-full bg-moss/20 text-moss flex items-center justify-center mx-auto">
-<i class="w-10 h-10" data-lucide="check-circle-2"></i>
-</div>
-<h3 class="font-serif text-3xl font-bold text-forest">Thank You, Guardian!</h3>
-<p class="text-sm text-slategreen">
-                    Your sponsorship pledge has been received. You will receive an email dispatch with your official VANA Wildlife Certificate and initial ranger care logs.
-                </p>
-<button class="px-8 py-3 bg-forest text-cream text-xs font-bold rounded-full hover:bg-moss transition-colors" onclick="closeCheckoutModal(); clearCart();">
-                    Return to Foundation
-                </button>
-</div>
-</div>
-</div>
+<!-- CENTRALIZED PRODUCT SYSTEM
+This website template intentionally contains no Cart engine, Cart UI, or checkout implementation.
+Commerce controls use data-commerce-action="view-product" and central Product Target IDs.
+-->
 <!-- JAVASCRIPT LOGIC -->
 <script>
         // Global Application State
-        let cartState = [];
-        window.vanaGetCartState = function(){ return cartState; };
         let currentCalcFreq = 'monthly';
         let currentCalcAmt = 35;
 
@@ -1569,11 +1453,6 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
             m3.innerText = 'Direct Field Dispatch Logs';
         }
 
-        function submitCalculatorDonation() {
-            const title = currentCalcFreq === 'monthly' ? `Custom Guardian Sponsorship` : `One-Time Wildlife Gift`;
-            quickSponsor('VANA Sanctuary Reserve', title, currentCalcAmt, 'https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=80&w=800&auto=format&fit=crop');
-        }
-
         function switchHabitatTab(regionKey) {
             const data = habitatData[regionKey];
             if (!data) return;
@@ -1613,7 +1492,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
                                 <span class="text-xs text-slategreen block">Active Field Rangers</span>
                                 <span class="text-lg font-bold text-forest">${data.rangers} Personnel</span>
                             </div>
-                            <button onclick="quickSponsor('${data.title}', 'Habitat Protection', 50, '${data.image}')" class="px-5 py-2.5 bg-terracotta hover:bg-terracottadark text-cream text-xs font-bold rounded-full transition-colors flex items-center space-x-1">
+                            <button data-commerce-action="view-product" data-product-context="habitat" data-product-name="${data.title}" data-product-price="50" data-product-image="${data.image}" class="px-5 py-2.5 bg-terracotta hover:bg-terracottadark text-cream text-xs font-bold rounded-full transition-colors flex items-center space-x-1">
                                 <span>Support This Region ($50)</span>
                             </button>
                         </div>
@@ -1624,176 +1503,6 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
             if (window.lucide) {
                 lucide.createIcons();
             }
-        }
-
-        function toggleCartDrawer() {
-            const overlay = document.getElementById('cart-drawer-overlay');
-            const drawer = document.getElementById('cart-drawer');
-
-            if (drawer.classList.contains('translate-x-full')) {
-                overlay.classList.remove('opacity-0', 'pointer-events-none');
-                drawer.classList.remove('translate-x-full');
-            } else {
-                overlay.classList.add('opacity-0', 'pointer-events-none');
-                drawer.classList.add('translate-x-full');
-            }
-        }
-
-        function quickSponsor(name, species, price, image, targetId, paymentType, productId) {
-            const normalizedTarget = targetId ? String(targetId).replace(/^#/,'') : '';
-            const key = productId || normalizedTarget || name;
-            const existingIndex = cartState.findIndex(item => (item.productId || item.targetId || item.name) === key);
-            if (existingIndex > -1) {
-                cartState[existingIndex].quantity += 1;
-            } else {
-                cartState.push({
-                    id: Date.now() + Math.random(),
-                    productId: productId || '',
-                    name: name,
-                    species: species,
-                    price: Number(price) || 0,
-                    image: image,
-                    quantity: 1,
-                    targetId: normalizedTarget,
-                    paymentType: paymentType || 'monthly'
-                });
-            }
-
-            renderCart();
-            toggleCartDrawer();
-        }
-
-        function removeFromCart(id) {
-            cartState = cartState.filter(item => item.id !== id);
-            renderCart();
-        }
-
-        function updateCartQuantity(id, change) {
-            const item = cartState.find(item => item.id === id);
-            if (item) {
-                item.quantity += change;
-                if (item.quantity <= 0) {
-                    removeFromCart(id);
-                } else {
-                    renderCart();
-                }
-            }
-        }
-
-        function clearCart() {
-            cartState = [];
-            renderCart();
-        }
-
-        function renderCart() {
-            const emptyState = document.getElementById('cart-empty-state');
-            const itemsList = document.getElementById('cart-items-list');
-            const badge = document.getElementById('cart-count-badge');
-            const subtotalEl = document.getElementById('cart-subtotal');
-            const totalEl = document.getElementById('cart-total');
-            const checkoutBtn = document.getElementById('cart-checkout-btn');
-
-            const totalCount = cartState.reduce((sum, item) => sum + item.quantity, 0);
-            badge.innerText = totalCount;
-
-            if (cartState.length === 0) {
-                emptyState.style.display = 'block';
-                itemsList.innerHTML = '';
-                subtotalEl.innerText = (window.vanaPhase2GetMoney ? window.vanaPhase2GetMoney(0) : '$0.00') + ' / mo';
-                totalEl.innerText = (window.vanaPhase2GetMoney ? window.vanaPhase2GetMoney(0) : '$0.00') + ' / mo';
-                checkoutBtn.disabled = true;
-                checkoutBtn.dataset.checkoutTargetId = '';
-                checkoutBtn.dataset.productTargetIds = '';
-                checkoutBtn.dataset.confirmButtonId = 'confirm-gift-button';
-                updateWelcomeKitProgress(0);
-                if(window.vanaPhase2SyncCheckoutContext)window.vanaPhase2SyncCheckoutContext();
-                return;
-            }
-
-            emptyState.style.display = 'none';
-            checkoutBtn.disabled = false;
-
-            let subtotal = 0;
-            itemsList.innerHTML = cartState.map(item => {
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
-                const symbol = window.vanaPhase2GetCurrencySymbol ? window.vanaPhase2GetCurrencySymbol() : '$';
-                const unit = item.paymentType === 'onetime' ? '/ one-time' : '/ mo';
-                return `
-                    <div class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sand shadow-sm">
-                        <img src="${item.image}" alt="${item.name}" class="w-14 h-14 rounded-lg object-cover">
-                        <div class="flex-grow">
-                            <h4 class="font-serif font-bold text-forest text-sm">${item.name}</h4>
-                            <p class="text-[11px] text-slategreen">${item.species}</p>
-                            <span class="text-xs font-bold text-terracotta">${symbol}${item.price} ${unit}</span>
-                            ${item.targetId ? `<div class="text-[9px] text-slategreen mt-0.5">Target: ${item.targetId}</div>` : ''}
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <button onclick="updateCartQuantity(${item.id}, -1)" class="w-6 h-6 rounded-full bg-sandlight hover:bg-sand text-forest flex items-center justify-center font-bold text-xs">-</button>
-                            <span class="text-xs font-bold">${item.quantity}</span>
-                            <button onclick="updateCartQuantity(${item.id}, 1)" class="w-6 h-6 rounded-full bg-sandlight hover:bg-sand text-forest flex items-center justify-center font-bold text-xs">+</button>
-                            <button onclick="removeFromCart(${item.id})" class="text-slategreen hover:text-terracotta ml-1 p-1">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            const moneyText = window.vanaPhase2GetMoney ? window.vanaPhase2GetMoney(subtotal) : `$${subtotal.toFixed(2)}`;
-            const allMonthly = cartState.every(item => (item.paymentType || 'monthly') === 'monthly');
-            subtotalEl.innerText = `${moneyText}${allMonthly ? ' / mo' : ''}`;
-            totalEl.innerText = `${moneyText}${allMonthly ? ' / mo' : ''}`;
-
-            const productTargets = cartState.map(item => item.targetId || '').filter(Boolean);
-            checkoutBtn.dataset.confirmButtonId = 'confirm-gift-button';
-            checkoutBtn.dataset.productTargetIds = productTargets.join(',');
-            checkoutBtn.dataset.checkoutTargetId = window.vanaPhase2BuildCheckoutTargetId ? window.vanaPhase2BuildCheckoutTargetId(cartState) : '';
-            updateWelcomeKitProgress(subtotal);
-            if(window.vanaPhase2SyncCheckoutContext)window.vanaPhase2SyncCheckoutContext();
-
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-        }
-
-        function updateWelcomeKitProgress(amount) {
-            const cfg = (window.vanaPhase2GetWelcomeKit && window.vanaPhase2GetWelcomeKit()) || {enabled:true,threshold:30,title:'Guardian Welcome Kit Progress',unlockedMessage:'✓ Welcome Kit Unlocked!',pendingMessage:'Pledge $30+ for Free Kit'};
-            const wrap = document.getElementById('welcome-kit-progress-wrap');
-            const title = document.getElementById('welcome-kit-title');
-            const target = Number(cfg.threshold) || 0;
-            const bar = document.getElementById('welcome-kit-bar');
-            const status = document.getElementById('welcome-kit-status');
-            if(wrap) wrap.style.display = cfg.enabled === false ? 'none' : 'block';
-            if(title) title.innerText = cfg.title || 'Guardian Welcome Kit Progress';
-            if(!bar || !status || cfg.enabled === false) return;
-            const percentage = target > 0 ? Math.min(100, Math.round((amount / target) * 100)) : 0;
-            bar.style.width = `${percentage}%`;
-            if (target > 0 && amount >= target) {
-                status.innerText = cfg.unlockedMessage || '✓ Welcome Kit Unlocked!';
-                status.classList.add('text-terracotta');
-            } else {
-                status.innerText = cfg.pendingMessage || 'Pledge '+(target ? '$'+target : '')+'+ for Free Kit';
-                status.classList.remove('text-terracotta');
-            }
-        }
-
-        function openCheckoutModal() {
-            toggleCartDrawer();
-            document.getElementById('checkout-modal').classList.remove('hidden');
-            document.getElementById('checkout-form-step').classList.remove('hidden');
-            document.getElementById('checkout-success-step').classList.add('hidden');
-        }
-
-        function closeCheckoutModal() {
-            document.getElementById('checkout-modal').classList.add('hidden');
-        }
-
-        function processCheckout(event) {
-            event.preventDefault();
-            if(window.vanaPhase2SyncCheckoutContext)window.vanaPhase2SyncCheckoutContext();
-            document.getElementById('checkout-form-step').classList.add('hidden');
-            document.getElementById('checkout-success-step').classList.remove('hidden');
         }
 
         function handleContactSubmit(event) {
@@ -2065,17 +1774,11 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <div class="cp-phase2-title-row" style="margin-top:10px;"><span class="cp-phase2-item-meta" id="p2GroupProductCount">0 products</span><span class="cp-phase2-item-meta">Synced from website</span></div>
 <div class="cp-phase2-list" id="p2GroupProductList" style="margin-top:7px;"></div>
 <div class="cp-phase2-block" style="margin-top:10px;margin-bottom:0;padding:9px;background:rgba(201,161,90,.05);">
-<div class="cp-phase2-block-title" style="margin-bottom:7px;">Checkout Tracking Preview</div>
-<div class="cp-phase2-item-meta">Confirm &amp; Authorize Gift ID</div>
-<div class="cp-id-preview" style="margin-top:5px;"><code>confirm-gift-button</code></div>
-<div class="cp-phase2-item-meta" style="margin-top:8px;">Product Target IDs</div>
+<div class="cp-phase2-block-title" style="margin-bottom:7px;">Product Mapping Preview</div>
+<div class="cp-phase2-item-meta">Product Target IDs</div>
 <div class="cp-id-preview" style="margin-top:5px;"><code id="p2GroupProductTargets">—</code></div>
-<div class="cp-phase2-item-meta" style="margin-top:8px;">Group Checkout Target ID</div>
-<div class="cp-id-preview" style="margin-top:5px;"><code id="p2GroupCheckoutTargetId">— (select 2+ products)</code></div>
-<div class="cp-phase2-item-meta" style="margin-top:8px;">Calculated Total</div>
-<div class="cp-id-preview" style="margin-top:5px;"><code id="p2GroupTotalAmount">$0</code></div>
 </div>
-<p class="cp-note">Group Products stay synchronized with the products displayed on the website. Target IDs are system-managed. A Group Checkout Target ID is generated when multiple products are selected.</p>
+<p class="cp-note">Group Products stay synchronized with the products displayed on the website. Target IDs are system-managed and exposed for the centralized Product System.</p>
 </div>
 <div class="cp-phase2-block">
 <div class="cp-phase2-block-title">Guardian Welcome Kit</div>
@@ -2089,7 +1792,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <div><label>Not Yet Unlocked Message</label><input id="p2WelcomeKitPending" placeholder="Pledge $30+ for Free Kit" type="text"/></div>
 </div>
 </div>
-<div class="cp-phase2-footnote">Phase 2 prepares synchronized pricing, product targets, group checkout references, and cart totals for the future payment integration. Real payment processing is intentionally not implemented in this phase.</div>
+<div class="cp-phase2-footnote">Phase 2 prepares synchronized product presentation data and product target mappings for the centralized Product System. Commerce processing is intentionally external to the website template.</div>
 </section>
 </div>
 <div class="box-foot">
@@ -2145,7 +1848,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 <div>
 <label>Button Name</label>
-<input id="p3Button" placeholder="Sponsor Aria" type="text"/>
+<input id="p3Button" placeholder="View Product" type="text"/>
 </div>
 </div>
 <div>
@@ -2176,7 +1879,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <div class="p3-builder-grid two">
 <label class="p3-check-row">
 <input checked="" id="p3Purchasable" type="checkbox"/>
-<span><strong>Purchasable Product</strong><small>Eligible for Group Cart</small></span>
+<span><strong>Purchasable Product</strong><small>Eligible for Centralized Product System</small></span>
 </label>
 <label class="p3-check-row">
 <input checked="" id="p3SingleEnabled" type="checkbox"/>
@@ -2206,7 +1909,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 </div>
 <div class="p3-builder-note">
-          One Product record is shared by the website card, Group Products, Group Cart eligibility, Single Product checkout eligibility, and the future Payment Integration. No duplicate product records are created.
+          One Product record is shared by the website card, Group Products, Centralized Cart eligibility, Single Product checkout eligibility, and the future Payment Integration. No duplicate product records are created.
         </div>
 </div>
 </div>
@@ -4283,16 +3986,15 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
       {id:"cat-marine",name:"Marine Life"},{id:"cat-birds",name:"Endangered Birds"}
     ],
     animals:[
-      {id:"animal-aria",name:"Aria",species:"Sumatran Tiger (Panthera tigris sumatrae)",image:"https://images.unsplash.com/photo-1561731216-c3a4d99437d5?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Critical",description:"Recovering after wire snare extraction. Requires daily physical therapy and enriched rainforest habitat enclosure.",carePlan:"Raw carnivore protein + bone supplements",location:"Sumatra Deep Reserve",price:25,paymentType:"monthly",buttonText:"Sponsor Aria",totalDonations:0,targetId:"price-25",purchasableProduct:true,singleProductEnabled:true},
-      {id:"animal-kibo",name:"Kibo",species:"Mountain Gorilla (Gorilla beringei beringei)",image:"https://images.unsplash.com/photo-1540573133985-7523134d2185?q=80&w=800&auto=format&fit=crop",categoryId:"cat-primates",badge:"Elephants & Primates",condition:"Stable",description:"Orphaned infant rescued from illegal pet trade traffickers. Now integrated into Virunga sanctuary troop.",carePlan:"Bamboo shoot forage & infant gorilla milk formula",location:"Virunga Highlands",price:35,paymentType:"monthly",buttonText:"Sponsor Kibo",totalDonations:0,targetId:"price-35",purchasableProduct:true,singleProductEnabled:true},
-      {id:"animal-nala",name:"Nala",species:"African Savannah Elephant",image:"https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=800&auto=format&fit=crop",categoryId:"cat-primates",badge:"Elephants & Primates",condition:"Priority",description:"Rescued after surviving poacher ambush in Tsavo East. Receiving leg wound treatment and herd re-socialization.",carePlan:"180kg Acacia foliage & vet wound dressings",location:"Tsavo East Haven",price:50,paymentType:"monthly",buttonText:"Sponsor Nala",totalDonations:0,targetId:"price-50",purchasableProduct:true,singleProductEnabled:true},
-      {id:"animal-kai",name:"Kai",species:"Green Sea Turtle (Chelonia mydas)",image:"https://images.unsplash.com/photo-1518467166778-b88f373ffec7?q=80&w=800&auto=format&fit=crop",categoryId:"cat-marine",badge:"Marine Life",condition:"Rehabbed",description:"Saved after ingestion of ocean plastics and flipper entanglement. Prepped for ocean re-release next month.",carePlan:"Sea grass diet + GPS ocean satellite tag",location:"Coral Reef Marine Lab",price:15,paymentType:"monthly",buttonText:"Sponsor Kai",totalDonations:0,targetId:"price-15",purchasableProduct:true,singleProductEnabled:true},
-      {id:"animal-zephyr",name:"Zephyr",species:"Snow Leopard (Panthera uncia)",image:"https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Vulnerable",description:"Rescued from a high-altitude snare corridor and now receiving rehabilitation and protected habitat care.",carePlan:"High-protein carnivore diet + mobility conditioning",location:"Himalayan Sanctuary",price:40,paymentType:"monthly",buttonText:"Sponsor Zephyr",totalDonations:0,targetId:"price-40",purchasableProduct:true,singleProductEnabled:true},
-      {id:"animal-soleil",name:"Soleil",species:"Hyacinth Macaw (Anodorhynchus hyacinthinus)",image:"https://images.unsplash.com/photo-1552728089-57bdde30beb3?q=80&w=800&auto=format&fit=crop",categoryId:"cat-birds",badge:"Endangered Birds",condition:"Stable",description:"Confiscated from illegal wildlife traffickers. Now learning natural flight dynamics in our aviary canopy sanctuary.",carePlan:"Palm nuts & flight rehabilitation enclosure",location:"Pantanal Aviary Haven",price:20,paymentType:"monthly",buttonText:"Sponsor Soleil",totalDonations:0,targetId:"price-20",purchasableProduct:true,singleProductEnabled:true}
+      {id:"animal-aria",name:"Aria",species:"Sumatran Tiger (Panthera tigris sumatrae)",image:"https://images.unsplash.com/photo-1561731216-c3a4d99437d5?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Critical",description:"Recovering after wire snare extraction. Requires daily physical therapy and enriched rainforest habitat enclosure.",carePlan:"Raw carnivore protein + bone supplements",location:"Sumatra Deep Reserve",price:25,paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-25",purchasableProduct:true,singleProductEnabled:true},
+      {id:"animal-kibo",name:"Kibo",species:"Mountain Gorilla (Gorilla beringei beringei)",image:"https://images.unsplash.com/photo-1540573133985-7523134d2185?q=80&w=800&auto=format&fit=crop",categoryId:"cat-primates",badge:"Elephants & Primates",condition:"Stable",description:"Orphaned infant rescued from illegal pet trade traffickers. Now integrated into Virunga sanctuary troop.",carePlan:"Bamboo shoot forage & infant gorilla milk formula",location:"Virunga Highlands",price:35,paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-35",purchasableProduct:true,singleProductEnabled:true},
+      {id:"animal-nala",name:"Nala",species:"African Savannah Elephant",image:"https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=800&auto=format&fit=crop",categoryId:"cat-primates",badge:"Elephants & Primates",condition:"Priority",description:"Rescued after surviving poacher ambush in Tsavo East. Receiving leg wound treatment and herd re-socialization.",carePlan:"180kg Acacia foliage & vet wound dressings",location:"Tsavo East Haven",price:50,paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-50",purchasableProduct:true,singleProductEnabled:true},
+      {id:"animal-kai",name:"Kai",species:"Green Sea Turtle (Chelonia mydas)",image:"https://images.unsplash.com/photo-1518467166778-b88f373ffec7?q=80&w=800&auto=format&fit=crop",categoryId:"cat-marine",badge:"Marine Life",condition:"Rehabbed",description:"Saved after ingestion of ocean plastics and flipper entanglement. Prepped for ocean re-release next month.",carePlan:"Sea grass diet + GPS ocean satellite tag",location:"Coral Reef Marine Lab",price:15,paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-15",purchasableProduct:true,singleProductEnabled:true},
+      {id:"animal-zephyr",name:"Zephyr",species:"Snow Leopard (Panthera uncia)",image:"https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=80&w=800&auto=format&fit=crop",categoryId:"cat-cats",badge:"Big Cats",condition:"Vulnerable",description:"Rescued from a high-altitude snare corridor and now receiving rehabilitation and protected habitat care.",carePlan:"High-protein carnivore diet + mobility conditioning",location:"Himalayan Sanctuary",price:40,paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-40",purchasableProduct:true,singleProductEnabled:true},
+      {id:"animal-soleil",name:"Soleil",species:"Hyacinth Macaw (Anodorhynchus hyacinthinus)",image:"https://images.unsplash.com/photo-1552728089-57bdde30beb3?q=80&w=800&auto=format&fit=crop",categoryId:"cat-birds",badge:"Endangered Birds",condition:"Stable",description:"Confiscated from illegal wildlife traffickers. Now learning natural flight dynamics in our aviary canopy sanctuary.",carePlan:"Palm nuts & flight rehabilitation enclosure",location:"Pantanal Aviary Haven",price:20,paymentType:"monthly",buttonText:"View Product",totalDonations:0,targetId:"price-20",purchasableProduct:true,singleProductEnabled:true}
     ],
     groupProducts:{name:"Wildlife Sponsorship Products",productIds:["animal-aria","animal-kibo","animal-nala","animal-kai","animal-zephyr","animal-soleil"]},
     welcomeKit:{enabled:true,threshold:30,title:"Guardian Welcome Kit Progress",unlockedMessage:"✓ Welcome Kit Unlocked!",pendingMessage:"Pledge $30+ for Free Kit"},
-    payment:{confirmButtonId:"confirm-gift-button"}
   };
 
   function $(id){return document.getElementById(id);}
@@ -4306,16 +4008,9 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
   function uniqueAnimalId(name){var base="animal-"+slug(name),id=base,n=2;while(getAnimal(id))id=base+"-"+(n++);return id;}
   function uniqueCatId(name){var base="cat-"+slug(name),id=base,n=2;while(getCat(id))id=base+"-"+(n++);return id;}
   function uniqueTargetId(amount,ignoreId){var base="price-"+String(num(amount,0)).replace(/\.0+$/g,"").replace(/\./g,"-"),id=base,n=2;while(phase2.animals.some(function(a){return a.id!==ignoreId&&a.targetId===id;}))id=base+"-"+(n++);return id;}
-  function hashString(str){var h=2166136261;for(var i=0;i<str.length;i++){h^=str.charCodeAt(i);h+=((h<<1)+(h<<4)+(h<<7)+(h<<8)+(h<<24));}return (h>>>0).toString(36).toUpperCase();}
   function selectedGroupProducts(){
     var ids=Array.isArray(phase2.groupProducts.productIds)?phase2.groupProducts.productIds:[];
     return ids.map(function(id){return getAnimal(id);}).filter(Boolean);
-  }
-  function buildCheckoutTargetId(items){
-    var arr=(items||[]).map(function(it){return String(it.targetId||"")+"x"+String(it.quantity||1);}).filter(Boolean).sort();
-    if(!arr.length)return "";
-    if(arr.length===1)return arr[0].split("x")[0];
-    return "grp_checkout_"+hashString(arr.join("|"));
   }
   function syncAnnouncementTarget(){phase2.announcement.targetId=uniqueTargetId(phase2.announcement.amount,"").replace(/-2$/,"-announcement");}
 
@@ -4342,7 +4037,6 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
     phase2.groupProducts.productIds=phase2.groupProducts.productIds.filter(function(id){return !!getAnimal(id);});
     if(!phase2.groupProducts.productIds.length)phase2.groupProducts.productIds=phase2.animals.map(function(a){return a.id;});
     phase2.welcomeKit=Object.assign({},phase2.welcomeKit,src.welcomeKit||{});
-    phase2.payment=Object.assign({},phase2.payment,src.payment||{});
     syncAllTargetIds();
   }
   function syncAllTargetIds(){
@@ -4358,7 +4052,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
     var text=$("phase2-announcement-text")||banner.querySelector("div.flex.items-center.space-x-2 span:last-child");
     if(text){text.id="phase2-announcement-text";text.textContent=phase2.announcement.text;}
     var btn=$("phase2-announcement-sponsor");
-    if(btn){btn.textContent=phase2.announcement.buttonText||"Sponsor";btn.style.display=phase2.announcement.enabled===false?"none":"inline-flex";btn.dataset.targetId=phase2.announcement.targetId;btn.dataset.paymentType="one-time";}
+    if(btn){btn.textContent="View Product";btn.style.display=phase2.announcement.enabled===false?"none":"inline-flex";btn.dataset.commerceAction="view-product";btn.dataset.productId=phase2.announcement.targetId||"";btn.dataset.targetId=phase2.announcement.targetId||"";btn.dataset.paymentType="one-time";}
     if($("p2AnnouncementTargetId"))$("p2AnnouncementTargetId").textContent=phase2.announcement.targetId||"—";
   }
   function renderCategoryFilters(){
@@ -4377,7 +4071,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
       html+='<div class="animal-card bg-white rounded-2xl overflow-hidden border border-sand/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col" id="animal-card-'+esc(a.id)+'" data-category="'+esc(a.categoryId)+'" data-animal-id="'+esc(a.id)+'">';
       html+='<div class="relative h-60 overflow-hidden"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Wildlife\'"><span class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs font-semibold px-3 py-1 rounded-full">'+esc(label)+'</span></div>';
       html+='<div class="p-6 flex-grow flex flex-col justify-between space-y-4"><div><div class="flex justify-between items-start mb-2"><h3 class="font-serif text-2xl font-bold text-forest">'+esc(a.name)+'</h3><span class="text-xs bg-terracotta/10 text-terracotta font-bold px-2.5 py-1 rounded-md">'+esc(a.condition)+'</span></div><p class="text-xs text-slategreen uppercase tracking-wider font-semibold mb-3">'+esc(a.species)+'</p><p class="text-sm text-forest/80 line-clamp-3 mb-4">'+esc(a.description)+'</p><div class="text-xs text-slategreen space-y-1 bg-sandlight p-3 rounded-lg border border-sand/50"><p><strong>Care Plan:</strong> '+esc(a.carePlan)+'</p><p><strong>Sanctuary Location:</strong> '+esc(a.location)+'</p><p><strong>Total Donations:</strong> '+money(a.totalDonations||0)+'</p></div></div>';
-      html+='<div class="pt-4 border-t border-sand flex items-center justify-between"><div><span class="text-xs text-slategreen block">'+(a.paymentType==='onetime'?'One-time Gift':'Monthly Care')+'</span><span class="text-lg font-bold text-forest">'+money(a.price)+' <span class="text-xs font-normal text-slategreen">'+unit+'</span></span></div><button id="'+esc(a.targetId)+'" data-target-id="'+esc(a.targetId)+'" data-payment-type="'+esc(a.paymentType)+'" onclick="quickSponsor(\''+safeName+'\',\''+safeSpecies+'\','+num(a.price,0)+',\''+safeImage+'\',\''+String(a.targetId).replace(/'/g,"\\'")+'\',\''+esc(a.paymentType)+'\',\''+esc(a.id)+'\')" class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5"><i data-lucide="plus" class="w-3.5 h-3.5"></i><span>'+esc(a.buttonText||('Sponsor '+a.name))+'</span></button></div></div></div>';
+      html+='<div class="pt-4 border-t border-sand flex items-center justify-between"><div><span class="text-xs text-slategreen block">'+(a.paymentType==='onetime'?'One-time Gift':'Monthly Care')+'</span><span class="text-lg font-bold text-forest">'+money(a.price)+' <span class="text-xs font-normal text-slategreen">'+unit+'</span></span></div><button id="'+esc(a.targetId)+'" data-target-id="'+esc(a.targetId)+'" data-product-id="'+esc(a.targetId)+'" data-commerce-action="view-product" data-payment-type="'+esc(a.paymentType)+'" class="px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors flex items-center space-x-1.5"><i data-lucide="eye" class="w-3.5 h-3.5"></i><span>View Product</span></button></div></div></div>';
     });
     grid.innerHTML=html;
     if(typeof window.filterCategory==='function')window.filterCategory(activeCat||"all");
@@ -4387,7 +4081,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
     var root=$("featured-animal-card");if(!root)return;var a=getAnimal(phase2.featuredAnimalId)||phase2.animals[0];if(!a)return;
     var total=num(a.totalDonations),goal=num(a.donationGoal,1200),pct=goal>0?Math.min(100,(total/goal)*100):0,unit=a.paymentType==="onetime"?"/ one-time":"/ mo";
     var safeName=String(a.name).replace(/'/g,"\\'");var safeSpecies=String(a.species).replace(/'/g,"\\'");var safeImage=String(a.image).replace(/'/g,"\\'");
-    root.innerHTML='<div class="bg-forestlight/90 border border-sand/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md"><div class="absolute top-4 right-4 bg-terracotta text-cream text-xs px-3 py-1.5 rounded-full font-semibold shadow-md flex items-center space-x-1.5"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Featured</span></div><div class="relative h-64 sm:h-72 rounded-xl overflow-hidden mb-5"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Rescued+Wildlife\'"><div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-forest to-transparent p-4 flex justify-between items-end"><div><span class="text-xs uppercase tracking-wider text-terracotta font-bold">Featured Sanctuary Resident</span><h3 class="font-serif text-2xl text-cream font-bold">'+esc(a.name)+' — '+esc(a.species)+'</h3></div><span class="text-xs px-2.5 py-1 bg-moss text-sand rounded-md font-medium">'+esc(a.condition)+'</span></div></div><p class="text-sand/80 text-sm mb-5 leading-relaxed">'+esc(a.description)+'</p><div class="bg-forest/80 rounded-xl p-3.5 mb-5 border border-sand/10 flex justify-between items-center text-xs"><div><p class="text-sand/60">Total Donations</p><p class="text-cream font-bold text-sm">'+money(total)+(goal>0?" / "+money(goal):"")+'</p></div><div class="w-24 bg-sand/20 h-2 rounded-full overflow-hidden"><div class="bg-terracotta h-full" style="width:'+pct.toFixed(1)+'%"></div></div></div><button data-target-id="'+esc(a.targetId||'')+'" onclick="quickSponsor(\''+safeName+'\',\''+safeSpecies+'\','+num(a.price,0)+',\''+safeImage+'\',\''+String(a.targetId||'').replace(/'/g,"\\'")+'\',\''+esc(a.paymentType||'monthly')+'\',\''+esc(a.id)+'\')" class="w-full py-3.5 rounded-xl bg-sand text-forest font-bold text-sm hover:bg-cream transition-colors flex items-center justify-center space-x-2"><i data-lucide="heart" class="w-4 h-4 text-terracotta"></i><span>'+esc(a.buttonText||('Sponsor '+a.name))+' ('+money(a.price)+' '+unit+')</span></button></div>';
+    root.innerHTML='<div class="bg-forestlight/90 border border-sand/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md"><div class="absolute top-4 right-4 bg-terracotta text-cream text-xs px-3 py-1.5 rounded-full font-semibold shadow-md flex items-center space-x-1.5"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Featured</span></div><div class="relative h-64 sm:h-72 rounded-xl overflow-hidden mb-5"><img src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Rescued+Wildlife\'"><div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-forest to-transparent p-4 flex justify-between items-end"><div><span class="text-xs uppercase tracking-wider text-terracotta font-bold">Featured Sanctuary Resident</span><h3 class="font-serif text-2xl text-cream font-bold">'+esc(a.name)+' — '+esc(a.species)+'</h3></div><span class="text-xs px-2.5 py-1 bg-moss text-sand rounded-md font-medium">'+esc(a.condition)+'</span></div></div><p class="text-sand/80 text-sm mb-5 leading-relaxed">'+esc(a.description)+'</p><div class="bg-forest/80 rounded-xl p-3.5 mb-5 border border-sand/10 flex justify-between items-center text-xs"><div><p class="text-sand/60">Total Donations</p><p class="text-cream font-bold text-sm">'+money(total)+(goal>0?" / "+money(goal):"")+'</p></div><div class="w-24 bg-sand/20 h-2 rounded-full overflow-hidden"><div class="bg-terracotta h-full" style="width:'+pct.toFixed(1)+'%"></div></div></div><button data-target-id="'+esc(a.targetId||'')+'" data-product-id="'+esc(a.targetId||'')+'" data-commerce-action="view-product" class="w-full py-3.5 rounded-xl bg-sand text-forest font-bold text-sm hover:bg-cream transition-colors flex items-center justify-center space-x-2"><i data-lucide="eye" class="w-4 h-4 text-terracotta"></i><span>View Product</span></button></div>';
     if(window.lucide)lucide.createIcons();
   }
   function updateFeaturedEditor(){
@@ -4400,8 +4094,8 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
   function renderAnimalList(){
     var box=$("p2AnimalList");if(!box)return;
     box.innerHTML=phase2.animals.map(function(a){
-      var c=getCat(a.categoryId),cartFlag=a.purchasableProduct!==false?'Cart: ON':'Cart: OFF',directFlag=a.singleProductEnabled!==false?'Direct: ON':'Direct: OFF';
-      return '<div class="cp-phase2-item"><div class="cp-phase2-item-main"><div class="cp-phase2-item-name">'+esc(a.name)+' <span style="color:#C9A15A">#'+esc(a.id.replace(/^animal-/,''))+'</span></div><div class="cp-phase2-item-meta">'+esc(c?c.name:(a.badge||'Uncategorized'))+' · '+money(a.price)+' '+(a.paymentType==='onetime'?'one-time':'monthly')+' · '+esc(a.targetId||'')+' · '+cartFlag+' · '+directFlag+'</div></div><div class="p3-list-actions"><button type="button" data-animal-edit="'+esc(a.id)+'">Edit</button><button type="button" data-animal-duplicate="'+esc(a.id)+'">Duplicate</button><button type="button" class="danger" data-animal-delete="'+esc(a.id)+'">Delete</button></div></div>';
+      var c=getCat(a.categoryId),purchaseFlag=a.purchasableProduct!==false?'Purchasable: ON':'Purchasable: OFF',directFlag=a.singleProductEnabled!==false?'Direct: ON':'Direct: OFF';
+      return '<div class="cp-phase2-item"><div class="cp-phase2-item-main"><div class="cp-phase2-item-name">'+esc(a.name)+' <span style="color:#C9A15A">#'+esc(a.id.replace(/^animal-/,''))+'</span></div><div class="cp-phase2-item-meta">'+esc(c?c.name:(a.badge||'Uncategorized'))+' · '+money(a.price)+' '+(a.paymentType==='onetime'?'one-time':'monthly')+' · '+esc(a.targetId||'')+' · '+purchaseFlag+' · '+directFlag+'</div></div><div class="p3-list-actions"><button type="button" data-animal-edit="'+esc(a.id)+'">Edit</button><button type="button" data-animal-duplicate="'+esc(a.id)+'">Duplicate</button><button type="button" class="danger" data-animal-delete="'+esc(a.id)+'">Delete</button></div></div>';
     }).join("");
   }
   function renderGroupProducts(){
@@ -4409,15 +4103,12 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
     var selected=phase2.groupProducts.productIds||[];
     var picker=$("p2GroupProductPicker");
     if(picker){picker.innerHTML='<option value="">Select a website product</option>'+phase2.animals.filter(function(a){return selected.indexOf(a.id)<0 && a.purchasableProduct!==false;}).map(function(a){return '<option value="'+esc(a.id)+'">'+esc(a.name)+' — '+money(a.price)+' · '+esc(a.targetId||'')+'</option>';}).join("");}
-    box.innerHTML=selected.map(function(id){var a=getAnimal(id);if(!a)return '';var cartFlag=a.purchasableProduct!==false?'Purchasable: ON':'Purchasable: OFF';var directFlag=a.singleProductEnabled!==false?'Direct: ON':'Direct: OFF';return '<div class="cp-phase2-item"><div class="cp-phase2-item-main"><div class="cp-phase2-item-name">'+esc(a.name)+'</div><div class="cp-phase2-item-meta">'+money(a.price)+' · '+esc(a.paymentType==='onetime'?'one-time':'monthly')+' · '+esc(a.targetId||'')+' · '+cartFlag+' · '+directFlag+'</div></div><button type="button" class="danger" data-group-product-remove="'+esc(a.id)+'">Remove</button></div>';}).join("");
+    box.innerHTML=selected.map(function(id){var a=getAnimal(id);if(!a)return '';var cartFlag=a.purchasableProduct!==false?'Purchasable: ON':'Purchasable: OFF';var directFlag=a.singleProductEnabled!==false?'Direct: ON':'Direct: OFF';return '<div class="cp-phase2-item"><div class="cp-phase2-item-main"><div class="cp-phase2-item-name">'+esc(a.name)+'</div><div class="cp-phase2-item-meta">'+money(a.price)+' · '+esc(a.paymentType==='onetime'?'one-time':'monthly')+' · '+esc(a.targetId||'')+' · '+purchaseFlag+' · '+directFlag+'</div></div><button type="button" class="danger" data-group-product-remove="'+esc(a.id)+'">Remove</button></div>';}).join("");
     var items=selectedGroupProducts().filter(function(a){return a.purchasableProduct!==false;});
     $("p2GroupProductCount").textContent=items.length+' product'+(items.length===1?'':'s')+' selected';
     var targets=items.map(function(a){return a.targetId;});
     $("p2GroupProductTargets").textContent=targets.length?targets.join(' + '):'—';
-    var groupTarget=items.length>=2?buildCheckoutTargetId(items.map(function(a){return {targetId:a.targetId,quantity:1};})):'';
-    var groupTargetLabel=groupTarget||('— ('+(items.length===0?'select 2+ products':('select '+(2-items.length)+' more product'+((2-items.length)===1?'':'s')))+')');
-    $("p2GroupCheckoutTargetId").textContent=groupTargetLabel;
-    $("p2GroupTotalAmount").textContent=money(items.reduce(function(sum,a){return sum+num(a.price);},0));
+
   }
   var phase3Modal = $("ezPhase3Modal");
   var phase2Manager = $("ezPhase2Modal");
@@ -4502,19 +4193,6 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
   window.vanaPhase2GetCurrencySymbol=function(){return phase2.currencySymbol||"$";};
   window.vanaPhase2GetMoney=function(v){return money(v);};
   window.vanaPhase2GetWelcomeKit=function(){return clone(phase2.welcomeKit);};
-  window.vanaPhase2BuildCheckoutTargetId=function(items){return buildCheckoutTargetId(items||[]);};
-  window.vanaPhase2SyncCheckoutContext=function(){
-    var productTargets=(window.vanaGetCartState ? window.vanaGetCartState() : []).map(function(item){return item.targetId||"";}).filter(Boolean);
-    var total=(window.vanaGetCartState ? window.vanaGetCartState() : []).reduce(function(sum,item){return sum+(Number(item.price)||0)*(Number(item.quantity)||1);},0);
-    var payload={checkoutTargetId:buildCheckoutTargetId(window.vanaGetCartState ? window.vanaGetCartState() : []),confirmButtonId:phase2.payment.confirmButtonId||"confirm-gift-button",productTargetIds:productTargets,currencyCode:phase2.currencyCode,currencySymbol:phase2.currencySymbol,totalAmount:total,items:(window.vanaGetCartState ? window.vanaGetCartState() : []).map(function(item){return {productId:item.productId||"",productTargetId:item.targetId||"",quantity:Number(item.quantity)||1,unitPrice:Number(item.price)||0,billing:item.paymentType||"monthly"};}),siteProjectId:document.documentElement.getAttribute("data-vana-site-id")||"",timestamp:new Date().toISOString(),consent:false};
-    window.vanaPaymentContext=payload;
-    var btn=$("confirm-gift-button");if(btn){btn.dataset.checkoutTargetId=payload.checkoutTargetId;btn.dataset.productTargetIds=productTargets.join(",");btn.dataset.paymentContextId=payload.checkoutTargetId||"";}
-    return payload;
-  };
-  window.vanaPhase2SponsorFromAnnouncement=function(){
-    var a=phase2.announcement;if(typeof window.quickSponsor==="function")window.quickSponsor("VANA Conservation Gift","General Wildlife Conservation",num(a.amount),"https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=80&w=800&auto=format&fit=crop",a.targetId,"onetime","announcement-product");
-  };
-
   function bind(){
     $("p2AnnouncementEnabled").addEventListener("change",function(){phase2.announcement.enabled=this.checked;renderAnnouncement();markChanged();});
     $("p2AnnouncementText").addEventListener("input",function(){phase2.announcement.text=this.value;renderAnnouncement();markChanged();});
@@ -4560,11 +4238,11 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
     $("p2AddGroupProduct").addEventListener("click",function(){$("p2GroupProductPicker").focus();});
     $("p2GroupProductAddSelected").addEventListener("click",function(){var id=$("p2GroupProductPicker").value;if(!id)return;var arr=phase2.groupProducts.productIds||[];if(arr.indexOf(id)<0)arr.push(id);phase2.groupProducts.productIds=arr;renderGroupProducts();markChanged();});
     $("p2GroupProductList").addEventListener("click",function(e){var btn=e.target.closest&&e.target.closest("[data-group-product-remove]");if(!btn)return;var id=btn.getAttribute("data-group-product-remove");phase2.groupProducts.productIds=(phase2.groupProducts.productIds||[]).filter(function(x){return x!==id;});renderGroupProducts();markChanged();});
-    $("p2WelcomeKitEnabled").addEventListener("change",function(){phase2.welcomeKit.enabled=this.checked;markChanged();if(window.renderCart)window.renderCart();});
-    $("p2WelcomeKitThreshold").addEventListener("input",function(){phase2.welcomeKit.threshold=num(this.value);markChanged();if(window.renderCart)window.renderCart();});
-    $("p2WelcomeKitTitle").addEventListener("input",function(){phase2.welcomeKit.title=this.value;markChanged();if(window.renderCart)window.renderCart();});
-    $("p2WelcomeKitUnlocked").addEventListener("input",function(){phase2.welcomeKit.unlockedMessage=this.value;markChanged();if(window.renderCart)window.renderCart();});
-    $("p2WelcomeKitPending").addEventListener("input",function(){phase2.welcomeKit.pendingMessage=this.value;markChanged();if(window.renderCart)window.renderCart();});
+    $("p2WelcomeKitEnabled").addEventListener("change",function(){phase2.welcomeKit.enabled=this.checked;markChanged();;});
+    $("p2WelcomeKitThreshold").addEventListener("input",function(){phase2.welcomeKit.threshold=num(this.value);markChanged();;});
+    $("p2WelcomeKitTitle").addEventListener("input",function(){phase2.welcomeKit.title=this.value;markChanged();;});
+    $("p2WelcomeKitUnlocked").addEventListener("input",function(){phase2.welcomeKit.unlockedMessage=this.value;markChanged();;});
+    $("p2WelcomeKitPending").addEventListener("input",function(){phase2.welcomeKit.pendingMessage=this.value;markChanged();;});
 
     $("cpSave").addEventListener("click",function(){setTimeout(function(){syncAllTargetIds();savePhase2(false);renderAll();var pill=$("ezUnsavedPill");if(pill)pill.style.display="none";},30);});
     $("cpCopy").addEventListener("click",function(){setTimeout(function(){try{syncAllTargetIds();var domain=$("cpDomain").value.trim()||"yourname.example.com",proto=domain.indexOf("http")===0?"":"https://",baseUrl=proto+domain.replace(/\/$/,"");var base=JSON.parse(localStorage.getItem(LS_SETTINGS)||"null")||{};base.schemaVersion=Math.max(4,Number(base.schemaVersion||1));base.configModel="vana-embed-site";base.phase2=clone(phase2);var payload=btoa(unescape(encodeURIComponent(JSON.stringify(base))));var snippet='<script src="'+baseUrl+'/embed-loader-5.js#p='+encodeURIComponent(payload)+'" data-page="sv-website-5.html" data-ez-embed data-ez-schema="4" defer><\\/script>';var out=$("cpEmbedOut");if(out){out.value=snippet;out.style.display="block";out.select();if(navigator.clipboard)navigator.clipboard.writeText(snippet);}}catch(e){}},50);});
