@@ -1,7 +1,8 @@
 name: Patch V5 Footer Effects Safety
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 jobs:
   patch:
     runs-on: ubuntu-latest
@@ -10,14 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Patch footer safety
-        run: |
-          echo 'ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCnA9UGF0aCgnc3Ytd2Vic2l0ZS01Lmh0bWwnKQpzPXAudGV4dF9yZWFkKHRlbmNvZGluZz0ndXRmLTgnKQpwcmludCgnc2FmZXR5Jyk=' | base64 -d > /tmp/patch.py
-          python3 /tmp/patch.py
-      - name: Commit patch and remove workflow
+        run: python3 .github/patch_v5_footer.py
+      - name: Commit patch and remove temporary files
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add sv-website-5.html
-          git rm .github/workflows/patch-v5-footer-safety.yml
+          git rm .github/workflows/patch-v5-footer-safety.yml .github/patch_v5_footer.py
           git commit -m 'Harden V5 footer protection for custom effects'
           git push
