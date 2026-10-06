@@ -1,0 +1,45 @@
+name: Fix V5 HTML Leakage
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-v5-html-leak.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-v5:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Remove everything after the first closing html tag
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('sv-website-5.html')
+          text = path.read_text(encoding='utf-8')
+          marker = '</html>'
+          pos = text.find(marker)
+          if pos < 0:
+              raise SystemExit('Missing closing </html> tag')
+          clean = text[:pos + len(marker)] + '\n'
+          if clean != text:
+              path.write_text(clean, encoding='utf-8')
+          PY
+
+      - name: Commit V5 fix
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add sv-website-5.html
+          if git diff --cached --quiet; then
+            echo 'No V5 leakage remains.'
+            exit 0
+          fi
+          git commit -m 'Fix V5 JavaScript leakage after closing html'
+          git push
