@@ -13,14 +13,21 @@ jobs:
       - name: Apply patch
         shell: bash
         run: |
-          echo 'cHl0aG9uIGJhc2U2NA==' | base64 -d > /tmp/patch_effects.py
-          python3 /tmp/patch_effects.py
-      - name: Commit patch and remove workflow
+          python3 .github/patch_v5_effects.py
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('sv-website-5.html').read_text(encoding='utf-8')
+          assert 'function startEffectSafetyGuard' in s
+          assert 'function restoreEffectSafetyBaseline' in s
+          assert s.count('function injectCustomEffects(effects)') == 1
+          print('Patch verification passed')
+          PY
+      - name: Commit patch and remove temporary files
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add sv-website-5.html
-          git rm .github/workflows/patch-v5-effects-safety.yml
+          git rm .github/workflows/patch-v5-effects-safety.yml .github/patch_v5_effects.py
           git commit -m 'Fix V5 custom effects isolation and cleanup'
           git push
