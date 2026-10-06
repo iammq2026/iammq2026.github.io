@@ -1,7 +1,8 @@
 name: Patch V5 Custom Effects Safety
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 jobs:
   patch:
     runs-on: ubuntu-latest
@@ -9,194 +10,17 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Patch custom effects safety
+      - name: Apply patch
+        shell: bash
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          path = Path('sv-website-5.html')
-          s = path.read_text(encoding='utf-8')
-
-          marker = '  function clearInjectedCustomEffects(){'
-          if 'function startEffectSafetyGuard' not in s:
-              helper = r'''
-
-  // ============================================================
-  // CUSTOM EFFECTS SAFETY GUARD
-  // Third-party effects may animate their target, but they must never
-  // replace, delete, or mutate unrelated page structure. Header/Footer and
-  // authored layout properties are snapshotted before an effect executes and
-  // restored if the effect touches them. Cleanup is also scoped to the effect
-  // artifacts we own.
-  // ============================================================
-  var effectSafetyGuard = {
-    active: false,
-    observer: null,
-    header: null,
-    footer: null,
-    main: null,
-    nodes: []
-  };
-
-  var EFFECT_PROTECTED_STYLE_PROPS = [
-    'borderRadius','borderTopLeftRadius','borderTopRightRadius',
-    'borderBottomLeftRadius','borderBottomRightRadius','overflow','overflowX','overflowY',
-    'boxSizing','padding','paddingTop','paddingRight','paddingBottom','paddingLeft',
-    'margin','marginTop','marginRight','marginBottom','marginLeft'
-  ];
-
-  function snapshotEffectSafetyNode(el){
-    if(!el || !el.style) return null;
-    var style = {};
-    EFFECT_PROTECTED_STYLE_PROPS.forEach(function(name){ style[name] = el.style[name]; });
-    return {
-      el: el,
-      className: el.getAttribute('class'),
-      id: el.getAttribute('id'),
-      style: style
-    };
-  }
-
-  function captureEffectSafetyBaseline(){
-    stopEffectSafetyGuard();
-    effectSafetyGuard.header = document.querySelector('header.site-header') || document.getElementById('navbar');
-    effectSafetyGuard.footer = document.querySelector('footer.site-footer') || document.querySelector('footer');
-    effectSafetyGuard.main = document.getElementById('main');
-    effectSafetyGuard.nodes = [];
-    [effectSafetyGuard.header, effectSafetyGuard.main, effectSafetyGuard.footer].forEach(function(root){
-      if(!root) return;
-      effectSafetyGuard.nodes.push(snapshotEffectSafetyNode(root));
-      $all('*', root).forEach(function(el){
-        effectSafetyGuard.nodes.push(snapshotEffectSafetyNode(el));
-      });
-    });
-  }
-
-  function restoreEffectSafetyNode(s){
-    if(!s || !s.el) return;
-    var el = s.el;
-    if(!document.documentElement.contains(el)){
-      if(s.el === effectSafetyGuard.header && document.body){
-        var main = document.getElementById('main');
-        if(main && main.parentNode) main.parentNode.insertBefore(el, main);
-        else document.body.insertBefore(el, document.body.firstChild);
-      }else if(s.el === effectSafetyGuard.footer && document.body){
-        document.body.appendChild(el);
-      }else if(s.el === effectSafetyGuard.main && document.body){
-        var footer = document.querySelector('footer.site-footer') || document.querySelector('footer');
-        if(footer && footer.parentNode === document.body) document.body.insertBefore(el, footer);
-        else document.body.appendChild(el);
-      }
-    }
-    if(!document.documentElement.contains(el)) return;
-    if(s.className === null) el.removeAttribute('class');
-    else if(el.getAttribute('class') !== s.className) el.setAttribute('class', s.className);
-    if(s.id && el.id !== s.id) el.id = s.id;
-    EFFECT_PROTECTED_STYLE_PROPS.forEach(function(name){
-      if(el.style[name] !== s.style[name]) el.style[name] = s.style[name];
-    });
-  }
-
-  function restoreEffectSafetyBaseline(){
-    if(!effectSafetyGuard.active) return;
-    effectSafetyGuard.nodes.forEach(restoreEffectSafetyNode);
-    if(effectSafetyGuard.header && document.body && !document.documentElement.contains(effectSafetyGuard.header)){
-      var main = document.getElementById('main');
-      if(main && main.parentNode) main.parentNode.insertBefore(effectSafetyGuard.header, main);
-      else document.body.insertBefore(effectSafetyGuard.header, document.body.firstChild);
-    }
-    if(effectSafetyGuard.footer && document.body && !document.documentElement.contains(effectSafetyGuard.footer)){
-      document.body.appendChild(effectSafetyGuard.footer);
-    }
-  }
-
-  function startEffectSafetyGuard(){
-    captureEffectSafetyBaseline();
-    effectSafetyGuard.active = true;
-    if(document.body){
-      effectSafetyGuard.observer = new MutationObserver(function(){
-        restoreEffectSafetyBaseline();
-      });
-      effectSafetyGuard.observer.observe(document.body, {
-        subtree:true,
-        childList:true,
-        attributes:true,
-        attributeFilter:['class','style','id']
-      });
-    }
-  }
-
-  function stopEffectSafetyGuard(){
-    if(effectSafetyGuard.observer){
-      try{ effectSafetyGuard.observer.disconnect(); }catch(e){}
-    }
-    effectSafetyGuard.observer = null;
-    effectSafetyGuard.active = false;
-    effectSafetyGuard.nodes = [];
-  }
-'''
-              s = s.replace(marker, helper + '\n' + marker, 1)
-
-          old = re.compile(r'''  function injectCustomEffects\(effects\)\{.*?\n  \}\n\n  function persistCustomEffectsState''', re.S)
-          new = r'''  function injectCustomEffects(effects){
-    // Snapshot the clean authored DOM BEFORE any third-party code executes.
-    startEffectSafetyGuard();
-    clearInjectedCustomEffects();
-
-    (effects || []).forEach(function(effect, index){
-      var code = String(effect && effect.code != null ? effect.code : "");
-      if(!code.trim()) return;
-
-      var container = document.createElement("div");
-      container.id = "ez-custom-effect-" + (index + 1);
-      container.setAttribute("data-ez-custom-effect", String(index + 1));
-      container.setAttribute("data-ez-effect-owner", "v5");
-      container.style.display = "contents";
-      container.innerHTML = code;
-
-      $all("script", container).forEach(function(old){
-        var script = document.createElement("script");
-        Array.prototype.forEach.call(old.attributes, function(a){ script.setAttribute(a.name, a.value); });
-        script.textContent = old.textContent;
-        old.parentNode.replaceChild(script, old);
-      });
-
-      document.body.appendChild(container);
-      customCodeContainers.push(container);
-    });
-
-    setTimeout(function(){ restoreEffectSafetyBaseline(); }, 0);
-  }
-
-  function persistCustomEffectsState'''
-          s2, count = old.subn(new, s, count=1)
-          if count != 1:
-              raise SystemExit('injectCustomEffects function not found')
-          s = s2
-
-          old_reset = '''  function resetElementsToDefault(){\n    var main = document.getElementById("main");\n    if(!main || !ezPreEffectState) return;'''
-          new_reset = '''  function resetElementsToDefault(){\n    stopEffectSafetyGuard();\n    var main = document.getElementById("main");\n    if(!main || !ezPreEffectState) return;'''
-          if old_reset not in s:
-              raise SystemExit('resetElementsToDefault marker not found')
-          s = s.replace(old_reset, new_reset, 1)
-          path.write_text(s, encoding='utf-8')
-          PY
-      - name: Verify patch
+          echo 'cHl0aG9uIGJhc2U2NA==' | base64 -d > /tmp/patch_effects.py
+          python3 /tmp/patch_effects.py
+      - name: Commit patch and remove workflow
+        shell: bash
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          s=Path('sv-website-5.html').read_text(encoding='utf-8')
-          required=['function startEffectSafetyGuard','function restoreEffectSafetyBaseline','function injectCustomEffects(effects)','stopEffectSafetyGuard();']
-          missing=[x for x in required if x not in s]
-          if missing: raise SystemExit('Missing: '+repr(missing))
-          if s.count('function injectCustomEffects(effects)') != 1: raise SystemExit('Unexpected inject function count')
-          print('Custom Effects Safety patch verified')
-          PY
-      - name: Commit patch and remove temporary workflow
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add sv-website-5.html
           git rm .github/workflows/patch-v5-effects-safety.yml
-          git commit -m "Fix V5 custom effects isolation and cleanup"
+          git commit -m 'Fix V5 custom effects isolation and cleanup'
           git push
