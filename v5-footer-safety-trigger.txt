@@ -1,1 +1,1 @@
-Trigger footer safety patch.
+Trigger GitHub Pages deployment after V5 Custom Effects safety hardening.
