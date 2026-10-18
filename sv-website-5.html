@@ -932,8 +932,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 <!-- Submit Sponsorship CTA -->
 <div class="text-center">
-<button type="button" id="calc-cta-button" onclick="handleImpactCtaClick()" class="px-10 py-4 rounded-full bg-terracotta hover:bg-terracottadark text-cream font-bold text-sm tracking-wide transition-all shadow-lg hover:shadow-xl inline-flex items-center space-x-2">
-<i class="w-4 h-4 fill-cream" data-lucide="heart"></i>
+<button type="button" id="calc-cta-button" onclick="handleImpactCtaClick()" class="px-10 py-4 rounded-full bg-terracotta hover:bg-terracottadark text-cream font-bold text-sm tracking-wide transition-all shadow-lg hover:shadow-xl inline-flex items-center justify-center">
 <span id="calc-cta-text">Pledge $35 / Month Sponsorship</span>
 </button>
 </div>
@@ -3997,7 +3996,6 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     ensurePageElementIds();
     ensurePhase1EditableSurface();
     captureTextBaselines();
-
     pushHistory();
 
     // reposition floating UI on scroll/resize
