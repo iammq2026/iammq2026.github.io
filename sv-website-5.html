@@ -1390,18 +1390,9 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
             else updateCalculatorUI();
         }
 
-        // Bind the frequency controls outside the replaceable #main subtree.
-        // The editor restores #main from saved HTML on load, so handlers stored
-        // only in inline onclick attributes can be lost or become stale.
-        document.addEventListener("click", function(event) {
-            const button = event.target && event.target.closest
-                ? event.target.closest("#calc-freq-monthly, #calc-freq-onetime")
-                : null;
-            if (!button) return;
-            event.preventDefault();
-            setCalcFrequency(button.id === "calc-freq-onetime" ? "onetime" : "monthly");
-        }, true);
-
+        // Frequency controls are rebound by the Phase 2 runtime after saved
+        // mainHTML is restored. See bindImpactFrequencyButtons().
+        
         function selectCalcPreset(index) {
             const cfg = window.vanaPhase2GetImpactSimulator ? window.vanaPhase2GetImpactSimulator() : null;
             const mode = cfg && cfg[currentCalcFreq];
@@ -1497,7 +1488,6 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
         function switchHabitatTab(regionKey) {
             const data = habitatData[regionKey];
             if (!data) return;
-
             const tabs = document.querySelectorAll('.hab-tab');
             tabs.forEach(tab => {
                 if (tab.dataset.tab === regionKey) {
@@ -3548,6 +3538,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       ensureItemActions();
       showEzPage(currentEzPage, { silent: true });
       if(window.ezRebindContent){ window.ezRebindContent(); }
+      if(window.vanaPhase2RefreshImpactSimulator){ window.vanaPhase2RefreshImpactSimulator(); }
     }
   }
 
@@ -4047,6 +4038,53 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   function normalizeImpactMode(src,mode){var base=impactModeDefault(mode),out=Object.assign({},base,src||{}),presets=Array.isArray(src&&src.presets)?src.presets.slice(0,4):[];while(presets.length<4)presets.push(clone(base.presets[presets.length]));out.presets=presets.map(function(p,i){var fallback=base.presets[i],legacyPreset=!(p&&(p.description!=null||Array.isArray(p.metrics)||p.icon!=null||p.heading!=null)),amount=priceText(p&&p.amount!=null&&String(p.amount).trim()!==""?p.amount:fallback.amount),label=String(p&&p.label!=null?p.label:fallback.label),generated=impactPresetDefault(amount,label,mode),legacyDescription=src&&src.headline?impactFormatText(src.headline,amount):generated.description,legacyMetrics=Array.isArray(src&&src.metrics)?src.metrics.map(function(metric){return impactFormatText(metric,amount);}):generated.metrics;if(mode==="monthly"&&i===0&&legacyPreset){legacyDescription="One-time contribution funds emergency veterinary medical kits & secures 18 acres of forest reserve.";legacyMetrics=["Antibiotic & Wound Supplies","18 Acres Secured","Direct Field Dispatch Logs"];}var metrics=Array.isArray(p&&p.metrics)?p.metrics.slice(0,3):legacyMetrics,metricIcons=Array.isArray(p&&p.metricIcons)?p.metricIcons.slice(0,3):generated.metricIcons;while(metrics.length<3)metrics.push(generated.metrics[metrics.length]||"");while(metricIcons.length<3)metricIcons.push("check");return {amount:amount,label:label,heading:String(p&&p.heading!=null?p.heading:generated.heading),description:String(p&&p.description!=null?p.description:legacyDescription),icon:impactIconName(p&&p.icon,generated.icon),metrics:metrics.map(function(v,j){return String(v==null?generated.metrics[j]||"":v);}),metricIcons:metricIcons.map(function(v){return impactIconName(v,"check");}),buttonText:p&&p.buttonText!=null?String(p.buttonText):String(src&&src.cta!=null?src.cta:generated.buttonText),buttonLink:String(p&&p.buttonLink!=null?p.buttonLink:""),buttonOpenNewTab:p&&p.buttonOpenNewTab===true};});out.metrics=Array.isArray(src&&src.metrics)?src.metrics.slice(0,3):base.metrics.slice();while(out.metrics.length<3)out.metrics.push(base.metrics[out.metrics.length]||"");out.label=String(out.label||base.label);out.defaultAmount=priceText(out.presets[0]&&out.presets[0].amount||base.defaultAmount||"$15");out.headline=String(out.headline||base.headline);out.cta=String(out.cta||base.cta);return out;}
   function normalizeImpactSimulator(src){var base=phase2.impactSimulator,next=Object.assign({},base,src||{});next.monthly=normalizeImpactMode(src&&src.monthly,"monthly");next.onetime=normalizeImpactMode(src&&src.onetime,"onetime");next.enabled=next.enabled!==false;next.kicker=String(next.kicker||base.kicker);next.title=String(next.title||base.title);next.description=String(next.description||base.description);next.customAmountLabel=String(next.customAmountLabel||base.customAmountLabel||"");next.minAmount=priceText(next.minAmount||base.minAmount||"5");next.defaultFrequency=next.defaultFrequency==="onetime"?"onetime":"monthly";return next;}
   function impactConfig(){try{return window.vanaPhase2GetImpactSimulator?window.vanaPhase2GetImpactSimulator():phase2.impactSimulator;}catch(e){return phase2.impactSimulator;}}
+  function bindImpactFrequencyButtons(){
+    var section=$("calculator");
+    if(!section)return {monthly:null,onetime:null};
+    var buttons=Array.prototype.slice.call(section.querySelectorAll("button"));
+    var toggleWrap=section.querySelector(".flex.justify-center.mb-8");
+    var toggleButtons=toggleWrap?Array.prototype.slice.call(toggleWrap.querySelectorAll("button")):[];
+    function findButton(mode){
+      var dataButton=section.querySelector('[data-calc-frequency="'+mode+'"]');
+      if(dataButton)return dataButton;
+      var idButton=section.querySelector("#calc-freq-"+mode);
+      if(idButton)return idButton;
+      var legacy=buttons.find(function(button){
+        var inline=button.getAttribute("onclick")||"";
+        return inline.indexOf("setCalcFrequency")>-1 &&
+          (mode==="onetime"?/onetime/i.test(inline):/monthly/i.test(inline));
+      });
+      if(legacy)return legacy;
+      var textButton=buttons.find(function(button){
+        var label=(button.textContent||"").trim();
+        return mode==="onetime"?/one[\s-]*time/i.test(label):/monthly/i.test(label);
+      });
+      return textButton||null;
+    }
+    var monthly=findButton("monthly")||toggleButtons[0]||null;
+    var onetime=findButton("onetime")||toggleButtons[1]||null;
+    function bind(button,mode){
+      if(!button)return;
+      button.id=mode==="monthly"?"calc-freq-monthly":"calc-freq-onetime";
+      button.type="button";
+      button.setAttribute("data-calc-frequency",mode);
+      button.setAttribute("data-ez-editor-ignore","true");
+      button.removeAttribute("onclick");
+      if(button.__vanaImpactFrequencyHandler){
+        // Already wired to this mode: don't add duplicate listeners on redraw.
+        return;
+      }
+      var handler=function(event){
+        if(event){event.preventDefault();}
+        setCalcFrequency(mode);
+      };
+      button.__vanaImpactFrequencyHandler=handler;
+      button.addEventListener("click",handler);
+    }
+    bind(monthly,"monthly");
+    bind(onetime,"onetime");
+    return {monthly:monthly,onetime:onetime};
+  }
   function renderImpactPresets(){var wrap=$("calc-amount-presets");if(!wrap)return;var cfg=impactConfig(),mode=cfg&&cfg[currentCalcFreq]?cfg[currentCalcFreq]:impactModeDefault(currentCalcFreq),presets=mode.presets||[];if(currentCalcPresetIndex>=presets.length)currentCalcPresetIndex=Math.max(0,presets.length-1);wrap.innerHTML=presets.map(function(p,i){var amt=impactNumber(p.amount,0),active=i===currentCalcPresetIndex;return '<button type="button" class="calc-amt-btn '+(active?'border-2 border-terracotta bg-terracotta/10':'border border-sand/30 bg-forest/50 hover:bg-forest')+' p-4 rounded-xl text-center transition-all" data-amount="'+esc(amt)+'" data-impact-preset="'+i+'" aria-pressed="'+(active?'true':'false')+'" onclick="selectCalcPreset('+i+')"><span class="block font-serif text-2xl font-bold '+(active?'text-terracotta':'text-cream')+'">'+esc(priceText(p.amount))+'</span><span class="text-[11px] '+(active?'text-terracotta uppercase font-bold':'text-sand/70 uppercase')+'">'+esc(p.label||"")+'</span></button>';}).join("");}
   function renderImpactPresetEditors(modeName){var prefix=modeName==="monthly"?"Monthly":"Onetime",wrap=$("p4"+prefix+"PresetEditors"),mode=phase2.impactSimulator[modeName];if(!wrap||!mode)return;wrap.innerHTML=(mode.presets||[]).map(function(p,i){var idx=String(i),metricEditor=function(metricIndex){var j=String(metricIndex);return '<div><label>Metric '+(metricIndex+1)+' Text</label><input type="text" data-impact-preset-index="'+idx+'" data-impact-preset-field="metrics" data-impact-metric-index="'+j+'" value="'+esc(p.metrics[metricIndex]||"")+'"/><label>Metric '+(metricIndex+1)+' Icon</label><input type="text" data-impact-preset-index="'+idx+'" data-impact-preset-field="metricIcons" data-impact-metric-index="'+j+'" value="'+esc(p.metricIcons[metricIndex]||"check")+'" placeholder="e.g. check, leaf, paw-print"/></div>';};return '<details class="cp-phase2-block" style="margin-top:8px;margin-bottom:0;"><summary style="cursor:pointer;list-style:none;font-weight:700;">Preset '+(i+1)+' — '+esc(priceText(p.amount))+' · '+esc(p.label||"")+'</summary><div style="margin-top:10px;"><div class="cp-phase2-grid two"><div><label>Amount</label><input type="text" data-impact-preset-index="'+idx+'" data-impact-preset-field="amount" value="'+esc(p.amount)+'"/></div><div><label>Tier Label</label><input type="text" data-impact-preset-index="'+idx+'" data-impact-preset-field="label" value="'+esc(p.label)+'"/></div></div><label>Impact Card Heading</label><input type="text" data-impact-preset-index="'+idx+'" data-impact-preset-field="heading" value="'+esc(p.heading)+'"/><label>Impact Description</label><textarea rows="3" data-impact-preset-index="'+idx+'" data-impact-preset-field="description">'+esc(p.description)+'</textarea><label>Main Impact Icon (Lucide name)</label><input type="text" data-impact-preset-index="'+idx+'" data-impact-preset-field="icon" value="'+esc(p.icon)+'" placeholder="e.g. shield, heart, leaf"/><div class="cp-phase2-grid two">'+metricEditor(0)+metricEditor(1)+metricEditor(2)+'</div><div class="cp-phase2-block" style="margin-top:10px;margin-bottom:0;"><div class="cp-phase2-block-title">Preset Button</div><label>Button Text</label><input type="text" data-impact-preset-index="'+idx+'" data-impact-preset-field="buttonText" value="'+esc(p.buttonText==null?"":p.buttonText)+'" placeholder="e.g. Pledge {amount} / Month Sponsorship"/><p class="cp-note">Use <code>{amount}</code> to automatically insert this preset’s current amount into the button text.</p><label>Button Link (external payment page)</label><input type="text" data-impact-preset-index="'+idx+'" data-impact-preset-field="buttonLink" value="'+esc(p.buttonLink||"")+'" placeholder="youtube.com or https://payment-page.example"/><label class="cp-check-row"><input type="checkbox" data-impact-preset-index="'+idx+'" data-impact-preset-field="buttonOpenNewTab" '+(p.buttonOpenNewTab===true?"checked":"")+'/><span>Open new tab</span></label><p class="cp-note">Leave Button Link empty to show the button without any action. Add a payment page URL to enable navigation.</p></div><p class="cp-note">Use a Lucide icon name (for example: shield, heart, leaf, paw-print). This preset controls its own card heading, description, metrics, icons and button.</p></div></details>';}).join("");}
   function applyImpactSimulatorConfig(resetAmount){
@@ -4074,7 +4112,8 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       currentCalcAmt=impactNumber(presets[currentCalcPresetIndex].amount,15);
     }
 
-    var monthlyBtn=$("calc-freq-monthly"),onetimeBtn=$("calc-freq-onetime");
+    var frequencyButtons=bindImpactFrequencyButtons();
+    var monthlyBtn=frequencyButtons.monthly,onetimeBtn=frequencyButtons.onetime;
     if(monthlyBtn){
       monthlyBtn.className=currentCalcFreq==="monthly"
         ?"px-6 py-2.5 rounded-full text-xs font-bold transition-all bg-terracotta text-cream shadow-sm"
