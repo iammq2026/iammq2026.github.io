@@ -898,8 +898,8 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <!-- Frequency Toggle -->
 <div class="flex justify-center mb-8">
 <div class="bg-forest p-1.5 rounded-full border border-sand/20 flex space-x-1">
-<button class="px-6 py-2.5 rounded-full text-xs font-bold transition-all bg-terracotta text-cream shadow-sm" id="calc-freq-monthly" onclick="setCalcFrequency('monthly')">Monthly Giving</button>
-<button class="px-6 py-2.5 rounded-full text-xs font-bold transition-all text-sand hover:text-cream" id="calc-freq-onetime" onclick="setCalcFrequency('onetime')">One-Time Gift</button>
+<button type="button" class="px-6 py-2.5 rounded-full text-xs font-bold transition-all bg-terracotta text-cream shadow-sm" id="calc-freq-monthly" data-calc-frequency="monthly" data-ez-editor-ignore="true" aria-pressed="true">Monthly Giving</button>
+<button type="button" class="px-6 py-2.5 rounded-full text-xs font-bold transition-all text-sand hover:text-cream" id="calc-freq-onetime" data-calc-frequency="onetime" data-ez-editor-ignore="true" aria-pressed="false">One-Time Gift</button>
 </div>
 </div>
 <!-- Amount Selection Preset Buttons -->
@@ -1389,6 +1389,18 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
             if (window.vanaPhase2RefreshImpactSimulator) window.vanaPhase2RefreshImpactSimulator();
             else updateCalculatorUI();
         }
+
+        // Bind the frequency controls outside the replaceable #main subtree.
+        // The editor restores #main from saved HTML on load, so handlers stored
+        // only in inline onclick attributes can be lost or become stale.
+        document.addEventListener("click", function(event) {
+            const button = event.target && event.target.closest
+                ? event.target.closest("#calc-freq-monthly, #calc-freq-onetime")
+                : null;
+            if (!button) return;
+            event.preventDefault();
+            setCalcFrequency(button.id === "calc-freq-onetime" ? "onetime" : "monthly");
+        }, true);
 
         function selectCalcPreset(index) {
             const cfg = window.vanaPhase2GetImpactSimulator ? window.vanaPhase2GetImpactSimulator() : null;
