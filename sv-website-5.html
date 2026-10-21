@@ -1485,55 +1485,82 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
             }
             window.location.assign(url);
         }
+        function escapeHabitatHtml(value) {
+            return String(value == null ? '' : value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
         function switchHabitatTab(regionKey) {
-            const data = habitatData[regionKey];
-            if (!data) return;
+            const liveState = window.vanaHabitatManagerLiveState;
             const tabs = document.querySelectorAll('.hab-tab');
             tabs.forEach(tab => {
-                if (tab.dataset.tab === regionKey) {
-                    tab.className = 'hab-tab tab-active px-5 py-2.5 rounded-full text-xs font-semibold border border-sand transition-all';
-                } else {
-                    tab.className = 'hab-tab px-5 py-2.5 rounded-full text-xs font-semibold border border-sand transition-all text-slategreen hover:bg-cream';
-                }
+                const active = tab.dataset.tab === regionKey;
+                tab.className = active
+                    ? 'hab-tab tab-active px-5 py-2.5 rounded-full text-xs font-semibold border border-sand transition-all'
+                    : 'hab-tab px-5 py-2.5 rounded-full text-xs font-semibold border border-sand transition-all text-slategreen hover:bg-cream';
+                tab.setAttribute('aria-selected', active ? 'true' : 'false');
             });
 
             const display = document.getElementById('habitat-display-card');
-            display.innerHTML = `
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    <div class="lg:col-span-6 relative h-64 sm:h-80 rounded-2xl overflow-hidden">
-                        <img src="${data.image}" alt="${data.title}" class="w-full h-full object-cover">
-                        <div class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs px-3 py-1 rounded-full font-medium">
-                            ${data.location}
+            if (!display) return;
+
+            if (liveState && Array.isArray(liveState.habitats) && Array.isArray(liveState.categories)) {
+                const category = liveState.categories.find(item => item.id === regionKey);
+                const records = liveState.habitats.filter(item => item.categoryId === regionKey);
+                if (!records.length) {
+                    display.innerHTML = '<div class="rounded-2xl border border-sand p-8 sm:p-12 text-center"><h3 class="font-serif text-2xl font-bold text-forest">' +
+                        escapeHabitatHtml(category ? category.name : 'Habitat category') +
+                        '</h3><p class="text-sm text-slategreen mt-3">Habitat details for this category will be added soon.</p></div>';
+                    return;
+                }
+
+                display.innerHTML = records.map(data => {
+                    const image = /^https?:\/\//i.test(String(data.image || '').trim()) ? String(data.image).trim() : '';
+                    const threats = Array.isArray(data.threats) ? data.threats : [];
+                    const amount = Math.max(0, Number(data.supportAmount) || 0);
+                    const buttonText = String(data.supportButtonText || 'Support This Region');
+                    return `
+                    <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-6 relative h-64 sm:h-80 rounded-2xl overflow-hidden">
+                            ${image ? '<img src="' + escapeHabitatHtml(image) + '" alt="' + escapeHabitatHtml(data.title) + '" class="w-full h-full object-cover">' : '<div class="w-full h-full bg-sandlight flex items-center justify-center text-slategreen text-sm">Add a public image URL in Habitat Manager</div>'}
+                            <div class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs px-3 py-1 rounded-full font-medium">${escapeHabitatHtml(data.location)}</div>
                         </div>
-                    </div>
-                    <div class="lg:col-span-6 space-y-4">
-                        <span class="text-xs font-bold text-terracotta uppercase tracking-wider">${data.statusText}</span>
-                        <h3 class="font-serif text-3xl font-bold text-forest">${data.title}</h3>
-                        <p class="text-sm text-slategreen leading-relaxed">${data.overview}</p>
-                        
-                        <div class="space-y-2 pt-2">
-                            <h4 class="text-xs uppercase font-bold text-forest">Primary Environmental Threats:</h4>
-                            <div class="flex flex-wrap gap-2">
-                                ${data.threats.map(t => `<span class="bg-sandlight text-forest text-xs px-2.5 py-1 rounded-md border border-sand">${t}</span>`).join('')}
+                        <div class="lg:col-span-6 space-y-4">
+                            ${data.statusText ? '<span class="text-xs font-bold text-terracotta uppercase tracking-wider">' + escapeHabitatHtml(data.statusText) + '</span>' : ''}
+                            <h3 class="font-serif text-3xl font-bold text-forest">${escapeHabitatHtml(data.title)}</h3>
+                            <p class="text-sm text-slategreen leading-relaxed">${escapeHabitatHtml(data.overview)}</p>
+                            <div class="space-y-2 pt-2">
+                                <h4 class="text-xs uppercase font-bold text-forest">Primary Environmental Threats:</h4>
+                                <div class="flex flex-wrap gap-2">${threats.map(t => '<span class="bg-sandlight text-forest text-xs px-2.5 py-1 rounded-md border border-sand">' + escapeHabitatHtml(t) + '</span>').join('')}</div>
+                            </div>
+                            <div class="pt-4 flex items-center justify-between border-t border-sand gap-4">
+                                <div><span class="text-xs text-slategreen block">Active Field Rangers</span><span class="text-lg font-bold text-forest">${Math.max(0, Number(data.rangers) || 0)} Personnel</span></div>
+                                <button data-commerce-action="view-product" data-product-context="habitat" data-product-name="${escapeHabitatHtml(data.title)}" data-product-price="${amount}" data-product-image="${escapeHabitatHtml(image)}" class="px-5 py-2.5 bg-terracotta hover:bg-terracottadark text-cream text-xs font-bold rounded-full transition-colors flex items-center space-x-1"><span>${escapeHabitatHtml(buttonText)} ($${amount})</span></button>
                             </div>
                         </div>
-
-                        <div class="pt-4 flex items-center justify-between border-t border-sand">
-                            <div>
-                                <span class="text-xs text-slategreen block">Active Field Rangers</span>
-                                <span class="text-lg font-bold text-forest">${data.rangers} Personnel</span>
-                            </div>
-                            <button data-commerce-action="view-product" data-product-context="habitat" data-product-name="${data.title}" data-product-price="50" data-product-image="${data.image}" class="px-5 py-2.5 bg-terracotta hover:bg-terracottadark text-cream text-xs font-bold rounded-full transition-colors flex items-center space-x-1">
-                                <span>Support This Region ($50)</span>
-                            </button>
+                    </article>`;
+                }).join('<div class="my-8 border-t border-sand"></div>');
+            } else {
+                const data = habitatData[regionKey];
+                if (!data) {
+                    display.innerHTML = '<div class="rounded-2xl border border-sand p-8 text-center text-sm text-slategreen">No habitat details are available for this category yet.</div>';
+                    return;
+                }
+                display.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-6 relative h-64 sm:h-80 rounded-2xl overflow-hidden">
+                            <img src="${escapeHabitatHtml(data.image)}" alt="${escapeHabitatHtml(data.title)}" class="w-full h-full object-cover">
+                            <div class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs px-3 py-1 rounded-full font-medium">${escapeHabitatHtml(data.location)}</div>
                         </div>
-                    </div>
-                </div>
-            `;
-
-            if (window.lucide) {
-                lucide.createIcons();
+                        <div class="lg:col-span-6 space-y-4">
+                            <span class="text-xs font-bold text-terracotta uppercase tracking-wider">${escapeHabitatHtml(data.statusText)}</span>
+                            <h3 class="font-serif text-3xl font-bold text-forest">${escapeHabitatHtml(data.title)}</h3>
+                            <p class="text-sm text-slategreen leading-relaxed">${escapeHabitatHtml(data.overview)}</p>
+                            <div class="space-y-2 pt-2"><h4 class="text-xs uppercase font-bold text-forest">Primary Environmental Threats:</h4><div class="flex flex-wrap gap-2">${(data.threats || []).map(t => '<span class="bg-sandlight text-forest text-xs px-2.5 py-1 rounded-md border border-sand">' + escapeHabitatHtml(t) + '</span>').join('')}</div></div>
+                            <div class="pt-4 flex items-center justify-between border-t border-sand"><div><span class="text-xs text-slategreen block">Active Field Rangers</span><span class="text-lg font-bold text-forest">${Math.max(0, Number(data.rangers) || 0)} Personnel</span></div><button data-commerce-action="view-product" data-product-context="habitat" data-product-name="${escapeHabitatHtml(data.title)}" data-product-price="50" data-product-image="${escapeHabitatHtml(data.image)}" class="px-5 py-2.5 bg-terracotta hover:bg-terracottadark text-cream text-xs font-bold rounded-full transition-colors flex items-center space-x-1"><span>Support This Region ($50)</span></button></div>
+                        </div>
+                    </div>`;
             }
+            if (window.lucide) lucide.createIcons();
         }
 
         function handleContactSubmit(event) {
@@ -4433,7 +4460,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 <label for="vhmDescription">Description</label><textarea id="vhmDescription"></textarea>
 <div class="vhm-row"><button type="button" class="vhm-btn vhm-primary" id="vhmSaveSection">Save Section Settings</button></div>
 <hr style="border:0;border-top:1px solid #e7dfd0;margin:16px 0">
-<h3>Categories</h3><p class="vhm-note">Add a category, rename it, or select one to assign habitat records. Live filter synchronization will be connected in Phase 2.</p>
+<h3>Categories</h3><p class="vhm-note">Add a category, rename it, or select one to assign habitat records. Category tabs and displayed habitat cards update when you save changes.</p>
 <label for="vhmNewCategory">New category name</label><input id="vhmNewCategory" type="text" placeholder="e.g. Congo Basin">
 <div class="vhm-row"><button type="button" class="vhm-btn vhm-primary" id="vhmAddCategory">+ Add Category</button></div>
 <div id="vhmCategoryList" class="vhm-list"></div>
@@ -4447,7 +4474,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 <div id="vhmStatus" class="vhm-status" role="status" aria-live="polite"></div>
 </div>
 </div>
-<div style="padding:0 20px 18px" class="vhm-note">Phase 1 provides the editor foundation and local draft storage. Phase 2 will connect these records to the published section and its category filters.</div>
+<div style="padding:0 20px 18px" class="vhm-note">Phase 2 connects saved editor settings to the live section preview. Copy Embed Code after saving to include the current section output in the generated embed snapshot.</div>
 </div>
 </div>
 <script id="vana-habitat-manager-script">
@@ -4464,7 +4491,54 @@ var cards=Object.keys(source).map(function(key){var d=source[key];return {id:key
 return {kicker:"Priority Ecosystems",heading:"Global Habitat Reserves",description:"We actively deploy frontline security, rewilding initiatives, and indigenous ranger programs in earth's most fragile ecological corridors.",categories:cats,habitats:cards};
 }
 function load(){try{var saved=localStorage.getItem(STORE);if(saved){var parsed=JSON.parse(saved);if(parsed&&Array.isArray(parsed.categories)&&Array.isArray(parsed.habitats))return parsed;}}catch(e){}return defaults();}
-function persist(message){try{localStorage.setItem(STORE,JSON.stringify(state));if(message)$("vhmStatus").textContent=message;}catch(e){$("vhmStatus").textContent="Could not save to this browser. Check browser storage settings.";}}
+function persist(message){
+try{
+localStorage.setItem(STORE,JSON.stringify(state));
+applyState();
+if(message) $("vhmStatus").textContent=message;
+}catch(e){$("vhmStatus").textContent="Could not save to this browser. Check browser storage settings.";}
+}
+function applyState(){
+if(!state)return;
+var section=document.getElementById("habitats");
+if(section){
+var kicker=section.querySelector("span.text-xs.uppercase.tracking-widest.text-terracotta.font-bold");
+var heading=section.querySelector("h2");
+var description=section.querySelector("p.text-slategreen.text-base");
+if(kicker)kicker.textContent=state.kicker||"";
+if(heading)heading.textContent=state.heading||"Global Habitat Reserves";
+if(description)description.textContent=state.description||"";
+}
+window.vanaHabitatManagerLiveState=JSON.parse(JSON.stringify(state));
+if(typeof habitatData!=="undefined"){
+Object.keys(habitatData).forEach(function(key){delete habitatData[key];});
+state.habitats.forEach(function(h){
+if(!h||!h.categoryId)return;
+if(!habitatData[h.id])habitatData[h.id]={};
+habitatData[h.id]={title:h.title||"",location:h.location||"",image:h.image||"",overview:h.overview||"",threats:Array.isArray(h.threats)?h.threats.slice():[],species:[],rangers:Number(h.rangers)||0,progress:Number(h.progress)||0,statusText:h.statusText||""};
+});
+}
+var tabs=document.getElementById("habitat-tabs");
+if(tabs){
+tabs.innerHTML="";
+state.categories.forEach(function(cat){
+var button=document.createElement("button");
+button.type="button";
+button.className="hab-tab px-5 py-2.5 rounded-full text-xs font-semibold border border-sand transition-all text-slategreen hover:bg-cream";
+button.dataset.tab=cat.id;
+button.textContent=cat.name;
+button.setAttribute("aria-selected","false");
+button.addEventListener("click",function(){switchHabitatTab(cat.id);});
+tabs.appendChild(button);
+});
+}
+var activeId="";
+var activeTab=document.querySelector("#habitat-tabs .tab-active");
+if(activeTab&&state.categories.some(function(c){return c.id===activeTab.dataset.tab;}))activeId=activeTab.dataset.tab;
+if(!activeId&&state.habitats.length&&state.habitats[0].categoryId)activeId=state.habitats[0].categoryId;
+if(!activeId&&state.categories.length)activeId=state.categories[0].id;
+if(activeId)switchHabitatTab(activeId);
+}
 function renderCategories(){
 $("vhmCategoryList").innerHTML=state.categories.map(function(c){return '<div class="vhm-panel" style="padding:9px"><label style="margin-top:0">Category name</label><input data-vhm-cat-name="'+esc(c.id)+'" value="'+esc(c.name)+'"><div class="vhm-row"><button type="button" class="vhm-btn" data-vhm-cat-save="'+esc(c.id)+'">Save name</button><button type="button" class="vhm-btn vhm-danger" data-vhm-cat-delete="'+esc(c.id)+'">Delete</button></div></div>';}).join("")||'<p class="vhm-note">No categories yet. Add one above.</p>';
 }
@@ -4487,7 +4561,7 @@ field("Environmental threats (one per line)","threats",(h.threats||[]).join("\n"
 '</div><p class="vhm-note">Use a publicly accessible image URL for now. Direct image upload and live preview can be added in the follow-up work if needed.</p>';
 }
 function renderAll(){ $("vhmKicker").value=state.kicker||"";$("vhmHeading").value=state.heading||"";$("vhmDescription").value=state.description||"";renderCategories();renderHabitatList();renderForm();}
-function open(){state=load();if(!state.habitats.some(function(h){return h.id===selectedId;}))selectedId=state.habitats[0]?state.habitats[0].id:"";renderAll();manager.style.display="block";document.body.style.overflow="hidden";}
+function open(){state=load();if(!state.habitats.some(function(h){return h.id===selectedId;}))selectedId=state.habitats[0]?state.habitats[0].id:"";renderAll();applyState();manager.style.display="block";document.body.style.overflow="hidden";}
 function close(){manager.style.display="none";document.body.style.overflow="";}
 function readForm(){var h=state.habitats.find(function(x){return x.id===selectedId;});if(!h)return;manager.querySelectorAll("[data-vhm-field]").forEach(function(el){var key=el.getAttribute("data-vhm-field"),value=el.value;if(key==="threats")value=value.split(/\r?\n/).map(function(x){return x.trim();}).filter(Boolean);if(key==="progress"||key==="rangers"||key==="supportAmount")value=Number(value)||0;h[key]=value;});}
 $("cpOpenHabitatManager").addEventListener("click",open);
