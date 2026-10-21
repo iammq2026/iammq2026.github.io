@@ -79,7 +79,20 @@
             color: #C86D3B;
             background-color: rgba(200, 109, 59, 0.08);
         }
-    </style>
+    
+/* STORIES carousel + editor-only story management */
+#dispatches-stories-track .story-card{width:100%;box-sizing:border-box}
+#dispatches-stories-track .story-card[data-story-active="false"]{display:none!important}
+#dispatches-stories-track .story-card[data-story-active="true"]{display:flex}
+#dispatches-story-indicators{min-height:18px}
+#dispatches-story-indicators .story-indicator{width:9px;height:9px;min-width:9px;padding:0;border:0;border-radius:999px;background:var(--color-line,#c9c6bb);cursor:pointer;transition:width .2s ease,background-color .2s ease,transform .2s ease}
+#dispatches-story-indicators .story-indicator[aria-current="true"]{width:26px;background:var(--color-accent,#2b3fdd)}
+#dispatches-story-indicators .story-indicator:focus-visible{outline:2px solid var(--color-accent,#2b3fdd);outline-offset:3px}
+.story-add-button{display:none}
+body.ez-edit-on #dispatches-add-story{display:inline-flex!important}
+body.ez-edit-on #dispatches-stories-track .story-card{cursor:pointer}
+@media(prefers-reduced-motion:reduce){#dispatches-story-indicators .story-indicator{transition:none}}
+</style>
 <style id="ez-panel-styles">
 /* ============ EZ CUSTOMIZE PANEL — injected UI ============ */
 #ezRoot .editable-text{outline:1px dashed transparent;border-radius:3px;transition:outline-color .15s;}
@@ -1036,9 +1049,9 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
                         Direct dispatches from our wildlife officers, field veterinarians, and sanctuary sponsors across the globe.
                     </p>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div id="dispatches-stories-track" class="max-w-3xl mx-auto relative" aria-live="polite">
 <!-- Dispatch Card 1 -->
-<div class="bg-cream rounded-2xl p-6 border border-sand shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div id="story-card-1" data-story-card="true" data-story-id="story-1" data-story-active="true" class="ez-frame story-card bg-cream rounded-2xl p-6 border border-sand shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
 <div class="space-y-4">
 <div class="flex items-center space-x-1 text-terracotta">
 <i class="w-4 h-4 fill-terracotta" data-lucide="star"></i>
@@ -1062,7 +1075,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 </div>
 <!-- Dispatch Card 2 -->
-<div class="bg-cream rounded-2xl p-6 border border-sand shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div id="story-card-2" data-story-card="true" data-story-id="story-2" data-story-active="false" class="ez-frame story-card bg-cream rounded-2xl p-6 border border-sand shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
 <div class="space-y-4">
 <div class="flex items-center space-x-1 text-terracotta">
 <i class="w-4 h-4 fill-terracotta" data-lucide="star"></i>
@@ -1086,7 +1099,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 </div>
 <!-- Dispatch Card 3 -->
-<div class="bg-cream rounded-2xl p-6 border border-sand shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div id="story-card-3" data-story-card="true" data-story-id="story-3" data-story-active="false" class="ez-frame story-card bg-cream rounded-2xl p-6 border border-sand shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
 <div class="space-y-4">
 <div class="flex items-center space-x-1 text-terracotta">
 <i class="w-4 h-4 fill-terracotta" data-lucide="star"></i>
@@ -1110,8 +1123,95 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 </div>
 </div>
+<div id="dispatches-story-indicators" class="flex items-center justify-center gap-3 mt-8" aria-label="Choose a story"></div>
+<div class="flex justify-center mt-5">
+<button id="dispatches-add-story" type="button" data-ez-editor-ignore="true" class="story-add-button items-center justify-center px-5 py-2.5 rounded-full border border-forest text-forest bg-transparent hover:bg-forest hover:text-cream transition-colors text-xs font-bold" style="display:none">+ Add Stories</button>
+</div>
 </div>
 </section>
+
+<script id="vana-stories-carousel-script">
+(function(){
+  "use strict";
+  var track=document.getElementById("dispatches-stories-track");
+  var dots=document.getElementById("dispatches-story-indicators");
+  var addButton=document.getElementById("dispatches-add-story");
+  if(!track||!dots)return;
+  var activeIndex=0, timer=null, intervalMs=5500;
+  function cards(){return Array.prototype.slice.call(track.querySelectorAll(":scope > [data-story-card='true']"));}
+  function ensureStoryIds(){
+    var used=Object.create(null), next=1;
+    cards().forEach(function(card){
+      var id=card.getAttribute("data-story-id")||"";
+      if(!id||used[id]){
+        do{id="story-"+next++;}while(used[id]);
+        card.setAttribute("data-story-id",id);
+      }
+      used[id]=true;
+      if(!card.id||document.querySelectorAll("#"+CSS.escape(card.id)).length>1){
+        var candidate="story-card-"+id.replace(/[^a-zA-Z0-9_-]/g,"-"),suffix=2,base=candidate;
+        while(document.getElementById(candidate)&&document.getElementById(candidate)!==card)candidate=base+"-"+suffix++;
+        card.id=candidate;
+      }
+    });
+  }
+  function renderDots(){
+    var list=cards();
+    dots.innerHTML="";
+    list.forEach(function(card,index){
+      var button=document.createElement("button");
+      button.type="button";button.className="story-indicator";button.setAttribute("data-story-index",String(index));
+      button.setAttribute("data-ez-editor-ignore","true");
+      button.setAttribute("aria-label","Show story "+(index+1)+" of "+list.length);
+      button.setAttribute("aria-current",index===activeIndex?"true":"false");
+      button.title="Story "+(index+1);
+      dots.appendChild(button);
+    });
+  }
+  function show(index,resetTimer){
+    var list=cards();if(!list.length)return;
+    activeIndex=((index%list.length)+list.length)%list.length;
+    list.forEach(function(card,i){
+      card.setAttribute("data-story-active",i===activeIndex?"true":"false");
+      card.setAttribute("aria-hidden",i===activeIndex?"false":"true");
+    });
+    Array.prototype.forEach.call(dots.querySelectorAll(".story-indicator"),function(dot,i){
+      dot.setAttribute("aria-current",i===activeIndex?"true":"false");
+    });
+    if(resetTimer)startTimer();
+  }
+  function startTimer(){
+    if(timer)clearInterval(timer);
+    timer=setInterval(function(){
+      if(document.hidden||document.body.classList.contains("ez-edit-on"))return;
+      show(activeIndex+1,false);
+    },intervalMs);
+  }
+  function refresh(){
+    ensureStoryIds();
+    var list=cards();if(!list.length){dots.innerHTML="";return;}
+    activeIndex=Math.max(0,Math.min(activeIndex,list.length-1));
+    renderDots();show(activeIndex,false);
+  }
+  dots.addEventListener("click",function(e){
+    var dot=e.target.closest("[data-story-index]");if(!dot)return;
+    show(Number(dot.getAttribute("data-story-index"))||0,true);
+  });
+  if(addButton){
+    addButton.addEventListener("click",function(e){
+      e.preventDefault();e.stopPropagation();
+      if(!document.body.classList.contains("ez-edit-on"))return;
+      if(typeof window.vanaAddStoryCard==="function")window.vanaAddStoryCard();
+    });
+  }
+  window.vanaStoriesRefresh=refresh;
+  window.vanaStoriesShow=function(index){show(index,true);};
+  var observer=new MutationObserver(function(){refresh();});
+  observer.observe(track,{childList:true,subtree:false});
+  refresh();startTimer();
+})();
+</script>
+
 <!-- CONTACT & VOLUNTEER INQUIRY FORM -->
 <section class="py-20 lg:py-28 bg-cream" id="contact">
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -2539,6 +2639,35 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     markUnsaved();
     selectFrame(clone);
   }
+
+
+  // STORIES: add a card through the same unique-ID and history pipeline as other editor-managed cards.
+  window.vanaAddStoryCard = function(){
+    if(!editOn || viewOnly) return;
+    var track = document.getElementById("dispatches-stories-track");
+    if(!track) return;
+    var storyCards = track.querySelectorAll(":scope > [data-story-card='true']");
+    var template = storyCards[storyCards.length - 1];
+    if(!template) return;
+    var clone = ezMakeCloneUnique(template.cloneNode(true));
+    clone.classList.remove("ez-selected");
+    var used = Object.create(null);
+    Array.prototype.forEach.call(track.querySelectorAll("[data-story-id]"),function(card){used[card.getAttribute("data-story-id")]=true;});
+    var n = 1, storyId;
+    do { storyId = "story-" + n++; } while(used[storyId]);
+    clone.setAttribute("data-story-card","true");
+    clone.setAttribute("data-story-id",storyId);
+    clone.id = "story-card-" + storyId;
+    clone.setAttribute("data-story-active","false");
+    clone.setAttribute("aria-hidden","true");
+    $all(".editable-text,.ez-editable-leaf",clone).forEach(function(el){el.setAttribute("contenteditable","true");});
+    track.appendChild(clone);
+    if(window.vanaStoriesRefresh) window.vanaStoriesRefresh();
+    if(window.vanaStoriesShow) window.vanaStoriesShow(storyCards.length);
+    pushHistory();
+    markUnsaved();
+    selectFrame(clone);
+  };
 
   document.addEventListener("click", function(e){
     if(e.target.closest("#ezAddCard")){ addProjectCard(); return; }
@@ -4055,6 +4184,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     ensurePageElementIds();
     ensurePhase1EditableSurface();
     captureTextBaselines();
+    if(window.vanaStoriesRefresh) window.vanaStoriesRefresh();
     pushHistory();
     // reposition floating UI on scroll/resize
     window.addEventListener("scroll", function(){ if(selectedFrame && frameToolbar.style.display==="flex"){ selectFrame(selectedFrame); } }, {passive:true});
