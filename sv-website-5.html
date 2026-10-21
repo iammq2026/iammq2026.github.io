@@ -3768,12 +3768,23 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     return decodeSettings(decodeURIComponent(raw));
   }
 
-  $("#cpCopy").addEventListener("click", function(){
+  async function encodeEmbedPayload(obj){
+    var json = JSON.stringify(obj);
+    try{
+      if(typeof CompressionStream === "function"){
+        var stream = new Blob([json]).stream().pipeThrough(new CompressionStream("gzip"));
+        var buffer = await new Response(stream).arrayBuffer();
+        var bytes = new Uint8Array(buffer), binary = "";
+        for(var i=0;i<bytes.length;i++) binary += String.fromCharCode(bytes[i]);
+        return "gz:" + btoa(binary);
+      }
+    }catch(e){}
+    return encodeSettings(obj);
+  }
+  $("#cpCopy").addEventListener("click", async function(){
     var domain = $("#cpDomain").value.trim() || "yourname.example.com";
     var proto = domain.indexOf("http") === 0 ? "" : "https://";
     var base = proto + domain.replace(/\/$/,"");
-    // Copying the embed is also a save action: capture every current editor value once,
-    // persist it locally when storage is available, and encode that same snapshot.
     var currentSettings = collectSettings();
     try{
       localStorage.setItem(LS_SETTINGS, JSON.stringify(currentSettings));
@@ -3781,15 +3792,15 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       unsaved = false;
       if(unsavedPill) unsavedPill.style.display = "none";
     }catch(e){}
-    var payload = encodeSettings(currentSettings);
+    var payload = await encodeEmbedPayload(currentSettings);
     var snippet = '<script src="' + base + '/embed-loader-5.js' +
       (payload ? '#p=' + encodeURIComponent(payload) : '') +
-      '" data-page="sv-website-5.html" data-ez-embed data-ez-schema="1" defer><' + '/script>';
+      '" data-page="sv-website-5.html" data-ez-embed data-ez-schema="5" defer><' + '/script>';
     var out = $("#cpEmbedOut");
     out.style.display = "block";
     out.value = snippet;
     out.select();
-    if(navigator.clipboard){ navigator.clipboard.writeText(snippet); }
+    if(navigator.clipboard){ try{ await navigator.clipboard.writeText(snippet); }catch(e){} }
   });
 
 
@@ -4433,7 +4444,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 
 
     $("cpSave").addEventListener("click",function(){setTimeout(function(){syncAllTargetIds();savePhase2(false);renderAll();var pill=$("ezUnsavedPill");if(pill)pill.style.display="none";},30);});
-    $("cpCopy").addEventListener("click",function(){setTimeout(function(){try{syncAllTargetIds();var domain=$("cpDomain").value.trim()||"yourname.example.com",proto=domain.indexOf("http")===0?"":"https://",baseUrl=proto+domain.replace(/\/$/,"");var base=JSON.parse(localStorage.getItem(LS_SETTINGS)||"null")||{};base.schemaVersion=Math.max(4,Number(base.schemaVersion||1));base.configModel="vana-embed-site";base.phase2=clone(phase2);var payload=btoa(unescape(encodeURIComponent(JSON.stringify(base))));var snippet='<script src="'+baseUrl+'/embed-loader-5.js#p='+encodeURIComponent(payload)+'" data-page="sv-website-5.html" data-ez-embed data-ez-schema="4" defer><'+'/script>';var out=$("cpEmbedOut");if(out){out.value=snippet;out.style.display="block";out.select();if(navigator.clipboard)navigator.clipboard.writeText(snippet);}}catch(e){}},50);});
+    $("cpCopy").addEventListener("click",function(){setTimeout(async function(){try{syncAllTargetIds();var domain=$("cpDomain").value.trim()||"yourname.example.com",proto=domain.indexOf("http")===0?"":"https://",baseUrl=proto+domain.replace(/\/$/,"");var base=JSON.parse(localStorage.getItem(LS_SETTINGS)||"null")||{};base.schemaVersion=Math.max(5,Number(base.schemaVersion||1));base.configModel="vana-embed-site";base.phase2=clone(phase2);var json=JSON.stringify(base),payload="";if(typeof CompressionStream==="function"){try{var stream=new Blob([json]).stream().pipeThrough(new CompressionStream("gzip")),buffer=await new Response(stream).arrayBuffer(),bytes=new Uint8Array(buffer),binary="";for(var i=0;i<bytes.length;i++)binary+=String.fromCharCode(bytes[i]);payload="gz:"+btoa(binary);}catch(e){}}if(!payload)payload=btoa(unescape(encodeURIComponent(json)));var snippet='<script src="'+baseUrl+'/embed-loader-5.js#p='+encodeURIComponent(payload)+'" data-page="sv-website-5.html" data-ez-embed data-ez-schema="5" defer><'+'/script>';var out=$("cpEmbedOut");if(out){out.value=snippet;out.style.display="block";out.select();if(navigator.clipboard)await navigator.clipboard.writeText(snippet);}}catch(e){}},50);});
   }
 
   function init(){
