@@ -3673,6 +3673,8 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       // Keep the legacy field synchronized so older versions can still read
       // the saved settings without losing the user's effects.
       customCode: customEffectsCode(customEffects),
+      // Include the complete managed habitat/category data, not only the currently visible category DOM.
+      habitatManager: typeof window.vanaHabitatManagerGetState === "function" ? window.vanaHabitatManagerGetState() : (window.vanaHabitatManagerLiveState || null),
       ownerEmail: $("#cpOwnerEmail").value
     };
   }
@@ -3685,6 +3687,11 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     if(s.mainHTML){ restoreSnapshot(s.mainHTML); }
     if(s.headerHTML){ restoreRegion(document.querySelector("header.site-header") || document.getElementById("navbar"), s.headerHTML); }
     if(s.footerHTML){ restoreRegion(document.querySelector(".site-footer") || document.querySelector("footer"), s.footerHTML); }
+    // The habitat manager script is later in the document, so queue its data until that script initializes.
+    if(s.habitatManager && Array.isArray(s.habitatManager.categories) && Array.isArray(s.habitatManager.habitats)){
+      if(typeof window.vanaHabitatManagerSetState === "function") window.vanaHabitatManagerSetState(s.habitatManager);
+      else window.vanaHabitatManagerPendingState = JSON.parse(JSON.stringify(s.habitatManager));
+    }
 
     if(s.cssVars){ Object.keys(s.cssVars).forEach(function(k){ if(s.cssVars[k]) document.documentElement.style.setProperty(k, s.cssVars[k]); }); }
     if(s.headingFont){ $("#fHeading").value = s.headingFont; loadGoogleFont(s.headingFont); }
@@ -4561,8 +4568,12 @@ field("Environmental threats (one per line)","threats",(h.threats||[]).join("\n"
 '</div><p class="vhm-note">Use a publicly accessible image URL for now. Direct image upload and live preview can be added in the follow-up work if needed.</p>';
 }
 function renderAll(){ $("vhmKicker").value=state.kicker||"";$("vhmHeading").value=state.heading||"";$("vhmDescription").value=state.description||"";renderCategories();renderHabitatList();renderForm();}
-function open(){state=load();if(!state.habitats.some(function(h){return h.id===selectedId;}))selectedId=state.habitats[0]?state.habitats[0].id:"";renderAll();applyState();manager.style.display="block";document.body.style.overflow="hidden";}
+function open(){if(!state)state=load();if(!state.habitats.some(function(h){return h.id===selectedId;}))selectedId=state.habitats[0]?state.habitats[0].id:"";renderAll();applyState();manager.style.display="block";document.body.style.overflow="hidden";}
 function close(){manager.style.display="none";document.body.style.overflow="";}
+window.vanaHabitatManagerGetState=function(){if(!state)state=load();return JSON.parse(JSON.stringify(state));};
+window.vanaHabitatManagerSetState=function(next){if(!next||!Array.isArray(next.categories)||!Array.isArray(next.habitats))return false;state=JSON.parse(JSON.stringify(next));window.vanaHabitatManagerLiveState=JSON.parse(JSON.stringify(state));selectedId=state.habitats.some(function(h){return h.id===selectedId;})?selectedId:(state.habitats[0]?state.habitats[0].id:"");applyState();return true;};
+var pendingState=window.vanaHabitatManagerPendingState;
+if(pendingState&&Array.isArray(pendingState.categories)&&Array.isArray(pendingState.habitats)){window.vanaHabitatManagerSetState(pendingState);window.vanaHabitatManagerPendingState=null;}
 function readForm(){var h=state.habitats.find(function(x){return x.id===selectedId;});if(!h)return;manager.querySelectorAll("[data-vhm-field]").forEach(function(el){var key=el.getAttribute("data-vhm-field"),value=el.value;if(key==="threats")value=value.split(/\r?\n/).map(function(x){return x.trim();}).filter(Boolean);if(key==="progress"||key==="rangers"||key==="supportAmount")value=Number(value)||0;h[key]=value;});}
 $("cpOpenHabitatManager").addEventListener("click",open);
 $("vhmClose").addEventListener("click",close);
