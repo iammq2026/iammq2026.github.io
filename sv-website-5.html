@@ -4458,7 +4458,7 @@ function $(id){return document.getElementById(id);}
 function esc(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 function uid(prefix){return prefix+"-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,7);}
 function defaults(){
-var source=window.habitatData||{};
+var source=(typeof habitatData!=="undefined"&&habitatData)||{};
 var cats=[{id:"amazon",name:"Amazon Basin"},{id:"serengeti",name:"Serengeti Plains"},{id:"coral",name:"Coral Triangle"},{id:"arctic",name:"Arctic Tundra"}];
 var cards=Object.keys(source).map(function(key){var d=source[key];return {id:key,categoryId:key,title:d.title||"",location:d.location||"",image:d.image||"",overview:d.overview||"",threats:Array.isArray(d.threats)?d.threats.slice():[],rangers:d.rangers==null?0:d.rangers,progress:d.progress==null?0:d.progress,statusText:d.statusText||"",supportButtonText:"Support This Region",supportAmount:"50"};});
 return {kicker:"Priority Ecosystems",heading:"Global Habitat Reserves",description:"We actively deploy frontline security, rewilding initiatives, and indigenous ranger programs in earth's most fragile ecological corridors.",categories:cats,habitats:cards};
