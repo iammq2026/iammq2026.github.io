@@ -3794,11 +3794,17 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 
 
   $("#cpReset").addEventListener("click", function(){
-    if(!confirm("Reset everything back to the original design? This can't be undone.")) return;
+    if(!confirm("Reset everything back to the original design, including Habitat Reserves categories and cards? This can't be undone.")) return;
     try{
+      // Reset every V5 editor store, including the separate Habitat Reserves manager.
       localStorage.removeItem(LS_DRAFT);
       localStorage.removeItem(LS_SETTINGS);
+      localStorage.removeItem(LS_HISTORY);
+      localStorage.removeItem("vanaHabitatManagerDraftV1");
     }catch(e){}
+    // Clear any in-memory/queued manager state too, then reload the untouched default source.
+    window.vanaHabitatManagerPendingState = null;
+    window.vanaHabitatManagerLiveState = null;
     location.href = location.pathname;
   });
 
