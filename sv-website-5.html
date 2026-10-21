@@ -1133,12 +1133,10 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <script id="vana-stories-carousel-script">
 (function(){
   "use strict";
-  var track=document.getElementById("dispatches-stories-track");
-  var dots=document.getElementById("dispatches-story-indicators");
-  var addButton=document.getElementById("dispatches-add-story");
-  if(!track||!dots)return;
-  var activeIndex=0, timer=null, intervalMs=5500;
-  function cards(){return Array.prototype.slice.call(track.querySelectorAll(":scope > [data-story-card='true']"));}
+  var activeIndex=0, timer=null, intervalMs=5500, observer=null, observedTrack=null;
+  function getTrack(){return document.getElementById("dispatches-stories-track");}
+  function getDots(){return document.getElementById("dispatches-story-indicators");}
+  function cards(){var track=getTrack();return track?Array.prototype.slice.call(track.querySelectorAll(":scope > [data-story-card='true']")):[];}
   function ensureStoryIds(){
     var used=Object.create(null), next=1;
     cards().forEach(function(card){
@@ -1156,8 +1154,8 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
     });
   }
   function renderDots(){
-    var list=cards();
-    dots.innerHTML="";
+    var wrap=getDots(),list=cards();if(!wrap)return;
+    wrap.innerHTML="";
     list.forEach(function(card,index){
       var button=document.createElement("button");
       button.type="button";button.className="story-indicator";button.setAttribute("data-story-index",String(index));
@@ -1165,17 +1163,17 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
       button.setAttribute("aria-label","Show story "+(index+1)+" of "+list.length);
       button.setAttribute("aria-current",index===activeIndex?"true":"false");
       button.title="Story "+(index+1);
-      dots.appendChild(button);
+      wrap.appendChild(button);
     });
   }
   function show(index,resetTimer){
-    var list=cards();if(!list.length)return;
+    var list=cards(),wrap=getDots();if(!list.length)return;
     activeIndex=((index%list.length)+list.length)%list.length;
     list.forEach(function(card,i){
       card.setAttribute("data-story-active",i===activeIndex?"true":"false");
       card.setAttribute("aria-hidden",i===activeIndex?"false":"true");
     });
-    Array.prototype.forEach.call(dots.querySelectorAll(".story-indicator"),function(dot,i){
+    if(wrap)Array.prototype.forEach.call(wrap.querySelectorAll(".story-indicator"),function(dot,i){
       dot.setAttribute("aria-current",i===activeIndex?"true":"false");
     });
     if(resetTimer)startTimer();
@@ -1187,27 +1185,30 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
       show(activeIndex+1,false);
     },intervalMs);
   }
+  function attachObserver(){
+    var track=getTrack();if(!track||track===observedTrack)return;
+    if(observer)observer.disconnect();
+    observer=new MutationObserver(function(){refresh();});
+    observedTrack=track;observer.observe(track,{childList:true,subtree:false});
+  }
   function refresh(){
+    attachObserver();
+    var list=cards();if(!list.length){var wrap=getDots();if(wrap)wrap.innerHTML="";return;}
     ensureStoryIds();
-    var list=cards();if(!list.length){dots.innerHTML="";return;}
     activeIndex=Math.max(0,Math.min(activeIndex,list.length-1));
     renderDots();show(activeIndex,false);
   }
-  dots.addEventListener("click",function(e){
-    var dot=e.target.closest("[data-story-index]");if(!dot)return;
-    show(Number(dot.getAttribute("data-story-index"))||0,true);
-  });
-  if(addButton){
-    addButton.addEventListener("click",function(e){
+  document.addEventListener("click",function(e){
+    var dot=e.target&&e.target.closest?e.target.closest("#dispatches-story-indicators [data-story-index]"):null;
+    if(dot){show(Number(dot.getAttribute("data-story-index"))||0,true);return;}
+    var add=e.target&&e.target.closest?e.target.closest("#dispatches-add-story"):null;
+    if(add){
       e.preventDefault();e.stopPropagation();
-      if(!document.body.classList.contains("ez-edit-on"))return;
-      if(typeof window.vanaAddStoryCard==="function")window.vanaAddStoryCard();
-    });
-  }
+      if(document.body.classList.contains("ez-edit-on")&&typeof window.vanaAddStoryCard==="function")window.vanaAddStoryCard();
+    }
+  });
   window.vanaStoriesRefresh=refresh;
   window.vanaStoriesShow=function(index){show(index,true);};
-  var observer=new MutationObserver(function(){refresh();});
-  observer.observe(track,{childList:true,subtree:false});
   refresh();startTimer();
 })();
 </script>
