@@ -1,4 +1,4 @@
-(function(){
+(async function(){
   "use strict";
 
   // Version 5 embed loader.
@@ -37,6 +37,22 @@
     params.get('p') ||
     params.get('data') ||
     '';
+
+  // V5 embeds use gzip-compressed payloads (gz: prefix) to keep the script
+  // snippet short enough for HTML editors such as Systeme.io.
+  if(payload.indexOf('gz:') === 0 && typeof DecompressionStream === 'function'){
+    try{
+      var compressedBinary = atob(payload.slice(3));
+      var compressedBytes = new Uint8Array(compressedBinary.length);
+      for(var ci=0;ci<compressedBinary.length;ci++) compressedBytes[ci]=compressedBinary.charCodeAt(ci);
+      var decompressedStream = new Blob([compressedBytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+      var jsonText = await new Response(decompressedStream).text();
+      payload = btoa(unescape(encodeURIComponent(jsonText)));
+    }catch(e){
+      console.error('embed-loader-5.js: could not decompress the settings payload.', e);
+      payload = '';
+    }
+  }
 
   // Resolve the target page from explicit page/file configuration first.
   var fileName =
