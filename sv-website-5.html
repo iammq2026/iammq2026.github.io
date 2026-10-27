@@ -3679,6 +3679,31 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   // snapshot or logo + footer edits never reach the saved settings or embed.
   function snapshotHeader(){ return snapshotNode(document.querySelector("header.site-header") || document.getElementById("navbar")); }
   function snapshotFooter(){ return snapshotNode(document.querySelector(".site-footer") || document.querySelector("footer")); }
+
+  // Keep the clean page regions captured before browser-saved settings are restored.
+  // A custom effect can mutate live DOM nodes at the same time settings are saved,
+  // so previously saved snapshots may be truncated. These fallbacks are used only
+  // for suspiciously incomplete local saved/draft snapshots, never embed URL payloads.
+  var ezInitialCleanRegionSnapshots = null;
+  function countSnapshotElements(html){
+    var template=document.createElement("template");
+    template.innerHTML=typeof html==="string"?html:"";
+    return template.content.querySelectorAll("*").length;
+  }
+  function snapshotLooksTruncated(savedHtml, cleanHtml){
+    var expected=countSnapshotElements(cleanHtml);
+    if(expected<12)return false;
+    var actual=countSnapshotElements(savedHtml);
+    return actual < expected*0.60;
+  }
+  function captureInitialCleanRegionSnapshots(){
+    ezInitialCleanRegionSnapshots={
+      mainHTML:snapshotMain(),
+      headerHTML:snapshotHeader(),
+      footerHTML:snapshotFooter()
+    };
+  }
+
   function restoreRegion(root, html){
     if(!root || typeof html !== "string" || !html) return;
     root.innerHTML = html;
@@ -3823,14 +3848,20 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     };
   }
   window.ezGetCollectedSettings=function(){return collectSettings();};
-  function applySettings(s){
+  function applySettings(s, recoverCorruptSnapshot){
     if(!s) return;
     // Phase 1 config foundation: older saves remain compatible.
     if(!s.schemaVersion) s.schemaVersion = 1;
     if(!s.configModel) s.configModel = "vana-embed-site";
-    if(s.mainHTML){ restoreSnapshot(s.mainHTML); }
-    if(s.headerHTML){ restoreRegion(document.querySelector("header.site-header") || document.getElementById("navbar"), s.headerHTML); }
-    if(s.footerHTML){ restoreRegion(document.querySelector(".site-footer") || document.querySelector("footer"), s.footerHTML); }
+    var savedMainHTML=s.mainHTML, savedHeaderHTML=s.headerHTML, savedFooterHTML=s.footerHTML;
+    if(recoverCorruptSnapshot && ezInitialCleanRegionSnapshots){
+      if(snapshotLooksTruncated(savedMainHTML,ezInitialCleanRegionSnapshots.mainHTML)) savedMainHTML=ezInitialCleanRegionSnapshots.mainHTML;
+      if(snapshotLooksTruncated(savedHeaderHTML,ezInitialCleanRegionSnapshots.headerHTML)) savedHeaderHTML=ezInitialCleanRegionSnapshots.headerHTML;
+      if(snapshotLooksTruncated(savedFooterHTML,ezInitialCleanRegionSnapshots.footerHTML)) savedFooterHTML=ezInitialCleanRegionSnapshots.footerHTML;
+    }
+    if(savedMainHTML){ restoreSnapshot(savedMainHTML); }
+    if(savedHeaderHTML){ restoreRegion(document.querySelector("header.site-header") || document.getElementById("navbar"), savedHeaderHTML); }
+    if(savedFooterHTML){ restoreRegion(document.querySelector(".site-footer") || document.querySelector("footer"), savedFooterHTML); }
     // The habitat manager script is later in the document, so queue its data until that script initializes.
     if(s.habitatManager && Array.isArray(s.habitatManager.categories) && Array.isArray(s.habitatManager.habitats)){
       if(typeof window.vanaHabitatManagerSetState === "function") window.vanaHabitatManagerSetState(s.habitatManager);
@@ -4173,6 +4204,8 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     captureTextBaselines();
     // Establish a clean pre-effect baseline before any saved effect is injected.
     capturePreEffectState();
+    // Capture the original authored regions before potentially damaged local snapshots load.
+    captureInitialCleanRegionSnapshots();
 
     buildSectionsList();
     pushHistory();
@@ -4188,13 +4221,13 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     try{ saved = JSON.parse(localStorage.getItem(LS_SETTINGS) || "null"); }catch(e){}
     try{ draft = JSON.parse(localStorage.getItem(LS_DRAFT) || "null"); }catch(e){}
     if(urlSettings){
-      applySettings(urlSettings);
+      applySettings(urlSettings, false);
     } else if(draft && !viewOnly){
       if(confirm("May nakita kaming hindi pa na-save na draft. I-resume ang draft na ito?")){
-        applySettings(draft); unsaved = true; unsavedPill.style.display = "block";
+        applySettings(draft, true); unsaved = true; unsavedPill.style.display = "block";
       } else {
         localStorage.removeItem(LS_DRAFT);
-        if(saved) applySettings(saved);
+        if(saved) applySettings(saved, true);
       }
     } else if(saved){
       applySettings(saved);
