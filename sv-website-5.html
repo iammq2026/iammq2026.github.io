@@ -3515,10 +3515,12 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     if(!root) return;
     $all("script,style,link[rel='stylesheet'],[data-ez-effect],[data-ez-runtime],.ez-effect,.typewriter-cursor,.ez-cursor", root)
       .forEach(function(node){ if(node.parentNode) node.parentNode.removeChild(node); });
-    // Anything inside #main that was not part of the authored page (or added
-    // deliberately through the editor) is effect residue: overlays, glow
-    // wrappers, canvases, borders. Remove it regardless of what it looks like.
-    if(ezPreEffectState){
+    // This broad residue cleanup is ONLY for #main. Header and footer
+    // snapshots are also passed through snapshotNode(); applying the same
+    // cleanup there used to delete every unmarked nav/footer element before save.
+    // Restricting this to the actual main region keeps those snapshots intact.
+    var isMainRegion = !!(root && (root.id === "main" || (root.matches && root.matches("#main"))));
+    if(ezPreEffectState && isMainRegion){
       $all("*", root).forEach(function(node){
         if(node.hasAttribute && node.hasAttribute("data-ez-authored")) return;
         if(node.closest && node.closest(".item-actions")) return;
@@ -3549,7 +3551,14 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   function capturePreEffectState(){
     var main = document.getElementById("main");
     if(!main) return;
+    var header = document.querySelector("header.site-header") || document.getElementById("navbar");
+    var footer = document.querySelector(".site-footer") || document.querySelector("footer");
+    // Every region serialized into settings must carry an authored baseline.
+    // Without this, snapshots could mistake real navbar/footer content for
+    // effect residue and save an empty region.
     markAuthored(main);
+    if(header) markAuthored(header);
+    if(footer) markAuthored(footer);
     var map = {};
     $all("[id]", main).forEach(function(el){
       var attrs = {};
