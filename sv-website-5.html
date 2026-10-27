@@ -95,7 +95,7 @@ body.ez-edit-on #dispatches-stories-track .story-card{cursor:pointer}
 </style>
 <style id="ez-panel-styles">
 /* ============ EZ CUSTOMIZE PANEL — injected UI ============ */
-#ezRoot .editable-text{outline:1px dashed transparent;border-radius:3px;transition:outline-color .15s;}
+#ezRoot .editable-text{outline:1px dashed transparent;transition:outline-color .15s;}
 body.ez-edit-on .editable-text{cursor:text;}
 body.ez-edit-on .editable-text:hover{outline-color:rgba(43,63,221,0.35);}
 body.ez-edit-on .editable-text:focus{outline:2px solid #2b3fdd;outline-offset:1px;}
@@ -107,7 +107,7 @@ body.ez-edit-on [id].ez-selected{outline:2px solid #2b3fdd;outline-offset:2px;}
 body.ez-edit-on #main [id]:not(script):not(style),
 body.ez-edit-on header.site-header [id]:not(script):not(style),
 body.ez-edit-on footer.site-footer [id]:not(script):not(style){cursor:pointer;}
-body.ez-edit-on .ez-editable-leaf{outline:1px dashed transparent;border-radius:3px;cursor:text;}
+body.ez-edit-on .ez-editable-leaf{outline:1px dashed transparent;cursor:text;}
 body.ez-edit-on .ez-editable-leaf:hover{outline-color:rgba(43,63,221,0.35);}
 body.ez-edit-on .ez-editable-leaf:focus{outline:2px solid #2b3fdd;outline-offset:1px;}
 body.ez-edit-on [data-ez-phase1-readonly="true"],
@@ -3613,6 +3613,14 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     });
   }
 
+  // Phase 2 generates its Animal Cards dynamically. Let that renderer register
+  // the freshly rendered clean DOM before a custom effect can mutate a card.
+  window.ezRefreshPreEffectBaseline = function(root){
+    if(!root) return;
+    if(!ezPreEffectState) capturePreEffectState();
+    refreshBaselineFor(root);
+  };
+
 
 
   // Restore the LIVE DOM to its pre-effect state (used when custom code is
@@ -3828,6 +3836,8 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     if(s.bodyFont){ $("#fBody").value = s.bodyFont; loadGoogleFont(s.bodyFont); }
     customEffects = normalizeCustomEffects(s);
     customEffectsDraft = cloneCustomEffects(customEffects);
+    // Baseline the restored authored page before re-applying its saved effects.
+    capturePreEffectState();
     injectCustomEffects(customEffects);
     updateLastAppliedCustomCode();
     if(s.ownerEmail){ $("#cpOwnerEmail").value = s.ownerEmail; }
@@ -4155,6 +4165,8 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     ensurePageElementIds();
     ensurePhase1EditableSurface();
     captureTextBaselines();
+    // Establish a clean pre-effect baseline before any saved effect is injected.
+    capturePreEffectState();
 
     buildSectionsList();
     pushHistory();
@@ -4428,6 +4440,8 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     grid.innerHTML=html;
     if(typeof window.filterCategory==='function')window.filterCategory(activeCat||"all");
     if(window.lucide)lucide.createIcons();
+    // Record the final clean card markup (including icons) before effects run.
+    if(typeof window.ezRefreshPreEffectBaseline==='function')window.ezRefreshPreEffectBaseline(grid);
   }
   function renderFeatured(){
     var root=$("featured-animal-card");if(!root)return;var a=getAnimal(phase2.featuredAnimalId)||phase2.animals[0];if(!a)return;
