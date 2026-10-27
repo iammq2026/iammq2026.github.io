@@ -80,6 +80,17 @@
             background-color: rgba(200, 109, 59, 0.08);
         }
     
+/* V5 Snake-effect compatibility: keep the card and its image corners rounded
+   even if an effect sets the outer card to overflow:visible for its animation. */
+#animal-grid .animal-card[data-ez-animal-card="true"]{
+  border-top-left-radius:16px !important;
+  border-top-right-radius:16px !important;
+}
+#animal-grid .animal-card[data-ez-animal-card="true"] > [id^="animal-media-"]{
+  border-top-left-radius:16px !important;
+  border-top-right-radius:16px !important;
+  overflow:hidden !important;
+}
 /* STORIES carousel + editor-only story management */
 #dispatches-stories-track .story-card{width:100%;box-sizing:border-box}
 #dispatches-stories-track .story-card[data-story-active="false"]{display:none!important}
@@ -4481,7 +4492,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       var c=getCat(a.categoryId),label=c?c.name:(a.badge||"Wildlife"),unit=a.paymentType==="onetime"?"/ one-time":"/ mo";
       var safeName=String(a.name).replace(/'/g,"\\'");var safeSpecies=String(a.species).replace(/'/g,"\\'");var safeImage=String(a.image).replace(/'/g,"\\'");
       html+='<div class="animal-card ez-frame bg-white rounded-2xl overflow-hidden border border-sand/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col" id="animal-card-'+esc(a.id)+'" data-ez-animal-card="true" data-category="'+esc(a.categoryId)+'" data-animal-id="'+esc(a.id)+'">';
-      html+='<div id="animal-media-'+esc(a.id)+'" class="relative h-60 overflow-hidden"><img id="animal-image-'+esc(a.id)+'" data-ez-animal-media="true" src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Wildlife\'"><span id="animal-badge-'+esc(a.id)+'" data-ez-animal-text="true" class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs font-semibold px-3 py-1 rounded-full">'+esc(label)+'</span></div>';
+      html+='<div id="animal-media-'+esc(a.id)+'" class="relative h-60 overflow-hidden rounded-t-2xl"><img id="animal-image-'+esc(a.id)+'" data-ez-animal-media="true" src="'+esc(a.image)+'" alt="'+esc(a.name+' '+a.species)+'" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" onerror="this.src=\'https://placehold.co/800x600/112217/FAF7F2?text=Wildlife\'"><span id="animal-badge-'+esc(a.id)+'" data-ez-animal-text="true" class="absolute top-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-xs font-semibold px-3 py-1 rounded-full">'+esc(label)+'</span></div>';
       html+='<div id="animal-content-'+esc(a.id)+'" class="p-6 flex-grow flex flex-col justify-between space-y-4"><div id="animal-copy-'+esc(a.id)+'"><div id="animal-title-row-'+esc(a.id)+'" class="flex justify-between items-start mb-2"><h3 id="animal-name-'+esc(a.id)+'" data-ez-animal-text="true" class="font-serif text-2xl font-bold text-forest">'+esc(a.name)+'</h3><span id="animal-condition-'+esc(a.id)+'" data-ez-animal-text="true" class="text-xs bg-terracotta/10 text-terracotta font-bold px-2.5 py-1 rounded-md">'+esc(a.condition)+'</span></div><p id="animal-species-'+esc(a.id)+'" data-ez-animal-text="true" class="text-xs text-slategreen uppercase tracking-wider font-semibold mb-3">'+esc(a.species)+'</p><p id="animal-description-'+esc(a.id)+'" data-ez-animal-text="true" class="text-sm text-forest/80 line-clamp-3 mb-4">'+esc(a.description)+'</p><div id="animal-care-box-'+esc(a.id)+'" class="text-xs text-slategreen space-y-1 bg-sandlight p-3 rounded-lg border border-sand/50"><p id="animal-care-'+esc(a.id)+'" data-ez-animal-text="true"><strong>Care Plan:</strong> '+esc(a.carePlan)+'</p><p id="animal-location-'+esc(a.id)+'" data-ez-animal-text="true"><strong>Sanctuary Location:</strong> '+esc(a.location)+'</p><p id="animal-donations-'+esc(a.id)+'" data-ez-animal-text="true"><strong>Total Donations:</strong> '+money(a.totalDonations||0)+'</p></div></div>';
       html+='<div id="animal-footer-'+esc(a.id)+'" class="pt-4 border-t border-sand flex items-center justify-between"><div id="animal-payment-'+esc(a.id)+'"><span id="animal-payment-label-'+esc(a.id)+'" data-ez-animal-text="true" class="text-xs text-slategreen block">'+(a.paymentType==='onetime'?'One-time Gift':'Monthly Care')+'</span><span id="animal-price-'+esc(a.id)+'" data-ez-animal-text="true" class="text-lg font-bold text-forest">'+money(a.price)+' <span class="text-xs font-normal text-slategreen">'+unit+'</span></span></div><div id="animal-button-wrap-'+esc(a.id)+'">'+productCta(a,'px-4 py-2.5 bg-forest hover:bg-moss text-cream text-xs font-semibold rounded-full transition-colors','w-3.5 h-3.5','animal')+'</div></div></div></div>';
     });
