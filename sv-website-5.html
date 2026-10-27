@@ -3766,6 +3766,10 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   // SAVE SETTINGS / EMBED CODE
   // ============================================================
   function collectSettings(){
+    // Custom effects may mutate authored DOM immediately before a click handler runs.
+    // MutationObserver repairs are asynchronous, so normalize the protected page
+    // regions synchronously before serializing saved HTML.
+    if(typeof restoreEffectSafetyBaseline === "function") restoreEffectSafetyBaseline();
     var stats = {};
     $all(".stat[data-recolor-key]").forEach(function(stat){
       var counter = stat.querySelector("[data-count]");
