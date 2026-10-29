@@ -681,6 +681,13 @@ body.wildlife-scheme #dispatches-stories-track .story-card [class~="w-10"][class
   color:var(--w-on-accent)!important;
 }
 
+/* PHASE 3 follow-up — fix low-contrast simulator labels (PDF frames 93 and 96).
+   The accent green #2F5D50 is too close to the dark green simulator backgrounds;
+   use the existing high-contrast foreground token instead of changing the palette. */
+body.wildlife-scheme #calculator #calc-impact-kicker,
+body.wildlife-scheme #calculator #calc-impact-heading{
+  color:var(--w-on-brand)!important;
+}
 /* PHASE 3 — Ivory Editorial: keep simulator emphasis, ecosystem tabs, and story stars
    bound to the active global palette. Only presentation is changed; no event logic. */
 
