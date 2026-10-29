@@ -507,6 +507,73 @@ body.ez-edit-on .ez-add-btn{display:flex;}
 body.wildlife-scheme{--w-bg:#FAF7F2;--w-surface:#FFFFFF;--w-ink:#112217;--w-accent:#C86D3B;--w-soft:#F5F1E8;--w-line:#EAE3D2;--w-brand-bg:#112217;--w-brand-surface:#1B3324;--w-on-brand:#FAF7F2;--w-hover:#2E4E3F;--w-muted:#66756B;--w-stat:#A84E2C;--w-on-accent:#112217;}
 body.wildlife-scheme .bg-cream{background-color:var(--w-bg)!important}
 body.wildlife-scheme .bg-white{background-color:var(--w-surface)!important}
+/* PHASE 2 — Gold Noir contrast, navigation and selection refinements.
+   These are global theme-token rules; no interaction handlers or component state are changed. */
+body.wildlife-scheme [class~="bg-cream/90"]{
+  background-color:color-mix(in srgb,var(--w-bg) 90%,transparent)!important;
+}
+body.wildlife-scheme #navbar{
+  color:var(--w-ink)!important;
+  border-bottom-color:color-mix(in srgb,var(--w-line) 70%,transparent)!important;
+}
+body.wildlife-scheme #navbar .site-nav a,
+body.wildlife-scheme #mobile-menu a{
+  color:var(--w-ink)!important;
+  text-decoration-color:transparent;
+}
+body.wildlife-scheme #navbar .site-nav a:hover,
+body.wildlife-scheme #mobile-menu a:hover{
+  color:var(--w-accent)!important;
+  text-decoration-color:currentColor;
+}
+body.wildlife-scheme #navbar .site-nav a:focus-visible,
+body.wildlife-scheme #mobile-menu a:focus-visible{
+  outline:2px solid var(--w-accent)!important;
+  outline-offset:4px;
+}
+
+/* Hero product CTA: dark theme background, white label/icon, palette-colored edge. */
+body.wildlife-scheme #hero [data-commerce-action="view-product"],
+body.wildlife-scheme [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"]{
+  background-color:var(--w-brand-bg)!important;
+  color:#FFFFFF!important;
+  border:1px solid var(--w-accent)!important;
+}
+body.wildlife-scheme #hero [data-commerce-action="view-product"] *,
+body.wildlife-scheme [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"] *{
+  color:#FFFFFF!important;
+  stroke:currentColor!important;
+}
+body.wildlife-scheme #hero [data-commerce-action="view-product"]:hover,
+body.wildlife-scheme [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"]:hover{
+  background-color:var(--w-brand-surface)!important;
+}
+
+/* Gold Noir and the other schemes keep statistic-card outlines understated. */
+body.wildlife-scheme [class~="border-sand/60"]{
+  border-color:color-mix(in srgb,var(--w-line) 30%,transparent)!important;
+}
+body.wildlife-scheme section.bg-sandlight.border-b{
+  border-bottom-color:color-mix(in srgb,var(--w-line) 55%,transparent)!important;
+}
+body.wildlife-scheme section.bg-sandlight.border-b .grid.text-center > div{
+  box-shadow:0 1px 2px rgba(0,0,0,.06)!important;
+}
+
+/* Unselected donation amounts use the current surface/text tokens, not old green/orange classes. */
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn:not([aria-pressed="true"]){
+  background-color:var(--w-brand-surface)!important;
+  border-color:color-mix(in srgb,var(--w-line) 45%,transparent)!important;
+  color:var(--w-on-brand)!important;
+}
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn:not([aria-pressed="true"]) > span{
+  color:var(--w-on-brand)!important;
+}
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn:not([aria-pressed="true"]):hover{
+  background-color:color-mix(in srgb,var(--w-accent) 12%,var(--w-brand-surface))!important;
+  border-color:var(--w-accent)!important;
+}
+
 body.wildlife-scheme .bg-sandlight{background-color:var(--w-soft)!important}
 body.wildlife-scheme .bg-forest{background-color:var(--w-brand-bg)!important}
 body.wildlife-scheme .bg-forestlight{background-color:var(--w-brand-surface)!important}
