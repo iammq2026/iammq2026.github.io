@@ -504,7 +504,7 @@ body.ez-edit-on .ez-add-btn{display:flex;}
 </style><style id="wildlife-editor-scheme-overrides">
 /* Scheme tokens are populated inline on BODY by applyScheme()/settings restoration.
    Each token has one semantic job so dark schemes keep dark surfaces and light text. */
-body.wildlife-scheme{--w-bg:#FAF7F2;--w-surface:#FFFFFF;--w-ink:#112217;--w-accent:#C86D3B;--w-soft:#F5F1E8;--w-line:#EAE3D2;--w-brand-bg:#112217;--w-brand-surface:#1B3324;--w-on-brand:#FAF7F2;--w-hover:#2E4E3F;--w-muted:#66756B;}
+body.wildlife-scheme{--w-bg:#FAF7F2;--w-surface:#FFFFFF;--w-ink:#112217;--w-accent:#C86D3B;--w-soft:#F5F1E8;--w-line:#EAE3D2;--w-brand-bg:#112217;--w-brand-surface:#1B3324;--w-on-brand:#FAF7F2;--w-hover:#2E4E3F;--w-muted:#66756B;--w-stat:#A84E2C;--w-on-accent:#112217;}
 body.wildlife-scheme .bg-cream{background-color:var(--w-bg)!important}
 body.wildlife-scheme .bg-white{background-color:var(--w-surface)!important}
 body.wildlife-scheme .bg-sandlight{background-color:var(--w-soft)!important}
@@ -531,6 +531,88 @@ body.wildlife-scheme [class~="border-sand/20"]{border-color:color-mix(in srgb,va
 body.wildlife-scheme [class~="border-sand/15"]{border-color:color-mix(in srgb,var(--w-line) 15%,transparent)!important}
 body.wildlife-scheme [class~="border-sand/10"]{border-color:color-mix(in srgb,var(--w-line) 10%,transparent)!important}
 body.wildlife-scheme [class~="hover:text-terracotta"]:hover{color:var(--w-accent)!important}
+
+/* PHASE 1 — theme-aware color and contrast fixes */
+body.wildlife-scheme [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"]{
+  background-color:var(--w-brand-bg)!important;
+  color:#FFFFFF!important;
+  border:1px solid var(--w-accent)!important;
+}
+body.wildlife-scheme [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"] i,
+body.wildlife-scheme [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"] svg,
+body.wildlife-scheme [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"] [data-lucide]{
+  color:#FFFFFF!important;
+  stroke:currentColor!important;
+}
+body.wildlife-scheme [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"]:hover{
+  background-color:var(--w-brand-surface)!important;
+  color:#FFFFFF!important;
+}
+
+/* Four display counters share the selected palette's accessible statistic shade. */
+body.wildlife-scheme section.bg-sandlight .grid.text-center > div > .font-serif{
+  color:var(--w-stat)!important;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Habitat tab active state must use the current palette, not the default orange. */
+body.wildlife-scheme #habitat-tabs .hab-tab.tab-active{
+  background-color:var(--w-accent)!important;
+  border-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+  box-shadow:0 1px 3px rgba(0,0,0,.10);
+}
+body.wildlife-scheme #habitat-tabs .hab-tab:not(.tab-active){
+  border-color:var(--w-line)!important;
+  color:var(--w-muted)!important;
+}
+body.wildlife-scheme #habitat-tabs .hab-tab:not(.tab-active):hover{
+  background-color:color-mix(in srgb,var(--w-accent) 12%,var(--w-soft))!important;
+  border-color:var(--w-accent)!important;
+  color:var(--w-ink)!important;
+}
+
+/* Impact Simulator frequency/preset selection and icon badge follow the palette. */
+body.wildlife-scheme #calculator [data-calc-frequency][aria-pressed="true"]{
+  background-color:var(--w-accent)!important;
+  border-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn[aria-pressed="true"]{
+  background-color:var(--w-accent)!important;
+  border-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn[aria-pressed="true"] > span,
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn[aria-pressed="true"] .text-terracotta{
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme #calculator [class~="bg-terracotta/20"]{
+  background-color:color-mix(in srgb,var(--w-accent) 20%,var(--w-brand-bg))!important;
+  color:var(--w-accent)!important;
+}
+body.wildlife-scheme #calculator [class~="bg-terracotta/20"] i,
+body.wildlife-scheme #calculator [class~="bg-terracotta/20"] svg{
+  color:var(--w-accent)!important;
+}
+
+/* Story stars are filled icons with no visible stroke/outline; author initials use the palette. */
+body.wildlife-scheme #dispatches-stories-track .lucide-star,
+body.wildlife-scheme #dispatches-stories-track [data-lucide="star"]{
+  color:var(--w-accent)!important;
+  fill:currentColor!important;
+  stroke:none!important;
+}
+body.wildlife-scheme #dispatches-stories-track .lucide-star path,
+body.wildlife-scheme #dispatches-stories-track [data-lucide="star"] path{
+  fill:currentColor!important;
+  stroke:none!important;
+}
+body.wildlife-scheme #dispatches-stories-track .story-card [class~="w-10"][class~="h-10"][class~="rounded-full"]{
+  background-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+}
 .site-header-inner{position:relative;}
 .site-nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);white-space:nowrap;}
 .logo-img{width:190px;height:42px;max-width:none;object-fit:contain;display:block;}
@@ -3282,12 +3364,12 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   // ============================================================
   var schemes = {
     // Default reproduces the original VANA forest / cream / terracotta brand.
-    scheme0: { "--color-bg":"#FAF7F2", "--color-surface":"#FFFFFF", "--color-ink":"#112217", "--color-accent":"#C86D3B", "--color-line":"#EAE3D2", "--color-soft":"#F5F1E8", "--color-brand-bg":"#112217", "--color-brand-surface":"#1B3324", "--color-on-brand":"#FAF7F2", "--color-hover":"#2E4E3F", "--color-muted":"#66756B" },
-    scheme1: { "--color-bg":"#F2F1EC", "--color-surface":"#FFFFFF", "--color-ink":"#16181D", "--color-accent":"#2B3FDD", "--color-line":"rgba(22,24,29,.14)", "--color-soft":"#F5F5FA", "--color-brand-bg":"#20264B", "--color-brand-surface":"#2E365F", "--color-on-brand":"#F7F7FC", "--color-hover":"#303DAE", "--color-muted":"#626779" },
-    scheme2: { "--color-bg":"#0A0A0A", "--color-surface":"#141414", "--color-ink":"#F2F2F0", "--color-accent":"#C9A15A", "--color-line":"rgba(242,242,240,.16)", "--color-soft":"#141414", "--color-brand-bg":"#0A0A0A", "--color-brand-surface":"#1C1C1C", "--color-on-brand":"#F2F2F0", "--color-hover":"#A9823B", "--color-muted":"#B6B3AA" },
+    scheme0: { "--color-bg":"#FAF7F2", "--color-surface":"#FFFFFF", "--color-ink":"#112217", "--color-accent":"#C86D3B", "--color-line":"#EAE3D2", "--color-soft":"#F5F1E8", "--color-brand-bg":"#112217", "--color-brand-surface":"#1B3324", "--color-on-brand":"#FAF7F2", "--color-hover":"#2E4E3F", "--color-muted":"#66756B", "--color-stat":"#2F5D50", "--color-on-accent":"#FFFFFF", "--color-stat":"#A84E2C", "--color-on-accent":"#112217" },
+    scheme1: { "--color-bg":"#F2F1EC", "--color-surface":"#FFFFFF", "--color-ink":"#16181D", "--color-accent":"#2B3FDD", "--color-line":"rgba(22,24,29,.14)", "--color-soft":"#F5F5FA", "--color-brand-bg":"#20264B", "--color-brand-surface":"#2E365F", "--color-on-brand":"#F7F7FC", "--color-hover":"#303DAE", "--color-muted":"#626779", "--color-stat":"#2B3FDD", "--color-on-accent":"#FFFFFF" },
+    scheme2: { "--color-bg":"#0A0A0A", "--color-surface":"#141414", "--color-ink":"#F2F2F0", "--color-accent":"#C9A15A", "--color-line":"rgba(242,242,240,.16)", "--color-soft":"#141414", "--color-brand-bg":"#0A0A0A", "--color-brand-surface":"#1C1C1C", "--color-on-brand":"#F2F2F0", "--color-hover":"#A9823B", "--color-muted":"#B6B3AA", "--color-stat":"#C9A15A", "--color-on-accent":"#171310" },
     scheme3: { "--color-bg":"#F7F4EE", "--color-surface":"#FFFFFF", "--color-ink":"#1C1B18", "--color-accent":"#2F5D50", "--color-line":"rgba(28,27,24,.14)", "--color-soft":"#F1ECE3", "--color-brand-bg":"#1F4B3F", "--color-brand-surface":"#2F5D50", "--color-on-brand":"#FAF7F1", "--color-hover":"#23483C", "--color-muted":"#66756B" },
-    scheme4: { "--color-bg":"#0D0B14", "--color-surface":"#17131F", "--color-ink":"#F0EDF5", "--color-accent":"#9A7BD1", "--color-line":"rgba(240,237,245,.16)", "--color-soft":"#17131F", "--color-brand-bg":"#0D0B14", "--color-brand-surface":"#251D33", "--color-on-brand":"#F0EDF5", "--color-hover":"#7654B5", "--color-muted":"#B7ADC8" },
-    scheme5: { "--color-bg":"#171310", "--color-surface":"#211B16", "--color-ink":"#F5EEE6", "--color-accent":"#CE9155", "--color-line":"rgba(245,238,230,.16)", "--color-soft":"#211B16", "--color-brand-bg":"#171310", "--color-brand-surface":"#2B211A", "--color-on-brand":"#F5EEE6", "--color-hover":"#A96739", "--color-muted":"#C7B9AA" }
+    scheme4: { "--color-bg":"#0D0B14", "--color-surface":"#17131F", "--color-ink":"#F0EDF5", "--color-accent":"#9A7BD1", "--color-line":"rgba(240,237,245,.16)", "--color-soft":"#17131F", "--color-brand-bg":"#0D0B14", "--color-brand-surface":"#251D33", "--color-on-brand":"#F0EDF5", "--color-hover":"#7654B5", "--color-muted":"#B7ADC8", "--color-stat":"#9A7BD1", "--color-on-accent":"#0D0B14" },
+    scheme5: { "--color-bg":"#171310", "--color-surface":"#211B16", "--color-ink":"#F5EEE6", "--color-accent":"#CE9155", "--color-line":"rgba(245,238,230,.16)", "--color-soft":"#211B16", "--color-brand-bg":"#171310", "--color-brand-surface":"#2B211A", "--color-on-brand":"#F5EEE6", "--color-hover":"#A96739", "--color-muted":"#C7B9AA", "--color-stat":"#CE9155", "--color-on-accent":"#171310" }
   };
   var schemeTokenMap = {
     "--w-bg":"--color-bg",
@@ -3300,7 +3382,9 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     "--w-brand-surface":"--color-brand-surface",
     "--w-on-brand":"--color-on-brand",
     "--w-hover":"--color-hover",
-    "--w-muted":"--color-muted"
+    "--w-muted":"--color-muted",
+    "--w-stat":"--color-stat",
+    "--w-on-accent":"--color-on-accent"
   };
   function updateSchemeSwatches(vars){
     Object.keys(schemes).forEach(function(id){
@@ -4182,6 +4266,8 @@ if(!(el.hasAttribute&&el.hasAttribute('data-ez-editor-ignore'))&&!preserveIntera
         "--color-on-brand": document.documentElement.style.getPropertyValue("--color-on-brand"),
         "--color-hover": document.documentElement.style.getPropertyValue("--color-hover"),
         "--color-muted": document.documentElement.style.getPropertyValue("--color-muted"),
+        "--color-stat": document.documentElement.style.getPropertyValue("--color-stat"),
+        "--color-on-accent": document.documentElement.style.getPropertyValue("--color-on-accent"),
         "--w-bg": document.body.style.getPropertyValue("--w-bg"),
         "--w-surface": document.body.style.getPropertyValue("--w-surface"),
         "--w-ink": document.body.style.getPropertyValue("--w-ink"),
@@ -4193,6 +4279,8 @@ if(!(el.hasAttribute&&el.hasAttribute('data-ez-editor-ignore'))&&!preserveIntera
         "--w-on-brand": document.body.style.getPropertyValue("--w-on-brand"),
         "--w-hover": document.body.style.getPropertyValue("--w-hover"),
         "--w-muted": document.body.style.getPropertyValue("--w-muted"),
+        "--w-stat": document.body.style.getPropertyValue("--w-stat"),
+        "--w-on-accent": document.body.style.getPropertyValue("--w-on-accent"),
         "--font-heading": document.documentElement.style.getPropertyValue("--font-heading"),
         "--font-body": document.documentElement.style.getPropertyValue("--font-body")
       },
@@ -4239,6 +4327,16 @@ if(!(el.hasAttribute&&el.hasAttribute('data-ez-editor-ignore'))&&!preserveIntera
           var value=s.cssVars[token];
           if(value)document.body.style.setProperty(token,value);
         });
+        // Older saved themes predate --w-stat/--w-on-accent; infer those two
+        // tokens from the saved accent/background without overwriting their palette.
+        var restoredSchemeId=Object.keys(schemes).find(function(id){
+          return String(schemes[id]["--color-accent"]||"").toLowerCase()===String(s.cssVars["--color-accent"]||"").toLowerCase() &&
+            String(schemes[id]["--color-bg"]||"").toLowerCase()===String(s.cssVars["--color-bg"]||"").toLowerCase();
+        });
+        if(restoredSchemeId){
+          if(!s.cssVars["--w-stat"])document.body.style.setProperty("--w-stat",schemes[restoredSchemeId]["--color-stat"]);
+          if(!s.cssVars["--w-on-accent"])document.body.style.setProperty("--w-on-accent",schemes[restoredSchemeId]["--color-on-accent"]);
+        }
         updateSchemeSwatches(s.cssVars);
       }else{
         // Backward compatibility with settings saved by the original five-swatch palette.
