@@ -4015,6 +4015,8 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     if(savedMainHTML){ restoreSnapshot(savedMainHTML); }
     if(savedHeaderHTML){ restoreRegion(document.querySelector("header.site-header") || document.getElementById("navbar"), savedHeaderHTML); }
     if(savedFooterHTML){ restoreRegion(document.querySelector(".site-footer") || document.querySelector("footer"), savedFooterHTML); }
+    // Migrate legacy saved DOM before capturing the pre-effect baseline or injecting effects.
+    ensureV5PageStructure();
     // The habitat manager script is later in the document, so queue its data until that script initializes.
     if(s.habitatManager && Array.isArray(s.habitatManager.categories) && Array.isArray(s.habitatManager.habitats)){
       if(typeof window.vanaHabitatManagerSetState === "function") window.vanaHabitatManagerSetState(s.habitatManager);
@@ -4031,7 +4033,6 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     injectCustomEffects(customEffects);
     updateLastAppliedCustomCode();
     if(s.ownerEmail){ $("#cpOwnerEmail").value = s.ownerEmail; }
-    ensureV5PageStructure();
     syncOwnerEmailDisplays($("#cpOwnerEmail").value.trim());
     if(s.stats){
       Object.keys(s.stats).forEach(function(key){
