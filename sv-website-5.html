@@ -307,8 +307,8 @@ body:not(.ez-edit-on) .item-actions{display:none !important;}
 #customizePanel .cp-editpage-btn.active{background:rgba(201,161,90,0.18);border-color:#C9A15A;color:#C9A15A;}
 #customizePanel .cp-editpage-dot{width:8px;height:8px;border-radius:50%;background:#6B6B67;flex-shrink:0;}
 #customizePanel .cp-editpage-btn.active .cp-editpage-dot{background:#4ade80;box-shadow:0 0 8px #4ade80;}
-#customizePanel .cp-scheme-row{display:flex;gap:8px;}
-#customizePanel .cp-scheme-swatch{width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,0.25);flex-shrink:0;}
+#customizePanel .cp-scheme-row{display:flex;flex-wrap:wrap;gap:8px;}
+#customizePanel .cp-scheme-swatch{width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,0.25);flex-shrink:0;cursor:pointer;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;} #customizePanel .cp-scheme-swatch[aria-pressed="true"]{border:2px solid #C9A15A;box-shadow:0 0 0 2px rgba(201,161,90,.22);}
 #customizePanel .cp-scheme-swatch:hover{transform:scale(1.08);border-color:#C9A15A;}
 #customizePanel .cp-page-row{display:flex;align-items:center;gap:8px;padding:7px 8px;border:1px solid rgba(255,255,255,0.12);border-radius:9px;margin-bottom:6px;background:#0A0A0A;}
 #customizePanel .cp-page-row.active{border-color:#C9A15A;}
@@ -502,9 +502,27 @@ body.ez-edit-on .ez-add-btn{display:flex;}
   #ezStylePanel{width:88vw;}
 }
 </style><style id="wildlife-editor-scheme-overrides">
-body.wildlife-scheme{--w-bg:#FAF7F2;--w-surface:#FFFFFF;--w-ink:#112217;--w-accent:#C86D3B;--w-soft:#F5F1E8;--w-line:#EAE3D2;}
-body.wildlife-scheme .bg-cream{background-color:var(--w-bg)!important} body.wildlife-scheme .bg-sandlight{background-color:var(--w-soft)!important} body.wildlife-scheme .bg-forest{background-color:var(--w-ink)!important} body.wildlife-scheme .bg-terracotta{background-color:var(--w-accent)!important} body.wildlife-scheme .bg-moss{background-color:var(--w-accent)!important}
-body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-scheme .text-cream{color:var(--w-bg)!important} body.wildlife-scheme .text-terracotta{color:var(--w-accent)!important} body.wildlife-scheme .border-sand{border-color:var(--w-line)!important}
+/* Scheme tokens are populated inline on BODY by applyScheme()/settings restoration.
+   Each token has one semantic job so dark schemes keep dark surfaces and light text. */
+body.wildlife-scheme{--w-bg:#FAF7F2;--w-surface:#FFFFFF;--w-ink:#112217;--w-accent:#C86D3B;--w-soft:#F5F1E8;--w-line:#EAE3D2;--w-brand-bg:#112217;--w-brand-surface:#1B3324;--w-on-brand:#FAF7F2;--w-hover:#2E4E3F;--w-muted:#66756B;}
+body.wildlife-scheme .bg-cream{background-color:var(--w-bg)!important}
+body.wildlife-scheme .bg-white{background-color:var(--w-surface)!important}
+body.wildlife-scheme .bg-sandlight{background-color:var(--w-soft)!important}
+body.wildlife-scheme .bg-forest{background-color:var(--w-brand-bg)!important}
+body.wildlife-scheme .bg-forestlight{background-color:var(--w-brand-surface)!important}
+body.wildlife-scheme .bg-terracotta{background-color:var(--w-accent)!important}
+body.wildlife-scheme .bg-moss{background-color:var(--w-hover)!important}
+body.wildlife-scheme [class~="hover:bg-moss"]:hover{background-color:var(--w-hover)!important}
+body.wildlife-scheme .text-forest{color:var(--w-ink)!important}
+body.wildlife-scheme .text-cream{color:var(--w-on-brand)!important}
+body.wildlife-scheme .text-terracotta{color:var(--w-accent)!important}
+body.wildlife-scheme .text-slategreen{color:var(--w-muted)!important}
+body.wildlife-scheme .border-sand,
+body.wildlife-scheme [class~="border-sand/80"],
+body.wildlife-scheme [class~="border-sand/50"],
+body.wildlife-scheme [class~="border-sand/20"],
+body.wildlife-scheme [class~="border-sand/15"]{border-color:var(--w-line)!important}
+body.wildlife-scheme [class~="hover:text-terracotta"]:hover{color:var(--w-accent)!important}
 .site-header-inner{position:relative;}
 .site-nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);white-space:nowrap;}
 .logo-img{width:190px;height:42px;max-width:none;object-fit:contain;display:block;}
@@ -2248,12 +2266,13 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 </div>
 <div class="cp-group">
 <label>Quick Color Schemes</label>
-<div class="cp-scheme-row">
-<button class="cp-scheme-swatch" id="scheme0" style="background:linear-gradient(135deg,#F2F1EC 50%,#2B3FDD 50%);" title="Default"></button>
-<button class="cp-scheme-swatch" id="scheme1" style="background:linear-gradient(135deg,#0A0A0A 50%,#C9A15A 50%);" title="Gold Noir"></button>
-<button class="cp-scheme-swatch" id="scheme2" style="background:linear-gradient(135deg,#FAF7F1 50%,#1F4B3F 50%);" title="Ivory Editorial"></button>
-<button class="cp-scheme-swatch" id="scheme3" style="background:linear-gradient(135deg,#0D0B14 50%,#9A7BD1 50%);" title="Midnight Violet"></button>
-<button class="cp-scheme-swatch" id="scheme4" style="background:linear-gradient(135deg,#171310 50%,#CE9155 50%);" title="Terracotta"></button>
+<div class="cp-scheme-row" role="group" aria-label="Quick Color Schemes">
+<button type="button" class="cp-scheme-swatch" id="scheme0" aria-label="Default color scheme" aria-pressed="false" style="background:linear-gradient(135deg,#FAF7F2 50%,#112217 50%);" title="Default"></button>
+<button type="button" class="cp-scheme-swatch" id="scheme1" aria-label="Blue color scheme" aria-pressed="false" style="background:linear-gradient(135deg,#F2F1EC 50%,#2B3FDD 50%);" title="Blue"></button>
+<button type="button" class="cp-scheme-swatch" id="scheme2" aria-label="Gold Noir color scheme" aria-pressed="false" style="background:linear-gradient(135deg,#0A0A0A 50%,#C9A15A 50%);" title="Gold Noir"></button>
+<button type="button" class="cp-scheme-swatch" id="scheme3" aria-label="Ivory Editorial color scheme" aria-pressed="false" style="background:linear-gradient(135deg,#FAF7F1 50%,#1F4B3F 50%);" title="Ivory Editorial"></button>
+<button type="button" class="cp-scheme-swatch" id="scheme4" aria-label="Midnight Violet color scheme" aria-pressed="false" style="background:linear-gradient(135deg,#0D0B14 50%,#9A7BD1 50%);" title="Midnight Violet"></button>
+<button type="button" class="cp-scheme-swatch" id="scheme5" aria-label="Terracotta color scheme" aria-pressed="false" style="background:linear-gradient(135deg,#171310 50%,#CE9155 50%);" title="Terracotta"></button>
 </div>
 </div>
 <div class="cp-divider"></div>
@@ -3254,22 +3273,60 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   // QUICK COLOR SCHEMES
   // ============================================================
   var schemes = {
-    scheme0: { "--color-bg":"#F2F1EC", "--color-surface":"#FFFFFF", "--color-ink":"#16181D", "--color-accent":"#2B3FDD", "--color-line":"rgba(22, 24, 29, 0.14)" },
-    scheme1: { "--color-bg":"#0A0A0A", "--color-surface":"#141414", "--color-ink":"#F2F2F0", "--color-accent":"#C9A15A", "--color-line":"rgba(242, 242, 240, 0.16)" },
-    scheme2: { "--color-bg":"#F7F4EE", "--color-surface":"#FFFFFF", "--color-ink":"#1C1B18", "--color-accent":"#2F5D50", "--color-line":"rgba(28, 27, 24, 0.14)" },
-    scheme3: { "--color-bg":"#0D0B14", "--color-surface":"#17131F", "--color-ink":"#F0EDF5", "--color-accent":"#9A7BD1", "--color-line":"rgba(240, 237, 245, 0.16)" },
-    scheme4: { "--color-bg":"#171310", "--color-surface":"#211B16", "--color-ink":"#F5EEE6", "--color-accent":"#CE9155", "--color-line":"rgba(245, 238, 230, 0.16)" }
+    // Default reproduces the original VANA forest / cream / terracotta brand.
+    scheme0: { "--color-bg":"#FAF7F2", "--color-surface":"#FFFFFF", "--color-ink":"#112217", "--color-accent":"#C86D3B", "--color-line":"#EAE3D2", "--color-soft":"#F5F1E8", "--color-brand-bg":"#112217", "--color-brand-surface":"#1B3324", "--color-on-brand":"#FAF7F2", "--color-hover":"#2E4E3F", "--color-muted":"#66756B" },
+    scheme1: { "--color-bg":"#F2F1EC", "--color-surface":"#FFFFFF", "--color-ink":"#16181D", "--color-accent":"#2B3FDD", "--color-line":"rgba(22,24,29,.14)", "--color-soft":"#F5F5FA", "--color-brand-bg":"#20264B", "--color-brand-surface":"#2E365F", "--color-on-brand":"#F7F7FC", "--color-hover":"#303DAE", "--color-muted":"#626779" },
+    scheme2: { "--color-bg":"#0A0A0A", "--color-surface":"#141414", "--color-ink":"#F2F2F0", "--color-accent":"#C9A15A", "--color-line":"rgba(242,242,240,.16)", "--color-soft":"#141414", "--color-brand-bg":"#0A0A0A", "--color-brand-surface":"#1C1C1C", "--color-on-brand":"#F2F2F0", "--color-hover":"#A9823B", "--color-muted":"#B6B3AA" },
+    scheme3: { "--color-bg":"#F7F4EE", "--color-surface":"#FFFFFF", "--color-ink":"#1C1B18", "--color-accent":"#2F5D50", "--color-line":"rgba(28,27,24,.14)", "--color-soft":"#F1ECE3", "--color-brand-bg":"#1F4B3F", "--color-brand-surface":"#2F5D50", "--color-on-brand":"#FAF7F1", "--color-hover":"#23483C", "--color-muted":"#66756B" },
+    scheme4: { "--color-bg":"#0D0B14", "--color-surface":"#17131F", "--color-ink":"#F0EDF5", "--color-accent":"#9A7BD1", "--color-line":"rgba(240,237,245,.16)", "--color-soft":"#17131F", "--color-brand-bg":"#0D0B14", "--color-brand-surface":"#251D33", "--color-on-brand":"#F0EDF5", "--color-hover":"#7654B5", "--color-muted":"#B7ADC8" },
+    scheme5: { "--color-bg":"#171310", "--color-surface":"#211B16", "--color-ink":"#F5EEE6", "--color-accent":"#CE9155", "--color-line":"rgba(245,238,230,.16)", "--color-soft":"#211B16", "--color-brand-bg":"#171310", "--color-brand-surface":"#2B211A", "--color-on-brand":"#F5EEE6", "--color-hover":"#A96739", "--color-muted":"#C7B9AA" }
   };
-  Object.keys(schemes).forEach(function(id){
-    $("#"+id).addEventListener("click", function(){ applyScheme(schemes[id]); markUnsaved(); });
-  });
-  function applyScheme(vars){
-    Object.keys(vars).forEach(function(k){ document.documentElement.style.setProperty(k, vars[k]); });
-    var root=document.documentElement;
-    var bg=vars["--color-bg"]||"#FAF7F2", ink=vars["--color-ink"]||"#112217", accent=vars["--color-accent"]||"#C86D3B", surface=vars["--color-surface"]||"#FFFFFF", line=vars["--color-line"]||"#EAE3D2";
-    root.style.setProperty("--w-bg",bg); root.style.setProperty("--w-ink",ink); root.style.setProperty("--w-accent",accent); root.style.setProperty("--w-surface",surface); root.style.setProperty("--w-line",line); root.style.setProperty("--w-soft",surface);
-    document.body.classList.add("wildlife-scheme");
+  var schemeTokenMap = {
+    "--w-bg":"--color-bg",
+    "--w-surface":"--color-surface",
+    "--w-ink":"--color-ink",
+    "--w-accent":"--color-accent",
+    "--w-line":"--color-line",
+    "--w-soft":"--color-soft",
+    "--w-brand-bg":"--color-brand-bg",
+    "--w-brand-surface":"--color-brand-surface",
+    "--w-on-brand":"--color-on-brand",
+    "--w-hover":"--color-hover",
+    "--w-muted":"--color-muted"
+  };
+  function updateSchemeSwatches(vars){
+    Object.keys(schemes).forEach(function(id){
+      var button=$("#"+id);
+      if(!button)return;
+      var selected=String(schemes[id]["--color-accent"]||"").toLowerCase()===String(vars["--color-accent"]||"").toLowerCase() &&
+        String(schemes[id]["--color-bg"]||"").toLowerCase()===String(vars["--color-bg"]||"").toLowerCase();
+      button.setAttribute("aria-pressed",selected?"true":"false");
+    });
   }
+  function applyScheme(vars){
+    if(!vars)return;
+    Object.keys(vars).forEach(function(k){
+      if(vars[k])document.documentElement.style.setProperty(k,vars[k]);
+    });
+    var semantic={};
+    Object.keys(schemeTokenMap).forEach(function(token){
+      var source=schemeTokenMap[token];
+      var value=vars[token]||vars[source];
+      if(value)semantic[token]=value;
+    });
+    // Body has fixed defaults in the stylesheet. Put the selected tokens directly
+    // on BODY as well, otherwise those defaults mask variables inherited from HTML.
+    document.body.classList.add("wildlife-scheme");
+    Object.keys(semantic).forEach(function(k){
+      document.documentElement.style.setProperty(k,semantic[k]);
+      document.body.style.setProperty(k,semantic[k]);
+    });
+    updateSchemeSwatches(vars);
+  }
+  Object.keys(schemes).forEach(function(id){
+    var button=$("#"+id);
+    if(button)button.addEventListener("click",function(){applyScheme(schemes[id]);markUnsaved();});
+  });
 
   // ============================================================
   // FONTS
@@ -4111,6 +4168,23 @@ if(!(el.hasAttribute&&el.hasAttribute('data-ez-editor-ignore'))&&!preserveIntera
         "--color-ink": document.documentElement.style.getPropertyValue("--color-ink"),
         "--color-accent": document.documentElement.style.getPropertyValue("--color-accent"),
         "--color-line": document.documentElement.style.getPropertyValue("--color-line"),
+        "--color-soft": document.documentElement.style.getPropertyValue("--color-soft"),
+        "--color-brand-bg": document.documentElement.style.getPropertyValue("--color-brand-bg"),
+        "--color-brand-surface": document.documentElement.style.getPropertyValue("--color-brand-surface"),
+        "--color-on-brand": document.documentElement.style.getPropertyValue("--color-on-brand"),
+        "--color-hover": document.documentElement.style.getPropertyValue("--color-hover"),
+        "--color-muted": document.documentElement.style.getPropertyValue("--color-muted"),
+        "--w-bg": document.body.style.getPropertyValue("--w-bg"),
+        "--w-surface": document.body.style.getPropertyValue("--w-surface"),
+        "--w-ink": document.body.style.getPropertyValue("--w-ink"),
+        "--w-accent": document.body.style.getPropertyValue("--w-accent"),
+        "--w-line": document.body.style.getPropertyValue("--w-line"),
+        "--w-soft": document.body.style.getPropertyValue("--w-soft"),
+        "--w-brand-bg": document.body.style.getPropertyValue("--w-brand-bg"),
+        "--w-brand-surface": document.body.style.getPropertyValue("--w-brand-surface"),
+        "--w-on-brand": document.body.style.getPropertyValue("--w-on-brand"),
+        "--w-hover": document.body.style.getPropertyValue("--w-hover"),
+        "--w-muted": document.body.style.getPropertyValue("--w-muted"),
         "--font-heading": document.documentElement.style.getPropertyValue("--font-heading"),
         "--font-body": document.documentElement.style.getPropertyValue("--font-body")
       },
@@ -4148,7 +4222,28 @@ if(!(el.hasAttribute&&el.hasAttribute('data-ez-editor-ignore'))&&!preserveIntera
       else window.vanaHabitatManagerPendingState = JSON.parse(JSON.stringify(s.habitatManager));
     }
 
-    if(s.cssVars){ Object.keys(s.cssVars).forEach(function(k){ if(s.cssVars[k]) document.documentElement.style.setProperty(k, s.cssVars[k]); }); }
+    if(s.cssVars){
+      Object.keys(s.cssVars).forEach(function(k){ if(s.cssVars[k]) document.documentElement.style.setProperty(k, s.cssVars[k]); });
+      var hasSemanticTheme=!!(s.cssVars["--w-bg"]&&s.cssVars["--w-ink"]&&s.cssVars["--w-accent"]);
+      if(hasSemanticTheme){
+        document.body.classList.add("wildlife-scheme");
+        Object.keys(schemeTokenMap).forEach(function(token){
+          var value=s.cssVars[token];
+          if(value)document.body.style.setProperty(token,value);
+        });
+        updateSchemeSwatches(s.cssVars);
+      }else{
+        // Backward compatibility with settings saved by the original five-swatch palette.
+        // The old "Default" swatch used the blue accent, so those saved values map to Blue.
+        var legacyAccent=String(s.cssVars["--color-accent"]||"").toLowerCase();
+        if(legacyAccent){
+          var matchingScheme=Object.keys(schemes).find(function(id){
+            return String(schemes[id]["--color-accent"]||"").toLowerCase()===legacyAccent;
+          });
+          if(matchingScheme)applyScheme(schemes[matchingScheme]);
+        }
+      }
+    }
     if(s.headingFont){ $("#fHeading").value = s.headingFont; loadGoogleFont(s.headingFont); }
     if(s.bodyFont){ $("#fBody").value = s.bodyFont; loadGoogleFont(s.bodyFont); }
     customEffects = normalizeCustomEffects(s);
