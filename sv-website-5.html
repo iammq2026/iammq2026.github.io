@@ -91,6 +91,13 @@
   border-top-right-radius:16px !important;
   overflow:hidden !important;
 }
+/* V5 #5: footer social links are compact, accessible and repeatable in Edit Page. */
+#footer-socials-list{display:flex;flex-direction:column;gap:12px}
+.footer-social-item{position:relative}
+.footer-social-link{display:inline-flex;align-items:center;gap:12px;color:rgba(245,241,232,.88);font-size:13px;text-decoration:none;transition:color .15s ease}
+.footer-social-link:hover{color:#C86D3B}
+.footer-social-mark{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid rgba(234,227,210,.32);border-radius:999px;color:#EAE3D2;font-weight:700;font-size:11px;flex:0 0 30px}
+body.ez-edit-on #footer-socials-list>.footer-social-item:hover{outline:1px dashed rgba(201,161,90,.45);outline-offset:3px}
 /* STORIES carousel + editor-only story management */
 #dispatches-stories-track .story-card{width:100%;box-sizing:border-box}
 #dispatches-stories-track .story-card[data-story-active="false"]{display:none!important}
@@ -1252,13 +1259,8 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <input class="w-full bg-sandlight border border-sand rounded-xl px-4 py-3 text-sm text-forest focus:outline-none focus:border-terracotta transition-colors" id="contact-subject" placeholder="Inquiry topic" required="" type="text"/>
 </div>
 <div>
-<label class="block text-xs uppercase font-bold text-forest mb-2">Area of Interest</label>
-<select class="w-full bg-sandlight border border-sand rounded-xl px-4 py-3 text-sm text-forest focus:outline-none focus:border-terracotta transition-colors" id="contact-interest">
-<option value="sponsorship">Sanctuary Animal Sponsorship</option>
-<option value="volunteering">Field Volunteering Opportunities</option>
-<option value="corporate">Corporate Giving &amp; Partnerships</option>
-<option value="media">Media &amp; Press Inquiries</option>
-</select>
+<label class="block text-xs uppercase font-bold text-forest mb-2">Receiving Email</label>
+<input class="w-full bg-sandlight border border-sand rounded-xl px-4 py-3 text-sm text-forest focus:outline-none focus:border-terracotta transition-colors" id="contact-receiving-email" placeholder="Set in Customize → Owner Email (for inquiries)" readonly="" type="email"/>
 </div>
 </div>
 <div>
@@ -1281,11 +1283,34 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 </section>
 </div>
-<section class="ez-page hidden py-20 lg:py-28 bg-cream" data-ez-section="1" id="page-privacy">
+<section class="ez-page py-20 lg:py-28 bg-cream" data-ez-section="1" id="page-privacy" style="display:none;">
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 <p class="text-xs uppercase tracking-widest text-terracotta font-bold">Legal</p>
 <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest mt-2 mb-6">Privacy Policy</h1>
-<p class="text-slategreen leading-relaxed">This Privacy Policy explains how VANA Earth &amp; Wildlife Foundation may collect, use, retain, and protect information submitted through this website. Replace this placeholder with the organization’s final privacy policy before publishing.</p>
+<p class="text-slategreen leading-relaxed">VANA Earth &amp; Wildlife Foundation respects the privacy of people who visit this website. This notice describes, in general terms, how information shared through the website may be handled. Please review it against VANA’s actual practices before publication.</p>
+<div class="mt-10 space-y-8">
+<section data-ez-section="1">
+<h2 class="font-serif text-2xl font-bold text-forest mb-3">Information You Provide</h2>
+<p class="text-slategreen leading-relaxed">If you contact VANA, you may choose to provide information such as your name, email address, subject, and message. Please avoid submitting confidential or sensitive information through a general inquiry form.</p>
+</section>
+<section data-ez-section="1">
+<h2 class="font-serif text-2xl font-bold text-forest mb-3">How Information May Be Used</h2>
+<p class="text-slategreen leading-relaxed">Information that VANA receives may be used to respond to questions, understand requests, coordinate conservation-related communications, and maintain the website. The Receiving Email shown on the Contact Us form is configured through the website editor.</p>
+</section>
+<section data-ez-section="1">
+<h2 class="font-serif text-2xl font-bold text-forest mb-3">Forms and Communications</h2>
+<p class="text-slategreen leading-relaxed">The current static contact form displays an on-page confirmation. Unless an email or form-delivery integration is configured separately, that confirmation alone does not mean a message has been transmitted or stored by VANA.</p>
+</section>
+<section data-ez-section="1">
+<h2 class="font-serif text-2xl font-bold text-forest mb-3">Third-Party Services and Social Links</h2>
+<p class="text-slategreen leading-relaxed">Links to social networks or other external websites are provided for convenience. Those services operate under their own privacy notices and practices.</p>
+</section>
+<section data-ez-section="1">
+<h2 class="font-serif text-2xl font-bold text-forest mb-3">Updates to This Notice</h2>
+<p class="text-slategreen leading-relaxed">This notice may be updated as the website and VANA’s practices evolve. The version published on this page should be reviewed periodically for accuracy.</p>
+</section>
+</div>
+<a class="inline-flex items-center mt-10 px-6 py-3 bg-forest hover:bg-moss text-cream text-xs font-bold uppercase tracking-wider rounded-full transition-colors" href="#hero" id="privacy-back-home">← Back to Homepage</a>
 </div>
 </section>
 </main>
@@ -1320,21 +1345,22 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <li><a class="hover:text-terracotta transition-colors" href="#page-privacy">Privacy Policy</a></li>
 </ul>
 </div>
-<!-- Newsletter Subscription Column -->
-<div class="md:col-span-4 space-y-4">
-<h4 class="font-serif font-bold text-lg text-cream mb-2">Monthly Field Dispatches</h4>
-<p class="text-xs text-sand/70">
-                        Subscribe to receive monthly field logs, ranger drone footage, and animal rescue updates directly in your inbox.
-                    </p>
-<form class="space-y-2" onsubmit="handleNewsletterSubmit(event)">
-<div class="flex">
-<input class="bg-forestlight border border-sand/20 rounded-l-xl px-4 py-2.5 text-xs text-cream placeholder-sand/50 focus:outline-none focus:border-terracotta w-full" id="newsletter-email" placeholder="Enter your email address" required="" type="email"/>
-<button class="bg-terracotta hover:bg-terracottadark text-cream px-4 rounded-r-xl text-xs font-bold transition-colors shrink-0" type="submit">
-                                Join
-                            </button>
+<!-- Our Socials: each wrapper is a repeatable editor item with a unique ID. -->
+<div id="footer-socials-panel" class="md:col-span-4 space-y-4">
+<h4 class="font-serif font-bold text-lg text-cream mb-2" id="footer-socials-heading">Our Socials</h4>
+<p class="text-xs text-sand/70" id="footer-socials-description">Follow VANA for conservation news, rescue stories, and field updates.</p>
+<div class="flex flex-col gap-3" id="footer-socials-list">
+<div class="footer-social-item" id="footer-social-instagram-item">
+<a class="footer-social-link" href="https://www.instagram.com/" id="footer-social-instagram-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">IG</span><span>Instagram</span></a>
 </div>
-<p class="hidden text-[11px] text-terracotta font-semibold mt-1" id="newsletter-toast">✓ Welcome to the VANA Wildlife Community!</p>
-</form>
+<div class="footer-social-item" id="footer-social-facebook-item">
+<a class="footer-social-link" href="https://www.facebook.com/" id="footer-social-facebook-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">f</span><span>Facebook</span></a>
+</div>
+<div class="footer-social-item" id="footer-social-tiktok-item">
+<a class="footer-social-link" href="https://www.tiktok.com/" id="footer-social-tiktok-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">♪</span><span>TikTok</span></a>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="pt-8 border-t border-sand/15 flex flex-col sm:flex-row justify-between items-center text-xs text-sand/60 space-y-4 sm:space-y-0">
@@ -2480,7 +2506,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   // ============================================================
   // HOVER DUPLICATE / DELETE ON REPEATABLE ITEMS
   // ============================================================
-  var DELETABLE_SELECTORS = [".work-grid > .project-card", ".quote-stage > .quote", ".client-grid > .client-cell", "#journalList > .journal-item", "#journalPageList > .journal-item", "#services-accordion > .acc-item"];
+  var DELETABLE_SELECTORS = [".work-grid > .project-card", ".quote-stage > .quote", ".client-grid > .client-cell", "#journalList > .journal-item", "#journalPageList > .journal-item", "#services-accordion > .acc-item", "#footer-socials-list > .footer-social-item"];
   function ensureItemActions(){
     DELETABLE_SELECTORS.forEach(function(sel){
       document.querySelectorAll(sel).forEach(function(item){
@@ -3810,7 +3836,114 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   // ============================================================
   // SAVE SETTINGS / EMBED CODE
   // ============================================================
+  // V5 #5 structure migration. Older localStorage settings contain the previous
+  // Area of Interest selector and Newsletter column, and applySettings() restores
+  // those snapshots over the source HTML. Normalize those legacy snapshots before
+  // saving/exporting so the Contact Us, footer socials, and Privacy Policy stay current.
+  function v5PrivacyContentMarkup(){
+    return '<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">'+
+      '<p class="text-xs uppercase tracking-widest text-terracotta font-bold">Legal</p>'+
+      '<h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest mt-2 mb-6">Privacy Policy</h1>'+
+      '<p class="text-slategreen leading-relaxed">VANA Earth &amp; Wildlife Foundation respects the privacy of people who visit this website. This notice describes, in general terms, how information shared through the website may be handled. Please review it against VANA’s actual practices before publication.</p>'+
+      '<div class="mt-10 space-y-8">'+
+      '<section data-ez-section="1"><h2 class="font-serif text-2xl font-bold text-forest mb-3">Information You Provide</h2><p class="text-slategreen leading-relaxed">If you contact VANA, you may choose to provide information such as your name, email address, subject, and message. Please avoid submitting confidential or sensitive information through a general inquiry form.</p></section>'+
+      '<section data-ez-section="1"><h2 class="font-serif text-2xl font-bold text-forest mb-3">How Information May Be Used</h2><p class="text-slategreen leading-relaxed">Information that VANA receives may be used to respond to questions, understand requests, coordinate conservation-related communications, and maintain the website. The Receiving Email shown on the Contact Us form is configured through the website editor.</p></section>'+
+      '<section data-ez-section="1"><h2 class="font-serif text-2xl font-bold text-forest mb-3">Forms and Communications</h2><p class="text-slategreen leading-relaxed">The current static contact form displays an on-page confirmation. Unless an email or form-delivery integration is configured separately, that confirmation alone does not mean a message has been transmitted or stored by VANA.</p></section>'+
+      '<section data-ez-section="1"><h2 class="font-serif text-2xl font-bold text-forest mb-3">Third-Party Services and Social Links</h2><p class="text-slategreen leading-relaxed">Links to social networks or other external websites are provided for convenience. Those services operate under their own privacy notices and practices.</p></section>'+
+      '<section data-ez-section="1"><h2 class="font-serif text-2xl font-bold text-forest mb-3">Updates to This Notice</h2><p class="text-slategreen leading-relaxed">This notice may be updated as the website and VANA’s practices evolve. The version published on this page should be reviewed periodically for accuracy.</p></section>'+
+      '</div><a class="inline-flex items-center mt-10 px-6 py-3 bg-forest hover:bg-moss text-cream text-xs font-bold uppercase tracking-wider rounded-full transition-colors" href="#hero" id="privacy-back-home">← Back to Homepage</a>'+
+      '</div>';
+  }
+
+  function v5FooterSocialMarkup(){
+    return '<div id="footer-socials-panel" class="md:col-span-4 space-y-4">'+
+      '<h4 class="font-serif font-bold text-lg text-cream mb-2" id="footer-socials-heading">Our Socials</h4>'+
+      '<p class="text-xs text-sand/70" id="footer-socials-description">Follow VANA for conservation news, rescue stories, and field updates.</p>'+
+      '<div class="flex flex-col gap-3" id="footer-socials-list">'+
+      '<div class="footer-social-item" id="footer-social-instagram-item"><a class="footer-social-link" href="https://www.instagram.com/" id="footer-social-instagram-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">IG</span><span>Instagram</span></a></div>'+
+      '<div class="footer-social-item" id="footer-social-facebook-item"><a class="footer-social-link" href="https://www.facebook.com/" id="footer-social-facebook-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">f</span><span>Facebook</span></a></div>'+
+      '<div class="footer-social-item" id="footer-social-tiktok-item"><a class="footer-social-link" href="https://www.tiktok.com/" id="footer-social-tiktok-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">♪</span><span>TikTok</span></a></div>'+
+      '</div></div>';
+  }
+
+  function ensureV5PageStructure(){
+    var main=document.getElementById("main");
+    if(main){
+      // Migrate old saved Contact Us HTML once; preserve current editable values
+      // whenever the field has already been migrated.
+      var oldInterest=main.querySelector("#contact-interest");
+      var receivingEmail=main.querySelector("#contact-receiving-email");
+      if(oldInterest && !receivingEmail){
+        var fieldWrap=oldInterest.parentElement;
+        if(fieldWrap){
+          fieldWrap.innerHTML='<label class="block text-xs uppercase font-bold text-forest mb-2">Receiving Email</label>'+
+            '<input class="w-full bg-sandlight border border-sand rounded-xl px-4 py-3 text-sm text-forest focus:outline-none focus:border-terracotta transition-colors" id="contact-receiving-email" placeholder="Set in Customize → Owner Email (for inquiries)" readonly="" type="email"/>';
+        }
+      }else if(receivingEmail){
+        var receiverLabel=receivingEmail.parentElement&&receivingEmail.parentElement.querySelector("label");
+        if(receiverLabel)receiverLabel.textContent="Receiving Email";
+      }
+
+      var privacy=main.querySelector("#page-privacy");
+      if(!privacy){
+        privacy=document.createElement("section");
+        privacy.id="page-privacy";
+        privacy.className="ez-page py-20 lg:py-28 bg-cream";
+        privacy.setAttribute("data-ez-section","1");
+        privacy.style.display="none";
+        privacy.innerHTML=v5PrivacyContentMarkup();
+        var home=main.querySelector("#homePage");
+        if(home&&home.parentNode)home.parentNode.insertBefore(privacy,home.nextSibling);
+        else main.appendChild(privacy);
+      }
+      if(privacy){
+        privacy.classList.remove("hidden");
+        if(/Replace this placeholder/i.test(privacy.textContent||""))privacy.innerHTML=v5PrivacyContentMarkup();
+        if(!privacy.querySelector("#privacy-back-home")){
+          var privacyContainer=privacy.querySelector(".max-w-4xl")||privacy;
+          var back=document.createElement("a");
+          back.id="privacy-back-home";
+          back.href="#hero";
+          back.className="inline-flex items-center mt-10 px-6 py-3 bg-forest hover:bg-moss text-cream text-xs font-bold uppercase tracking-wider rounded-full transition-colors";
+          back.textContent="← Back to Homepage";
+          privacyContainer.appendChild(back);
+        }
+        privacy.style.display=(typeof currentEzPage==="string"&&currentEzPage==="privacy")?"":"none";
+      }
+    }
+
+    // Migrate a previously saved Newsletter block into the Our Socials block.
+    var footer=document.querySelector(".site-footer")||document.querySelector("footer");
+    if(footer&&!footer.querySelector("#footer-socials-panel")){
+      var oldTitle=Array.prototype.slice.call(footer.querySelectorAll("h4")).find(function(el){return /monthly field dispatches|newsletter/i.test(el.textContent||"");});
+      var oldPanel=oldTitle&&oldTitle.parentElement;
+      if(!oldPanel){
+        var oldNewsletter=footer.querySelector("#newsletter-email");
+        var ancestor=oldNewsletter&&oldNewsletter.parentElement;
+        while(ancestor&&ancestor!==footer){
+          if(ancestor.classList&&ancestor.classList.contains("md:col-span-4")){oldPanel=ancestor;break;}
+          ancestor=ancestor.parentElement;
+        }
+      }
+      var temp=document.createElement("div");
+      temp.innerHTML=v5FooterSocialMarkup();
+      var newPanel=temp.firstElementChild;
+      if(oldPanel&&newPanel)oldPanel.parentNode.replaceChild(newPanel,oldPanel);
+      else{
+        var grids=Array.prototype.slice.call(footer.querySelectorAll("div"));
+        var footerGrid=grids.find(function(el){return el.classList&&el.classList.contains("grid")&&el.classList.contains("md:grid-cols-12");});
+        if(footerGrid&&newPanel)footerGrid.appendChild(newPanel);
+      }
+    }
+    if(typeof syncOwnerEmailDisplays==="function"){
+      var owner=document.getElementById("cpOwnerEmail");
+      syncOwnerEmailDisplays(owner?owner.value.trim():"");
+    }
+  }
+
   function collectSettings(){
+    ensureV5PageStructure();
+    syncOwnerEmailDisplays($("#cpOwnerEmail").value.trim());
     // Custom effects may mutate authored DOM immediately before a click handler runs.
     // MutationObserver repairs are asynchronous, so normalize the protected page
     // regions synchronously before serializing saved HTML.
@@ -3898,6 +4031,8 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     injectCustomEffects(customEffects);
     updateLastAppliedCustomCode();
     if(s.ownerEmail){ $("#cpOwnerEmail").value = s.ownerEmail; }
+    ensureV5PageStructure();
+    syncOwnerEmailDisplays($("#cpOwnerEmail").value.trim());
     if(s.stats){
       Object.keys(s.stats).forEach(function(key){
         var stat = document.querySelector('.stat[data-recolor-key="' + key.replace(/"/g, '\\"') + '"]');
@@ -3918,8 +4053,15 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   // Owner Email: auto-detect from the existing "Prefer email?" mailto link
   // on first load, then keep everything in sync going forward.
   function syncOwnerEmailDisplays(email){
+    email = String(email == null ? "" : email).trim();
+    var receiving = document.getElementById("contact-receiving-email");
+    if(receiving){
+      receiving.value = email;
+      receiving.defaultValue = email;
+      receiving.placeholder = email ? "" : "Set in Customize → Owner Email (for inquiries)";
+    }
     var link = document.querySelector(".contact-direct a[href^='mailto:']");
-    if(link){ link.setAttribute("href", "mailto:" + email); link.textContent = email; }
+    if(link && email){ link.setAttribute("href", "mailto:" + email); link.textContent = email; }
     $all(".fact-value").forEach(function(el){
       var prevLabel = el.previousElementSibling;
       if(prevLabel && prevLabel.classList.contains("fact-label") && /say hello/i.test(prevLabel.textContent)){
@@ -3931,7 +4073,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
   if(ownerEmailInput){
     ownerEmailInput.addEventListener("input", function(){
       var val = ownerEmailInput.value.trim();
-      if(val){ syncOwnerEmailDisplays(val); }
+      syncOwnerEmailDisplays(val);
       markUnsaved();
     });
   }
@@ -4252,6 +4394,8 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     } else if(saved){
       applySettings(saved, true);
     }
+    ensureV5PageStructure();
+    syncOwnerEmailDisplays(ownerEmailInput ? ownerEmailInput.value.trim() : "");
     // Settings can replace DOM regions; re-assert the complete Phase 1 editor surface.
     ensurePageElementIds();
     ensurePhase1EditableSurface();
