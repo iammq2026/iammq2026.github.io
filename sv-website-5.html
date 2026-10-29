@@ -1287,7 +1287,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 <p class="text-xs uppercase tracking-widest text-terracotta font-bold">Legal</p>
 <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest mt-2 mb-6">Privacy Policy</h1>
-<p class="text-slategreen leading-relaxed">VANA Earth &amp; Wildlife Foundation respects the privacy of people who visit this website. This notice describes, in general terms, how information shared through the website may be handled. Please review it against VANA’s actual practices before publication.</p>
+<p class="text-slategreen leading-relaxed">VANA Earth &amp; Wildlife Foundation respects the privacy of people who visit this website. This notice describes, in general terms, how information shared through the website may be handled.</p>
 <div class="mt-10 space-y-8">
 <section data-ez-section="1">
 <h2 class="font-serif text-2xl font-bold text-forest mb-3">Information You Provide</h2>
@@ -3844,7 +3844,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     return '<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">'+
       '<p class="text-xs uppercase tracking-widest text-terracotta font-bold">Legal</p>'+
       '<h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest mt-2 mb-6">Privacy Policy</h1>'+
-      '<p class="text-slategreen leading-relaxed">VANA Earth &amp; Wildlife Foundation respects the privacy of people who visit this website. This notice describes, in general terms, how information shared through the website may be handled. Please review it against VANA’s actual practices before publication.</p>'+
+      '<p class="text-slategreen leading-relaxed">VANA Earth &amp; Wildlife Foundation respects the privacy of people who visit this website. This notice describes, in general terms, how information shared through the website may be handled.</p>'+
       '<div class="mt-10 space-y-8">'+
       '<section data-ez-section="1"><h2 class="font-serif text-2xl font-bold text-forest mb-3">Information You Provide</h2><p class="text-slategreen leading-relaxed">If you contact VANA, you may choose to provide information such as your name, email address, subject, and message. Please avoid submitting confidential or sensitive information through a general inquiry form.</p></section>'+
       '<section data-ez-section="1"><h2 class="font-serif text-2xl font-bold text-forest mb-3">How Information May Be Used</h2><p class="text-slategreen leading-relaxed">Information that VANA receives may be used to respond to questions, understand requests, coordinate conservation-related communications, and maintain the website. The Receiving Email shown on the Contact Us form is configured through the website editor.</p></section>'+
@@ -4056,6 +4056,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     email = String(email == null ? "" : email).trim();
     var receiving = document.getElementById("contact-receiving-email");
     if(receiving){
+      receiving.setAttribute("value", email);
       receiving.value = email;
       receiving.defaultValue = email;
       receiving.placeholder = email ? "" : "Set in Customize → Owner Email (for inquiries)";
