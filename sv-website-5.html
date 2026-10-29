@@ -99,9 +99,36 @@
 .footer-social-mark{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid rgba(234,227,210,.32);border-radius:999px;color:#EAE3D2;flex:0 0 40px}
 .footer-social-mark svg{display:block;width:19px;height:19px}
 body.ez-edit-on #footer-socials-list>.footer-social-item:hover{outline:1px dashed rgba(201,161,90,.45);outline-offset:3px}
-footer.site-footer > .pt-8.border-t{max-width:80rem;width:100%;margin-left:auto;margin-right:auto;padding-left:1rem;padding-right:1rem;box-sizing:border-box}
-@media(min-width:640px){footer.site-footer > .pt-8.border-t{padding-left:1.5rem;padding-right:1.5rem}}
-@media(min-width:1024px){footer.site-footer > .pt-8.border-t{padding-left:2rem;padding-right:2rem}}
+/* Keep copyright text aligned to the same inner padding as the footer columns.
+   Draw the divider as an inset rule so it cannot stretch edge-to-edge when old
+   saved HTML or editor styles interfere with the row's own border. */
+footer.site-footer .footer-bottom-row{
+  position:relative !important;
+  width:100% !important;
+  max-width:80rem !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  padding:2rem 1rem 0 !important;
+  box-sizing:border-box !important;
+  border-top:0 !important;
+}
+footer.site-footer .footer-bottom-row::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:1rem;
+  right:1rem;
+  border-top:1px solid rgba(234,227,210,.15);
+  pointer-events:none;
+}
+@media(min-width:640px){
+  footer.site-footer .footer-bottom-row{padding-left:1.5rem !important;padding-right:1.5rem !important}
+  footer.site-footer .footer-bottom-row::before{left:1.5rem;right:1.5rem}
+}
+@media(min-width:1024px){
+  footer.site-footer .footer-bottom-row{padding-left:2rem !important;padding-right:2rem !important}
+  footer.site-footer .footer-bottom-row::before{left:2rem;right:2rem}
+}
 /* STORIES carousel + editor-only story management */
 #dispatches-stories-track .story-card{width:100%;box-sizing:border-box}
 #dispatches-stories-track .story-card[data-story-active="false"]{display:none!important}
@@ -1367,7 +1394,7 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 </div>
 </div>
 </div>
-<div class="pt-8 border-t border-sand/15 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col sm:flex-row justify-between items-center text-xs text-sand/60 space-y-4 sm:space-y-0">
+<div class="footer-bottom-row pt-8 border-t border-sand/15 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col sm:flex-row justify-between items-center text-xs text-sand/60 space-y-4 sm:space-y-0">
 <p>© 2026 VANA Earth &amp; Wildlife Foundation. All rights reserved.</p>
 <div class="flex space-x-6">
 <a class="hover:text-cream transition-colors" href="#"><i class="w-4 h-4" data-lucide="instagram"></i></a>
@@ -4018,7 +4045,9 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       v5NormalizeSocialLinks(footer);
       var bottomRow=footer.querySelector("div.pt-8.border-t");
       if(bottomRow){
-        bottomRow.classList.add("max-w-7xl","mx-auto","px-4","sm:px-6","lg:px-8","w-full");
+        bottomRow.classList.add("footer-bottom-row","max-w-7xl","mx-auto","px-4","sm:px-6","lg:px-8","w-full");
+        // Keep structural sizing in sync with the CSS rule. The inset divider itself
+        // is drawn by ::before, not by the row border, so it follows content padding.
         bottomRow.style.maxWidth="80rem";
         bottomRow.style.width="100%";
         bottomRow.style.marginLeft="auto";
