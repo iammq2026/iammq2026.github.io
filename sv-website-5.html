@@ -91,13 +91,17 @@
   border-top-right-radius:16px !important;
   overflow:hidden !important;
 }
-/* V5 #5: footer social links are compact, accessible and repeatable in Edit Page. */
-#footer-socials-list{display:flex;flex-direction:column;gap:12px}
-.footer-social-item{position:relative}
-.footer-social-link{display:inline-flex;align-items:center;gap:12px;color:rgba(245,241,232,.88);font-size:13px;text-decoration:none;transition:color .15s ease}
-.footer-social-link:hover{color:#C86D3B}
-.footer-social-mark{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid rgba(234,227,210,.32);border-radius:999px;color:#EAE3D2;font-weight:700;font-size:11px;flex:0 0 30px}
+/* V5 #5 refinements: icon-only horizontal socials and padded footer bottom row. */
+#footer-socials-list{display:flex !important;flex-direction:row !important;align-items:center;gap:14px;flex-wrap:wrap}
+.footer-social-item{position:relative;flex:0 0 auto}
+.footer-social-link{display:inline-flex;align-items:center;justify-content:center;gap:0;width:42px;height:42px;color:rgba(245,241,232,.9);text-decoration:none;transition:color .15s ease,background-color .15s ease;border-radius:999px}
+.footer-social-link:hover{color:#C86D3B;background:rgba(234,227,210,.08)}
+.footer-social-mark{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid rgba(234,227,210,.32);border-radius:999px;color:#EAE3D2;flex:0 0 40px}
+.footer-social-mark svg{display:block;width:19px;height:19px}
 body.ez-edit-on #footer-socials-list>.footer-social-item:hover{outline:1px dashed rgba(201,161,90,.45);outline-offset:3px}
+footer.site-footer > .pt-8.border-t{max-width:80rem;width:100%;margin-left:auto;margin-right:auto;padding-left:1rem;padding-right:1rem;box-sizing:border-box}
+@media(min-width:640px){footer.site-footer > .pt-8.border-t{padding-left:1.5rem;padding-right:1.5rem}}
+@media(min-width:1024px){footer.site-footer > .pt-8.border-t{padding-left:2rem;padding-right:2rem}}
 /* STORIES carousel + editor-only story management */
 #dispatches-stories-track .story-card{width:100%;box-sizing:border-box}
 #dispatches-stories-track .story-card[data-story-active="false"]{display:none!important}
@@ -1351,19 +1355,19 @@ body.wildlife-scheme .text-forest{color:var(--w-ink)!important} body.wildlife-sc
 <p class="text-xs text-sand/70" id="footer-socials-description">Follow VANA for conservation news, rescue stories, and field updates.</p>
 <div class="flex flex-col gap-3" id="footer-socials-list">
 <div class="footer-social-item" id="footer-social-instagram-item">
-<a class="footer-social-link" href="https://www.instagram.com/" id="footer-social-instagram-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">IG</span><span>Instagram</span></a>
+<a aria-label="Instagram" class="footer-social-link" href="https://www.instagram.com/" id="footer-social-instagram-link" rel="noopener noreferrer" target="_blank" title="Instagram"><span aria-hidden="true" class="footer-social-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle></svg></span></a>
 </div>
 <div class="footer-social-item" id="footer-social-facebook-item">
-<a class="footer-social-link" href="https://www.facebook.com/" id="footer-social-facebook-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">f</span><span>Facebook</span></a>
+<a aria-label="Facebook" class="footer-social-link" href="https://www.facebook.com/" id="footer-social-facebook-link" rel="noopener noreferrer" target="_blank" title="Facebook"><span aria-hidden="true" class="footer-social-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.3-1.5 1.6-1.5h1.6V3.7c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.2v3.1H10V21h3.5z"></path></svg></span></a>
 </div>
 <div class="footer-social-item" id="footer-social-tiktok-item">
-<a class="footer-social-link" href="https://www.tiktok.com/" id="footer-social-tiktok-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">♪</span><span>TikTok</span></a>
+<a aria-label="TikTok" class="footer-social-link" href="https://www.tiktok.com/" id="footer-social-tiktok-link" rel="noopener noreferrer" target="_blank" title="TikTok"><span aria-hidden="true" class="footer-social-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 8.1a7.4 7.4 0 0 1-4.4-1.5v7.2a5.7 5.7 0 1 1-4.9-5.6v3.7a2.1 2.1 0 1 0 1.5 2V2.5h3.5c.2 2.8 1.8 4.7 4.4 5.1z"></path></svg></span></a>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="pt-8 border-t border-sand/15 flex flex-col sm:flex-row justify-between items-center text-xs text-sand/60 space-y-4 sm:space-y-0">
+<div class="pt-8 border-t border-sand/15 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col sm:flex-row justify-between items-center text-xs text-sand/60 space-y-4 sm:space-y-0">
 <p>© 2026 VANA Earth &amp; Wildlife Foundation. All rights reserved.</p>
 <div class="flex space-x-6">
 <a class="hover:text-cream transition-colors" href="#"><i class="w-4 h-4" data-lucide="instagram"></i></a>
@@ -1703,11 +1707,56 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 
         function handleContactSubmit(event) {
             event.preventDefault();
+            const form = document.getElementById('contact-form');
+            const fieldValue = (id) => {
+                const el = document.getElementById(id);
+                return el ? String(el.value || '').trim() : '';
+            };
+            const recipient = fieldValue('contact-receiving-email') || fieldValue('cpOwnerEmail');
+            if (!recipient) {
+                alert('Please set Owner Email (for inquiries) in the Customize panel before sending an inquiry.');
+                return;
+            }
+
+            const senderName = fieldValue('contact-name');
+            const senderEmail = fieldValue('contact-email');
+            const subject = fieldValue('contact-subject') || 'VANA Website Inquiry';
+            const message = fieldValue('contact-message');
+            const body = [
+                'Name: ' + senderName,
+                'Reply-to Email: ' + senderEmail,
+                '',
+                'Message:',
+                message
+            ].join('\n');
+            const params = new URLSearchParams();
+            params.set('view', 'cm');
+            params.set('fs', '1');
+            params.set('to', recipient);
+            params.set('su', subject);
+            params.set('body', body);
+            const composeUrl = 'https://mail.google.com/mail/?' + params.toString();
+            const mailtoUrl = 'mailto:' + encodeURIComponent(recipient) +
+                '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+            // Open immediately within the submit gesture so popup blockers are less likely to block it.
+            const composeTab = window.open(composeUrl, '_blank');
+            if (composeTab) {
+                try { composeTab.opener = null; } catch (err) {}
+            } else {
+                // Fallback to the default mail client if the browser blocks the new tab.
+                window.location.href = mailtoUrl;
+            }
+
             const success = document.getElementById('contact-success');
-            success.classList.remove('hidden');
-            document.getElementById('contact-form').reset();
+            if (success) success.classList.remove('hidden');
+            const successText = success && success.querySelector('span');
+            if (successText) successText.textContent = 'Your email draft is ready. Review it in the compose window, then click Send.';
+            if (form) form.reset();
+            const receiving = document.getElementById('contact-receiving-email');
+            if (receiving) receiving.value = recipient;
             setTimeout(() => {
-                success.classList.add('hidden');
+                if (success) success.classList.add('hidden');
             }, 6000);
         }
 
@@ -3860,10 +3909,40 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       '<h4 class="font-serif font-bold text-lg text-cream mb-2" id="footer-socials-heading">Our Socials</h4>'+
       '<p class="text-xs text-sand/70" id="footer-socials-description">Follow VANA for conservation news, rescue stories, and field updates.</p>'+
       '<div class="flex flex-col gap-3" id="footer-socials-list">'+
-      '<div class="footer-social-item" id="footer-social-instagram-item"><a class="footer-social-link" href="https://www.instagram.com/" id="footer-social-instagram-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">IG</span><span>Instagram</span></a></div>'+
-      '<div class="footer-social-item" id="footer-social-facebook-item"><a class="footer-social-link" href="https://www.facebook.com/" id="footer-social-facebook-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">f</span><span>Facebook</span></a></div>'+
-      '<div class="footer-social-item" id="footer-social-tiktok-item"><a class="footer-social-link" href="https://www.tiktok.com/" id="footer-social-tiktok-link" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="footer-social-mark">♪</span><span>TikTok</span></a></div>'+
+      '<div class="footer-social-item" id="footer-social-instagram-item"><a aria-label="Instagram" class="footer-social-link" href="https://www.instagram.com/" id="footer-social-instagram-link" rel="noopener noreferrer" target="_blank" title="Instagram"><span aria-hidden="true" class="footer-social-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle></svg></span></a></div>'+
+      '<div class="footer-social-item" id="footer-social-facebook-item"><a aria-label="Facebook" class="footer-social-link" href="https://www.facebook.com/" id="footer-social-facebook-link" rel="noopener noreferrer" target="_blank" title="Facebook"><span aria-hidden="true" class="footer-social-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.3-1.5 1.6-1.5h1.6V3.7c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.2v3.1H10V21h3.5z"></path></svg></span></a></div>'+
+      '<div class="footer-social-item" id="footer-social-tiktok-item"><a aria-label="TikTok" class="footer-social-link" href="https://www.tiktok.com/" id="footer-social-tiktok-link" rel="noopener noreferrer" target="_blank" title="TikTok"><span aria-hidden="true" class="footer-social-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 8.1a7.4 7.4 0 0 1-4.4-1.5v7.2a5.7 5.7 0 1 1-4.9-5.6v3.7a2.1 2.1 0 1 0 1.5 2V2.5h3.5c.2 2.8 1.8 4.7 4.4 5.1z"></path></svg></span></a></div>'+
       '</div></div>';
+  }
+
+  function v5NormalizeSocialLinks(footer){
+    if(!footer)return;
+    var platformIcons={
+      instagram:"<svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\"></rect><circle cx=\"12\" cy=\"12\" r=\"4\"></circle><circle cx=\"17.5\" cy=\"6.5\" r=\"1\" fill=\"currentColor\" stroke=\"none\"></circle></svg>",
+      facebook:"<svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.3-1.5 1.6-1.5h1.6V3.7c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.2v3.1H10V21h3.5z\"></path></svg>",
+      tiktok:"<svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M19.6 8.1a7.4 7.4 0 0 1-4.4-1.5v7.2a5.7 5.7 0 1 1-4.9-5.6v3.7a2.1 2.1 0 1 0 1.5 2V2.5h3.5c.2 2.8 1.8 4.7 4.4 5.1z\"></path></svg>"
+    };
+    var links=Array.prototype.slice.call(footer.querySelectorAll("#footer-socials-list .footer-social-link"));
+    links.forEach(function(link){
+      var hint=((link.getAttribute("aria-label")||"")+" "+(link.id||"")+" "+(link.textContent||"")).toLowerCase();
+      var platform=/instagram|insta/.test(hint)?"instagram":(/facebook/.test(hint)?"facebook":(/tiktok|tik tok/.test(hint)?"tiktok":""));
+      if(!platform)return;
+      var labels={instagram:"Instagram",facebook:"Facebook",tiktok:"TikTok"};
+      link.setAttribute("aria-label",labels[platform]);
+      link.setAttribute("title",labels[platform]);
+      link.setAttribute("target","_blank");
+      link.setAttribute("rel","noopener noreferrer");
+      link.classList.add("footer-social-link");
+      var mark=link.querySelector(".footer-social-mark");
+      if(!mark){mark=document.createElement("span");mark.className="footer-social-mark";link.insertBefore(mark,link.firstChild);}
+      mark.setAttribute("aria-hidden","true");
+      mark.innerHTML=platformIcons[platform];
+      Array.prototype.slice.call(link.children).forEach(function(child){
+        if(child!==mark)child.remove();
+      });
+    });
+    var list=footer.querySelector("#footer-socials-list");
+    if(list){list.style.display="flex";list.style.flexDirection="row";list.style.alignItems="center";list.style.gap="14px";list.style.flexWrap="wrap";}
   }
 
   function ensureV5PageStructure(){
@@ -3933,6 +4012,20 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
         var grids=Array.prototype.slice.call(footer.querySelectorAll("div"));
         var footerGrid=grids.find(function(el){return el.classList&&el.classList.contains("grid")&&el.classList.contains("md:grid-cols-12");});
         if(footerGrid&&newPanel)footerGrid.appendChild(newPanel);
+      }
+    }
+    if(footer){
+      v5NormalizeSocialLinks(footer);
+      var bottomRow=footer.querySelector("div.pt-8.border-t");
+      if(bottomRow){
+        bottomRow.classList.add("max-w-7xl","mx-auto","px-4","sm:px-6","lg:px-8","w-full");
+        bottomRow.style.maxWidth="80rem";
+        bottomRow.style.width="100%";
+        bottomRow.style.marginLeft="auto";
+        bottomRow.style.marginRight="auto";
+        bottomRow.style.paddingLeft="1rem";
+        bottomRow.style.paddingRight="1rem";
+        bottomRow.style.boxSizing="border-box";
       }
     }
     if(typeof syncOwnerEmailDisplays==="function"){
