@@ -680,6 +680,53 @@ body.wildlife-scheme #dispatches-stories-track .story-card [class~="w-10"][class
   background-color:var(--w-accent)!important;
   color:var(--w-on-accent)!important;
 }
+
+/* PHASE 3 — Ivory Editorial: keep simulator emphasis, ecosystem tabs, and story stars
+   bound to the active global palette. Only presentation is changed; no event logic. */
+
+/* Give the simulator's impact icon badge a legible, palette-matched foreground/background pair.
+   The prior 20% tint could leave an accent icon nearly the same shade as its dark green surface. */
+body.wildlife-scheme #calculator [class~="bg-terracotta/20"]{
+  background-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme #calculator [class~="bg-terracotta/20"] i,
+body.wildlife-scheme #calculator [class~="bg-terracotta/20"] svg,
+body.wildlife-scheme #calculator [class~="bg-terracotta/20"] [data-lucide]{
+  color:var(--w-on-accent)!important;
+  stroke:currentColor!important;
+}
+/* Any button hover that used the old terracotta-dark class should use the palette hover token. */
+body.wildlife-scheme #calculator [class~="hover:bg-terracottadark"]:hover,
+body.wildlife-scheme #calculator #calc-cta-button:hover{
+  background-color:var(--w-hover)!important;
+  color:var(--w-on-brand)!important;
+}
+body.wildlife-scheme #calculator #calc-cta-button{
+  background-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+  border:1px solid color-mix(in srgb,var(--w-accent) 75%,var(--w-line))!important;
+}
+body.wildlife-scheme #calculator #calc-cta-button *{
+  color:var(--w-on-accent)!important;
+}
+
+/* Explicitly suppress SVG star strokes on both the source icon and generated Lucide paths. */
+body.wildlife-scheme #dispatches-stories-track .story-card svg.lucide-star,
+body.wildlife-scheme #dispatches-stories-track .story-card [data-lucide="star"],
+body.wildlife-scheme #dispatches-stories-track .story-card i[data-lucide="star"]{
+  color:var(--w-accent)!important;
+  fill:currentColor!important;
+  stroke:none!important;
+  outline:none!important;
+  filter:none!important;
+}
+body.wildlife-scheme #dispatches-stories-track .story-card svg.lucide-star *,
+body.wildlife-scheme #dispatches-stories-track .story-card [data-lucide="star"] *,
+body.wildlife-scheme #dispatches-stories-track .story-card i[data-lucide="star"] *{
+  fill:currentColor!important;
+  stroke:none!important;
+}
 .site-header-inner{position:relative;}
 .site-nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);white-space:nowrap;}
 .logo-img{width:190px;height:42px;max-width:none;object-fit:contain;display:block;}
