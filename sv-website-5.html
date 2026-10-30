@@ -720,7 +720,7 @@ body.wildlife-scheme #calculator #calc-cta-button *{
 
 /* Phase 3 frame refinement: use each scheme's surface token so the CTA and
    selected controls do not blend into the large calculator workspace. */
-body.wildlife-scheme #calculator > .max-w-5xl > #calculator-main-frame{
+body.wildlife-scheme #calculator > .max-w-5xl > [data-ez-role="impact-simulator-frame"]{
   background-color:var(--w-surface)!important;
   border-color:color-mix(in srgb,var(--w-accent) 24%,var(--w-line))!important;
 }
@@ -4310,6 +4310,21 @@ if(!(el.hasAttribute&&el.hasAttribute('data-ez-editor-ignore'))&&!preserveIntera
   function ensureV5PageStructure(){
     var main=document.getElementById("main");
     if(main){
+      // Keep the Interactive Impact Simulator inspectable even when older saved
+      // mainHTML is restored from browser storage. Preserve any existing frame ID
+      // (including older generated IDs) so existing editor references are not broken.
+      var calculator=main.querySelector("#calculator");
+      if(calculator){
+        calculator.setAttribute("data-ez-phase1-readonly","true");
+        calculator.setAttribute("data-ez-inspect-only","true");
+        var calculatorFrame=calculator.querySelector(".max-w-5xl > .bg-forestlight");
+        if(calculatorFrame){
+          calculatorFrame.setAttribute("data-ez-inspect-only","true");
+          calculatorFrame.setAttribute("data-ez-role","impact-simulator-frame");
+          if(!calculatorFrame.id)calculatorFrame.id="calculator-main-frame";
+        }
+      }
+
       // Migrate old saved Contact Us HTML once; preserve current editable values
       // whenever the field has already been migrated.
       var oldInterest=main.querySelector("#contact-interest");
