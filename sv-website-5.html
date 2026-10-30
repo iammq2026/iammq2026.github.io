@@ -4323,6 +4323,9 @@ if(!(el.hasAttribute&&el.hasAttribute('data-ez-editor-ignore'))&&!preserveIntera
           calculatorFrame.setAttribute("data-ez-role","impact-simulator-frame");
           if(!calculatorFrame.id)calculatorFrame.id="calculator-main-frame";
         }
+        calculator.querySelectorAll(".editable-text,.ez-editable-leaf,[contenteditable]").forEach(function(el){
+          el.setAttribute("contenteditable","false");
+        });
       }
 
       // Migrate old saved Contact Us HTML once; preserve current editable values
