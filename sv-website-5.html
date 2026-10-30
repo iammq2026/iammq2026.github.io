@@ -917,6 +917,117 @@ body.wildlife-scheme #dispatches-stories-track .story-card [class~="w-10"][class
   color:var(--w-on-accent)!important;
 }
 
+/* PHASE 5 — Terracotta theme refinement.
+   Token-driven rules preserve behavior across all existing color schemes. */
+
+/* Desktop and mobile navigation: visible foreground, palette-aware hover/focus. */
+body.wildlife-scheme #navbar .site-nav a,
+body.wildlife-scheme #mobile-menu a{
+  color:var(--w-ink)!important;
+  opacity:1!important;
+}
+body.wildlife-scheme #navbar .site-nav a:hover,
+body.wildlife-scheme #mobile-menu a:hover{
+  color:var(--w-accent)!important;
+  text-decoration-color:currentColor!important;
+}
+body.wildlife-scheme #navbar .site-nav a:focus-visible,
+body.wildlife-scheme #mobile-menu a:focus-visible{
+  outline:2px solid var(--w-accent)!important;
+  outline-offset:4px;
+}
+
+/* Hero featured product action: selected scheme fill + matching accessible text/icon. */
+body.wildlife-scheme #hero [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"]{
+  background-color:var(--w-accent)!important;
+  border-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme #hero [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"] :is(span,i,svg,.lucide,[data-lucide]){
+  color:var(--w-on-accent)!important;
+  stroke:currentColor!important;
+}
+body.wildlife-scheme #hero [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"]:hover{
+  background-color:var(--w-hover)!important;
+  border-color:var(--w-hover)!important;
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme #hero [data-ez-role="hero-featured-animal"] [data-commerce-action="view-product"]:hover :is(span,i,svg,.lucide,[data-lucide]){
+  color:var(--w-on-accent)!important;
+}
+
+/* Ensure all accent-filled actions with legacy cream text use the current scheme foreground. */
+body.wildlife-scheme .bg-terracotta.text-cream,
+body.wildlife-scheme .bg-terracotta.text-cream :is(span,strong,i,svg,.lucide,[data-lucide]){
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme .bg-terracotta.text-cream :is(i,svg,.lucide,[data-lucide]){
+  stroke:currentColor!important;
+}
+
+/* Four statistics share the selected scheme statistic token and understated borders. */
+body.wildlife-scheme section.bg-sandlight.border-b .grid.text-center > div{
+  border-color:color-mix(in srgb,var(--w-line) 14%,transparent)!important;
+  box-shadow:0 1px 2px rgba(0,0,0,.035)!important;
+}
+body.wildlife-scheme section.bg-sandlight.border-b .grid.text-center > div > .font-serif{
+  color:var(--w-stat)!important;
+  font-weight:700!important;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Simulator frame, selected frequency/amount, and impact icon badge follow the palette. */
+body.wildlife-scheme #calculator #calculator-main-frame{
+  background-color:var(--w-brand-surface)!important;
+  border-color:color-mix(in srgb,var(--w-accent) 20%,var(--w-line))!important;
+}
+body.wildlife-scheme #calculator [data-calc-frequency][aria-pressed="true"],
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn[aria-pressed="true"]{
+  background-color:var(--w-accent)!important;
+  border-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn[aria-pressed="true"] :is(span,i,svg,.lucide,[data-lucide]){
+  color:var(--w-on-accent)!important;
+  stroke:currentColor!important;
+}
+body.wildlife-scheme #calculator [class~="bg-terracotta/20"]{
+  background-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme #calculator [class~="bg-terracotta/20"] :is(i,svg,.lucide,[data-lucide]){
+  color:var(--w-on-accent)!important;
+  stroke:currentColor!important;
+}
+
+/* Priority Ecosystems active tab uses the current theme, not a hard-coded orange. */
+body.wildlife-scheme #habitats #habitat-tabs .hab-tab.tab-active{
+  background-color:var(--w-accent)!important;
+  border-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme #habitats #habitat-tabs .hab-tab:not(.tab-active){
+  color:var(--w-muted)!important;
+  border-color:var(--w-line)!important;
+}
+
+/* Testimonial stars are filled accent icons without an unwanted SVG stroke/outline. */
+body.wildlife-scheme #dispatches-stories-track :is(svg.lucide-star,[data-lucide="star"],i[data-lucide="star"]){
+  color:var(--w-accent)!important;
+  fill:currentColor!important;
+  stroke:none!important;
+  outline:none!important;
+  filter:none!important;
+}
+body.wildlife-scheme #dispatches-stories-track :is(svg.lucide-star,[data-lucide="star"],i[data-lucide="star"]) *{
+  fill:currentColor!important;
+  stroke:none!important;
+}
+body.wildlife-scheme #dispatches-stories-track .story-card [class~="w-10"][class~="h-10"][class~="rounded-full"]{
+  background-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+}
+
 .site-header-inner{position:relative;}
 .site-nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);white-space:nowrap;}
 .logo-img{width:190px;height:42px;max-width:none;object-fit:contain;display:block;}
@@ -3691,7 +3802,7 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     scheme2: { "--color-bg":"#0A0A0A", "--color-surface":"#141414", "--color-ink":"#F2F2F0", "--color-accent":"#C9A15A", "--color-line":"rgba(242,242,240,.16)", "--color-soft":"#141414", "--color-brand-bg":"#0A0A0A", "--color-brand-surface":"#1C1C1C", "--color-on-brand":"#F2F2F0", "--color-hover":"#A9823B", "--color-muted":"#B6B3AA", "--color-stat":"#C9A15A", "--color-on-accent":"#171310" },
     scheme3: { "--color-bg":"#F7F4EE", "--color-surface":"#FFFFFF", "--color-ink":"#1C1B18", "--color-accent":"#2F5D50", "--color-line":"rgba(28,27,24,.14)", "--color-soft":"#F1ECE3", "--color-brand-bg":"#1F4B3F", "--color-brand-surface":"#2F5D50", "--color-on-brand":"#FAF7F1", "--color-hover":"#23483C", "--color-muted":"#66756B", "--color-stat":"#2F5D50", "--color-on-accent":"#FFFFFF" },
     scheme4: { "--color-bg":"#0D0B14", "--color-surface":"#17131F", "--color-ink":"#F0EDF5", "--color-accent":"#B69AE6", "--color-line":"rgba(240,237,245,.16)", "--color-soft":"#17131F", "--color-brand-bg":"#0D0B14", "--color-brand-surface":"#251D33", "--color-on-brand":"#F0EDF5", "--color-hover":"#7654B5", "--color-muted":"#B7ADC8", "--color-stat":"#B69AE6", "--color-on-accent":"#0D0B14" },
-    scheme5: { "--color-bg":"#171310", "--color-surface":"#211B16", "--color-ink":"#F5EEE6", "--color-accent":"#CE9155", "--color-line":"rgba(245,238,230,.16)", "--color-soft":"#211B16", "--color-brand-bg":"#171310", "--color-brand-surface":"#2B211A", "--color-on-brand":"#F5EEE6", "--color-hover":"#A96739", "--color-muted":"#C7B9AA", "--color-stat":"#CE9155", "--color-on-accent":"#171310" }
+    scheme5: { "--color-bg":"#171310", "--color-surface":"#211B16", "--color-ink":"#F5EEE6", "--color-accent":"#D5A06F", "--color-line":"rgba(245,238,230,.16)", "--color-soft":"#211B16", "--color-brand-bg":"#171310", "--color-brand-surface":"#2B211A", "--color-on-brand":"#F5EEE6", "--color-hover":"#E2AD7D", "--color-muted":"#C7B9AA", "--color-stat":"#D5A06F", "--color-on-accent":"#171310" }
   };
   var schemeTokenMap = {
     "--w-bg":"--color-bg",
