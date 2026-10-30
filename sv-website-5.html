@@ -762,6 +762,30 @@ body.ez-edit-on [data-ez-inspect-only="true"] *{
 }
 
 
+/* Final Phase 3 polish — lighten the four simulator icons while retaining each
+   scheme's hue. Mixing the accent with its on-brand foreground creates a soft
+   green for Ivory, pale gold for Gold Noir, pale blue for Blue, etc. */
+body.wildlife-scheme #calculator{
+  --w-calculator-icon:color-mix(in srgb,var(--w-accent) 35%,var(--w-on-brand));
+}
+body.wildlife-scheme #calculator #calc-impact-main-icon-wrap,
+body.wildlife-scheme #calculator #calc-metric-icon-1-wrap,
+body.wildlife-scheme #calculator #calc-metric-icon-2-wrap,
+body.wildlife-scheme #calculator #calc-metric-icon-3-wrap{
+  color:var(--w-calculator-icon)!important;
+}
+body.wildlife-scheme #calculator #calc-impact-main-icon-wrap i,
+body.wildlife-scheme #calculator #calc-impact-main-icon-wrap svg,
+body.wildlife-scheme #calculator #calc-metric-icon-1-wrap i,
+body.wildlife-scheme #calculator #calc-metric-icon-1-wrap svg,
+body.wildlife-scheme #calculator #calc-metric-icon-2-wrap i,
+body.wildlife-scheme #calculator #calc-metric-icon-2-wrap svg,
+body.wildlife-scheme #calculator #calc-metric-icon-3-wrap i,
+body.wildlife-scheme #calculator #calc-metric-icon-3-wrap svg{
+  color:var(--w-calculator-icon)!important;
+  stroke:currentColor!important;
+}
+
 /* Explicitly suppress SVG star strokes on both the source icon and generated Lucide paths. */
 body.wildlife-scheme #dispatches-stories-track .story-card svg.lucide-star,
 body.wildlife-scheme #dispatches-stories-track .story-card [data-lucide="star"],
