@@ -504,7 +504,7 @@ body.ez-edit-on .ez-add-btn{display:flex;}
 </style><style id="wildlife-editor-scheme-overrides">
 /* Scheme tokens are populated inline on BODY by applyScheme()/settings restoration.
    Each token has one semantic job so dark schemes keep dark surfaces and light text. */
-body.wildlife-scheme{--w-bg:#FAF7F2;--w-surface:#FFFFFF;--w-ink:#112217;--w-accent:#C86D3B;--w-soft:#F5F1E8;--w-line:#EAE3D2;--w-brand-bg:#112217;--w-brand-surface:#1B3324;--w-on-brand:#FAF7F2;--w-hover:#2E4E3F;--w-muted:#66756B;--w-stat:#A84E2C;--w-on-accent:#112217;}
+body.wildlife-scheme{--w-bg:#FAF7F2;--w-surface:#FFFFFF;--w-ink:#112217;--w-accent:#C86D3B;--w-soft:#F5F1E8;--w-line:#EAE3D2;--w-brand-bg:#112217;--w-brand-surface:#1B3324;--w-on-brand:#FAF7F2;--w-hover:#2E4E3F;--w-muted:#66756B;--w-stat:#A84E2C;--w-on-accent:#112217;--w-icon-light:color-mix(in srgb,var(--w-accent) 35%,var(--w-on-brand));}
 body.wildlife-scheme .bg-cream{background-color:var(--w-bg)!important}
 body.wildlife-scheme .bg-white{background-color:var(--w-surface)!important}
 /* PHASE 2 — Gold Noir contrast, navigation and selection refinements.
@@ -591,6 +591,19 @@ body.wildlife-scheme .text-cream{color:var(--w-on-brand)!important}
 body.wildlife-scheme .text-terracotta{color:var(--w-accent)!important}
 body.wildlife-scheme .text-slategreen{color:var(--w-muted)!important}
 body.wildlife-scheme .text-moss{color:var(--w-accent)!important}
+
+/* GLOBAL LIGHT ICON TREATMENT
+   Accent-colored icons on dark brand surfaces use a lighter tint of the active
+   scheme accent. Icons on light cards retain the darker accent for contrast. */
+body.wildlife-scheme :is(#hero,.site-footer,.bg-forest,.bg-forestlight,[class~="bg-forest/80"],[class~="bg-forestlight/90"]) :is(i,svg,[data-lucide]).text-terracotta,
+body.wildlife-scheme :is(#hero,.site-footer,.bg-forest,.bg-forestlight,[class~="bg-forest/80"],[class~="bg-forestlight/90"]) :is(i,svg,[data-lucide]).text-moss,
+body.wildlife-scheme :is(#hero,.site-footer,.bg-forest,.bg-forestlight,[class~="bg-forest/80"],[class~="bg-forestlight/90"]) .text-terracotta :is(i,svg,[data-lucide]),
+body.wildlife-scheme :is(#hero,.site-footer,.bg-forest,.bg-forestlight,[class~="bg-forest/80"],[class~="bg-forestlight/90"]) .text-moss :is(i,svg,[data-lucide]),
+body.wildlife-scheme :is(#hero,.site-footer,.bg-forest,.bg-forestlight,[class~="bg-forest/80"],[class~="bg-forestlight/90"]) :is(i,svg,[data-lucide]).fill-terracotta{
+  color:var(--w-icon-light)!important;
+  stroke:currentColor!important;
+}
+
 body.wildlife-scheme .border-sand{border-color:var(--w-line)!important}
 body.wildlife-scheme [class~="border-sand/80"]{border-color:color-mix(in srgb,var(--w-line) 80%,transparent)!important}
 body.wildlife-scheme [class~="border-sand/50"]{border-color:color-mix(in srgb,var(--w-line) 50%,transparent)!important}
@@ -766,7 +779,7 @@ body.ez-edit-on [data-ez-inspect-only="true"] *{
    scheme's hue. Mixing the accent with its on-brand foreground creates a soft
    green for Ivory, pale gold for Gold Noir, pale blue for Blue, etc. */
 body.wildlife-scheme #calculator{
-  --w-calculator-icon:color-mix(in srgb,var(--w-accent) 35%,var(--w-on-brand));
+  --w-calculator-icon:var(--w-icon-light);
 }
 body.wildlife-scheme #calculator #calc-impact-main-icon-wrap,
 body.wildlife-scheme #calculator #calc-metric-icon-1-wrap,
