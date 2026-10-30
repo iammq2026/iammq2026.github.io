@@ -355,16 +355,17 @@ body:not(.ez-edit-on) .item-actions{display:none !important;}
   #customizePanel{left:16px;right:16px;bottom:16px;width:auto;}
 }
 
-/* BAGONG PANEL — floating Customize frame only.
-   Only the outer frame and its four existing header controls are restyled.
-   All editor body controls, page lists, color swatches, and section styles stay intact. */
+/* BAGONG PANEL — reference-matched floating Customize frame.
+   290px open frame / 56px collapsed tile. Only the outer panel frame and its
+   four existing header controls are styled here; cpBody content is untouched. */
 #customizePanel{
-  width:240px;
-  padding:12px 12px 14px;
+  box-sizing:border-box;
+  width:290px;
+  padding:18px 20px 20px;
   border-radius:14px;
   background:#141414;
   border:1px solid rgba(255,255,255,.14);
-  box-shadow:0 18px 46px rgba(0,0,0,.50);
+  box-shadow:0 24px 60px rgba(0,0,0,.55);
 }
 #customizePanel .cp-head{
   display:block;
@@ -374,7 +375,7 @@ body:not(.ez-edit-on) .item-actions{display:none !important;}
   display:block;
   margin:1px 0 8px;
   color:#f2f2f0;
-  font-size:10px;
+  font-size:11px;
   line-height:1;
   font-weight:700;
   letter-spacing:.08em;
@@ -391,21 +392,22 @@ body:not(.ez-edit-on) .item-actions{display:none !important;}
 #customizePanel .cp-collapse-btn,
 #customizePanel .cp-history-btn,
 #customizePanel .cp-toggle{
+  box-sizing:border-box;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:2px;
+  gap:1px;
   min-width:0;
   width:100%;
-  height:36px;
-  padding:3px 1px;
+  height:38px;
+  padding:3px 2px;
   border:1px solid rgba(255,255,255,.18);
   border-radius:999px;
   background:transparent;
   color:#f2f2f0;
   font-family:inherit;
-  font-size:8px;
+  font-size:8.5px;
   font-weight:600;
   line-height:1;
   white-space:nowrap;
@@ -414,7 +416,7 @@ body:not(.ez-edit-on) .item-actions{display:none !important;}
 #customizePanel .cp-collapse-btn:hover,
 #customizePanel .cp-history-btn:not(:disabled):hover{
   background:rgba(255,255,255,.04);
-  border-color:rgba(255,255,255,.32);
+  border-color:rgba(201,161,90,.55);
   color:#f2f2f0;
 }
 #customizePanel .cp-toggle{
@@ -431,24 +433,32 @@ body:not(.ez-edit-on) .item-actions{display:none !important;}
 }
 #customizePanel .cp-control-icon{
   display:block;
-  font-size:12px;
+  font-size:11px;
   line-height:1;
   font-weight:600;
 }
 #customizePanel .cp-control-label{
   display:block;
-  font-size:8px;
+  font-size:8.5px;
   line-height:1;
 }
+
+/* The collapsed reference is a compact 56px square with only the expand control. */
 #customizePanel.cp-collapsed{
-  width:auto;
-  min-width:0;
-  max-width:calc(100vw - 32px);
-  padding:8px 9px;
+  box-sizing:border-box;
+  width:56px;
+  min-width:56px;
+  max-width:56px;
+  height:56px;
+  max-height:56px;
+  padding:0;
   border-radius:14px;
+  overflow:hidden;
 }
 #customizePanel.cp-collapsed .cp-head{
   display:block;
+  width:100%;
+  height:100%;
   margin:0;
 }
 #customizePanel.cp-collapsed .cp-head > strong{
@@ -456,7 +466,8 @@ body:not(.ez-edit-on) .item-actions{display:none !important;}
 }
 #customizePanel.cp-collapsed .cp-head-btns{
   display:flex;
-  width:auto;
+  width:100%;
+  height:100%;
   gap:0;
   margin:0;
 }
@@ -467,28 +478,46 @@ body:not(.ez-edit-on) .item-actions{display:none !important;}
   display:none!important;
 }
 #customizePanel.cp-collapsed .cp-collapse-btn{
-  width:auto;
-  min-width:72px;
-  height:32px;
-  padding:4px 9px;
+  display:flex;
+  width:56px;
+  min-width:56px;
+  height:56px;
+  padding:0;
+  border:0;
+  border-radius:14px;
+  background:transparent;
+  color:#f2f2f0;
 }
+#customizePanel.cp-collapsed .cp-collapse-btn:hover{
+  background:rgba(255,255,255,.04);
+  border-color:transparent;
+}
+#customizePanel.cp-collapsed .cp-collapse-btn .cp-control-icon{
+  font-size:16px;
+}
+#customizePanel.cp-collapsed .cp-collapse-btn .cp-control-label{
+  font-size:8.5px;
+}
+
 @media(max-width:720px){
   #customizePanel{
     left:auto;
     right:16px;
     bottom:16px;
-    width:min(240px,calc(100vw - 32px));
-    padding:12px 12px 14px;
+    width:min(290px,calc(100vw - 32px));
+    padding:18px 20px 20px;
   }
-  #customizePanel .cp-head-btns{gap:4px;}
+  #customizePanel .cp-head-btns{gap:5px;}
   #customizePanel .cp-collapse-btn,
   #customizePanel .cp-history-btn,
-  #customizePanel .cp-toggle{height:36px;}
+  #customizePanel .cp-toggle{height:38px;}
   #customizePanel.cp-collapsed{
     left:auto;
     right:16px;
-    width:auto;
-    min-width:0;
+    width:56px;
+    min-width:56px;
+    max-width:56px;
+    padding:0;
   }
 }
 
@@ -3076,17 +3105,19 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 
   var cpBody = $("#cpBody");
   var cpToggleLabel = cpToggle.querySelector(".cp-control-label");
+  var cpToggleIcon = cpToggle.querySelector(".cp-control-icon");
   var cpCollapseLabel = cpCollapse.querySelector(".cp-control-label");
   cpToggle.addEventListener("click", function(){
     var hidden = cpBody.style.display === "none";
     cpBody.style.display = hidden ? "block" : "none";
     if(cpToggleLabel) cpToggleLabel.textContent = hidden ? "Hide" : "Show";
+    if(cpToggleIcon) cpToggleIcon.textContent = hidden ? "−" : "+";
     cpToggle.title = hidden ? "Hide Customize Controls" : "Show Customize Controls";
     cpToggle.setAttribute("aria-expanded", hidden ? "true" : "false");
   });
   cpCollapse.addEventListener("click", function(){
     var collapsed = customizePanel.classList.toggle("cp-collapsed");
-    if(cpCollapseLabel) cpCollapseLabel.textContent = collapsed ? "Expand" : "Collapsed";
+    if(cpCollapseLabel) cpCollapseLabel.textContent = collapsed ? "Show" : "Collapsed";
     cpCollapse.title = collapsed ? "Expand Customize panel" : "Collapse Customize panel";
     cpCollapse.setAttribute("aria-expanded", collapsed ? "false" : "true");
   });
