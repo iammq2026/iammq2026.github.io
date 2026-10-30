@@ -2876,7 +2876,12 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
       if(body){
         var hidden = body.style.display === "none";
         body.style.display = hidden ? "block" : "none";
-        el.textContent = hidden ? "Hide" : "Show";
+        var toggleLabel = el.querySelector(".cp-control-label");
+        var toggleIcon = el.querySelector(".cp-control-icon");
+        if(toggleLabel) toggleLabel.textContent = hidden ? "Hide" : "Show";
+        if(toggleIcon) toggleIcon.textContent = hidden ? "−" : "+";
+        el.title = hidden ? "Hide Customize Controls" : "Show Customize Controls";
+        el.setAttribute("aria-expanded", hidden ? "true" : "false");
       }
       e.stopImmediatePropagation();
       return;
@@ -2884,7 +2889,9 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
 
     if(el.id === "cpCollapse"){
       var collapsed = panel.classList.toggle("cp-collapsed");
-      el.textContent = collapsed ? "Expand <" : "Collapsed >";
+      var collapseLabel = el.querySelector(".cp-control-label");
+      if(collapseLabel) collapseLabel.textContent = collapsed ? "Show" : "Collapsed";
+      el.title = collapsed ? "Show Customize Panel" : "Collapse Customize Panel";
       el.setAttribute("aria-expanded", collapsed ? "false" : "true");
       e.stopImmediatePropagation();
       return;
