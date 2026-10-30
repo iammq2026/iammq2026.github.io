@@ -718,6 +718,50 @@ body.wildlife-scheme #calculator #calc-cta-button *{
   color:var(--w-on-accent)!important;
 }
 
+/* Phase 3 frame refinement: use each scheme's surface token so the CTA and
+   selected controls do not blend into the large calculator workspace. */
+body.wildlife-scheme #calculator > .max-w-5xl > #calculator-main-frame{
+  background-color:var(--w-surface)!important;
+  border-color:color-mix(in srgb,var(--w-accent) 24%,var(--w-line))!important;
+}
+
+/* Frequency toggle: pale track, accent selected state, ink-colored idle state. */
+body.wildlife-scheme #calculator .flex.justify-center.mb-8 > .bg-forest{
+  background-color:var(--w-soft)!important;
+  border-color:var(--w-line)!important;
+}
+body.wildlife-scheme #calculator [data-calc-frequency][aria-pressed="true"]{
+  background-color:var(--w-accent)!important;
+  border-color:var(--w-accent)!important;
+  color:var(--w-on-accent)!important;
+}
+body.wildlife-scheme #calculator [data-calc-frequency][aria-pressed="false"]{
+  background-color:transparent!important;
+  border-color:transparent!important;
+  color:var(--w-ink)!important;
+}
+
+/* Unselected amounts use the soft surface; selected amounts remain the scheme accent. */
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn:not([aria-pressed="true"]){
+  background-color:var(--w-soft)!important;
+  border-color:color-mix(in srgb,var(--w-line) 75%,transparent)!important;
+  color:var(--w-ink)!important;
+}
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn:not([aria-pressed="true"]) > span{
+  color:var(--w-ink)!important;
+}
+body.wildlife-scheme #calculator #calc-amount-presets .calc-amt-btn:not([aria-pressed="true"]):hover{
+  background-color:color-mix(in srgb,var(--w-accent) 10%,var(--w-soft))!important;
+  border-color:var(--w-accent)!important;
+}
+
+/* Inspect-only region shows a selection cursor in Edit Page mode, never a text cursor. */
+body.ez-edit-on [data-ez-inspect-only="true"],
+body.ez-edit-on [data-ez-inspect-only="true"] *{
+  cursor:pointer!important;
+}
+
+
 /* Explicitly suppress SVG star strokes on both the source icon and generated Lucide paths. */
 body.wildlife-scheme #dispatches-stories-track .story-card svg.lucide-star,
 body.wildlife-scheme #dispatches-stories-track .story-card [data-lucide="star"],
@@ -1177,7 +1221,7 @@ body.wildlife-scheme #dispatches-stories-track .story-card i[data-lucide="star"]
 </div>
 </section>
 <!-- INTERACTIVE DONATION & IMPACT CALCULATOR -->
-<section class="py-20 bg-forest text-cream relative overflow-hidden" data-ez-phase1-readonly="true" data-ez-role="impact-simulator" data-ez-section="1" id="calculator">
+<section class="py-20 bg-forest text-cream relative overflow-hidden" data-ez-phase1-readonly="true" data-ez-inspect-only="true" data-ez-role="impact-simulator" data-ez-section="1" id="calculator">
 <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#FAF7F2_1px,transparent_1px)] [background-size:16px_16px]"></div>
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 <div class="text-center max-w-2xl mx-auto mb-12">
@@ -1185,7 +1229,7 @@ body.wildlife-scheme #dispatches-stories-track .story-card i[data-lucide="star"]
 <h2 class="font-serif text-3xl sm:text-5xl font-bold text-cream mt-2 mb-4" id="calc-impact-title">Calculate Your Direct Impact</h2>
 <p class="text-sand/80 text-sm sm:text-base" id="calc-impact-description">See exactly how your contributions translate into tangible emergency care, ranger rations, and wilderness acreage protection.</p>
 </div>
-<div class="bg-forestlight border border-sand/20 rounded-3xl p-6 sm:p-10 shadow-2xl">
+<div id="calculator-main-frame" data-ez-inspect-only="true" class="bg-forestlight border border-sand/20 rounded-3xl p-6 sm:p-10 shadow-2xl">
 <!-- Frequency Toggle -->
 <div class="flex justify-center mb-8">
 <div class="bg-forest p-1.5 rounded-full border border-sand/20 flex space-x-1">
@@ -2607,6 +2651,10 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     $("#cpEditPage").classList.toggle("active", editOn);
     $("#cpEditPageState").textContent = editOn ? "ON" : "OFF";
     $all(".editable-text,.ez-editable-leaf").forEach(function(el){ el.setAttribute("contenteditable", editOn ? "true" : "false"); });
+    // Inspect-only regions remain selectable, but their text never becomes editable.
+    $all('[data-ez-inspect-only="true"] .editable-text, [data-ez-inspect-only="true"] .ez-editable-leaf').forEach(function(el){
+      el.setAttribute("contenteditable","false");
+    });
     if(!editOn){ hideAllFloating(); }
   }
   window.ezSetEditMode = function(){ setEditMode(!editOn); };
@@ -2659,6 +2707,20 @@ Commerce controls use data-commerce-action="view-product" and central Product Ta
     if(!editOn) return;
     var insidePanelUi = e.target.closest && e.target.closest("#customizePanel,#ezStylePanel,#ezFrameToolbar,#ezAttrInspector,#ezLinkPopup,#ezIdListPanel,#ezCustomCodeModal,#ezPhase2Modal,#ezUnsavedPill");
     if(insidePanelUi) return;
+
+    // Inspect-only regions are selectable for Attribute Inspector, but never open
+    // the styling/content toolbar. Check before editor-ignore controls so clicks
+    // on calculator tabs or amount buttons select their containing frame.
+    var inspectOnly = e.target && e.target.closest ? e.target.closest('[data-ez-inspect-only="true"]') : null;
+    if(inspectOnly){
+      e.preventDefault();
+      e.stopPropagation();
+      hideAllFloating();
+      selectFrame(inspectOnly);
+      frameToolbar.style.display = "none";
+      showAttrInspector();
+      return;
+    }
 
     // In Edit Page mode the page is an editor, not a live website. Stop
     // navigation, buttons, tabs, legacy commerce actions, etc. from firing while selecting.
